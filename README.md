@@ -11,7 +11,7 @@
 <br>
 <br>
 
-##  Team-Peekabook iOS Developers
+##  Team-Peekabook Server Developers
 
 
 | 박현정 | 조에슬 |
