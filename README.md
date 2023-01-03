@@ -11,7 +11,7 @@
 <br>
 <br>
 
-## 📌Team-Peekabook Server Developers
+## Team-Peekabook Server Developers
 
 
 | 박현정 | 조에슬 |
@@ -22,7 +22,7 @@
 <br>
 <br>
 
-## 📌Development Environment
+## 🔧Development Environment
 <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=PostgreSQL&logoColor=white"/> <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white"/>
 
 ## 📌 Coding Convention
