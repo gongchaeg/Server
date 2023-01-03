@@ -17,12 +17,11 @@
 
 | 박현정 | 조에슬 |
 | :---------:|:----------:|
-|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="(https://user-images.githubusercontent.com/81394850/210396865-4861c0d6-972b-4ebf-b143-875e341718f4.jpg"> | 
+|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210396865-4861c0d6-972b-4ebf-b143-875e341718f4.jpg"> | 
 | [hyeonjeongs](https://github.com/hyeonjeongs) | [yeseul106](https://github.com/yeseul106) |
 
 
 
-<br>
 <br>
 
 ## 🔧Development Environment
