@@ -218,6 +218,7 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 
 <br>
 ### 🔹Branch Convention
+
 - [develop] : 최종 배포
 - [feature] : 기능 추가
 - [fix] : 에러 수정, 버그 수정
