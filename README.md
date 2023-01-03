@@ -27,6 +27,28 @@
 
 <br>
 
+## Project Foldering
+
+📁 src _
+|_ 📁 config _
+             |_ 📋 index.ts
+|_ 📁 controllers _
+             |_ 📋 index.ts
+|_ 📁 interfaces _
+|_ 📁 models _
+             |_ 📋 Information.ts
+             |_ 📋 Schedule.ts
+             |_ 📋 User.ts
+|_ 📁 modules _
+              |_ 📋 responseMessage.ts
+              |_ 📋 statusCode.ts
+              |_ 📋 util.ts
+|_ 📁 routes _
+              |_ 📋 index.ts
+|_ 📁 services _
+              |_ 📋 index.ts
+|_ 📋 index.ts
+
 ## 📌 Coding Convention
 <details>
  <summary >함수에 대한 주석  </summary>
