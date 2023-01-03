@@ -11,7 +11,7 @@
 <br>
 <br>
 
-##  Team-Peekabook Server Developers
+## 📌Team-Peekabook Server Developers
 
 
 | 박현정 | 조에슬 |
@@ -22,7 +22,7 @@
 <br>
 <br>
 
-## Development Environment
+## 📌Development Environment
 <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=PostgreSQL&logoColor=white"/> <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white"/>
 
 ## 📌 Coding Convention
@@ -161,7 +161,7 @@
  
  
  ## 📌Git Convention
- ### Commit Convention
+ ### 🔹Commit Convention
  - ✅ `[CHORE]` : 동작에 영향 없는 코드 or 변경 없는 변경사항(주석 추가 등)
 - ✨ `[FEAT]` : 새로운 기능 구현
 - ➕ `[ADD]` : Feat 이외의 부수적인 코드 추가, 라이브러리 추가, 새로운 파일 생성
@@ -177,7 +177,7 @@
 
 `ex ) git commit -m "#1 [FEAT] 회원가입 기능 완료"`
 
-### Branch Convention
+### 🔹Branch Convention
 - [develop] : 최종 배포
 - [feature] : 기능 추가
 - [fix] : 에러 수정, 버그 수정
@@ -190,8 +190,8 @@
 
 `ex) feature/#issue-user-api`
 
-### Branch Strategy
-### Git Flow
+### 🔹Branch Strategy
+### 🔹Git Flow
 
 기본적으로 Git Flow 전략을 이용한다. Fork한 후 나의 repository에서 작업하고 구현 후 원본 repository에 pr을 날린다. 작업 시작 시 선행되어야 할 작업은 다음과 같다.
 
@@ -210,7 +210,7 @@
 - main → develop → feature. feature 브랜치는 feat/기능명으로 사용합니다.
 - 이슈를 사용하는 경우 브랜치명을 feature/[issue num]-[feature name]로 합니다.
 
-### Issue Convention
+### 🔹Issue Convention
 - [feat] : 기능 추가
 - [fix] : 에러 수정, 버그 수정
 - [docs] : README, 문서
