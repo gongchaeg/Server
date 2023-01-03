@@ -17,7 +17,7 @@
 
 | 박현정 | 조에슬 |
 | :---------:|:----------:|
-|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210396865-4861c0d6-972b-4ebf-b143-875e341718f4.jpg"> | 
+|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210397458-13875d52-7081-4f5b-9c65-a558b8efa57b.jpg"> | 
 | [hyeonjeongs](https://github.com/hyeonjeongs) | [yeseul106](https://github.com/yeseul106) |
 
 
