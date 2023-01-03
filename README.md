@@ -6,7 +6,8 @@
 
 <br>
 
-![서버소개](https://user-images.githubusercontent.com/80062632/210297833-e66fd992-74af-4290-99eb-053a75080a2d.png)
+![서버](https://user-images.githubusercontent.com/81394850/210396757-7b6eed63-1f90-477f-b0c9-0167a0e5c29a.png)
+
 
 <br>
 <br>
@@ -16,8 +17,10 @@
 
 | 박현정 | 조에슬 |
 | :---------:|:----------:|
-|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="https://user-images.githubusercontent.com/80062632/210303866-01f08884-968a-481d-ac8f-a7763a974263.png"> | 
+|<img width="300" alt="image" src="https://user-images.githubusercontent.com/81394850/210358708-f6139bed-c2b6-43d9-8dc6-525ac8c68e9f.jpg"> | <img width="300" alt="image" src="(https://user-images.githubusercontent.com/81394850/210396865-4861c0d6-972b-4ebf-b143-875e341718f4.jpg"> | 
 | [hyeonjeongs](https://github.com/hyeonjeongs) | [6uohul](https://github.com/6uohul) |
+
+
 
 <br>
 <br>
