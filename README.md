@@ -216,6 +216,7 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 
 `ex ) git commit -m "#1 [FEAT] 회원가입 기능 완료"`
 
+<br>
 ### 🔹Branch Convention
 - [develop] : 최종 배포
 - [feature] : 기능 추가
@@ -229,8 +230,9 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 
 `ex) feature/#issue-user-api`
 
+<br>
 ### 🔹Branch Strategy
-### 🔹Git Flow
+### Git Flow
 
 기본적으로 Git Flow 전략을 이용한다. Fork한 후 나의 repository에서 작업하고 구현 후 원본 repository에 pr을 날린다. 작업 시작 시 선행되어야 할 작업은 다음과 같다.
 
@@ -248,6 +250,8 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 - main, develop, feature 3가지 branch 를 기본으로 합니다.
 - main → develop → feature. feature 브랜치는 feat/기능명으로 사용합니다.
 - 이슈를 사용하는 경우 브랜치명을 feature/[issue num]-[feature name]로 합니다.
+
+<br>
 
 ### 🔹Issue Convention
 - [feat] : 기능 추가
