@@ -1,0 +1,8 @@
+{
+  "name": "peekabook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/team-peekabook/Peekabook-server.git",
+  "author": "hyeonjeong Park <py0429@ewhain.net>",
+  "license": "MIT"
+}
