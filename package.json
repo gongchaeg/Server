@@ -5,6 +5,10 @@
   "repository": "https://github.com/team-peekabook/Peekabook-server.git",
   "author": "hyeonjeong Park <py0429@ewhain.net>",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build" : "tsc && node dist"
+  },
   "dependencies": {
     "express": "^4.18.2"
   },
