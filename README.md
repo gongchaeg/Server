@@ -35,9 +35,9 @@
 |_ 📁 config _
              |_ 📋 index.ts
 |_ 📁 controllers _
-              |_ 📋 index.ts
+                  |_ 📋 index.ts
 |_ 📁 interfaces _
-              |_ 📁 user
+                 |_ 📁 user
 |_ 📁 models _
              |_ 📋 User.ts
 |_ 📁 modules _
@@ -47,7 +47,7 @@
 |_ 📁 routes _
             |_ 📋 index.ts
 |_ 📁 services _
-            |_ 📋 index.ts
+               |_ 📋 index.ts
 |_ 📋 index.ts
 ```
 <br>
