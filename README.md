@@ -200,7 +200,7 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
  <br>
  
  ## 📌Git Convention
- ### 🔹Commit Convention
+ ### Commit Convention
  - ✅ `[CHORE]` : 동작에 영향 없는 코드 or 변경 없는 변경사항(주석 추가 등)
 - ✨ `[FEAT]` : 새로운 기능 구현
 - ➕ `[ADD]` : Feat 이외의 부수적인 코드 추가, 라이브러리 추가, 새로운 파일 생성
@@ -217,7 +217,8 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 `ex ) git commit -m "#1 [FEAT] 회원가입 기능 완료"`
 
 <br>
-### 🔹Branch Convention
+
+### Branch Convention
 
 - [develop] : 최종 배포
 - [feature] : 기능 추가
@@ -232,7 +233,8 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 `ex) feature/#issue-user-api`
 
 <br>
-### 🔹Branch Strategy
+
+### Branch Strategy
 ### Git Flow
 
 기본적으로 Git Flow 전략을 이용한다. Fork한 후 나의 repository에서 작업하고 구현 후 원본 repository에 pr을 날린다. 작업 시작 시 선행되어야 할 작업은 다음과 같다.
