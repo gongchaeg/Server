@@ -33,38 +33,21 @@
 
 📁 src _
 |_ 📁 config _
-             |_ 📋 index.ts
+                |_ 📋 index.ts
 |_ 📁 controllers _
-                  |_ 📋 index.ts
-                  |_ 📋 InformationController.ts
-                  |_ 📋 ScheduleController.ts
-                  |_ 📋 UserController.ts
+                |_ 📋 index.ts
 |_ 📁 interfaces _
-                 |_ 📁 information
-                 |_ 📁 schedule
-                 |_ 📁 user
-|_ 📁 loaders _
-              |_ 📋 db.ts
+               |_ 📁 user
 |_ 📁 models _
-             |_ 📋 Information.ts
-             |_ 📋 Schedule.ts
-             |_ 📋 User.ts
+              |_ 📋 User.ts
 |_ 📁 modules _
               |_ 📋 responseMessage.ts
-              |_ 📋 returnToSlackMessage.ts
-              |_ 📋 slackAPI.ts
               |_ 📋 statusCode.ts
               |_ 📋 util.ts
 |_ 📁 routes _
              |_ 📋 index.ts
-             |_ 📋 InformationRouter.ts
-             |_ 📋 ScheduleRouter.ts
-             |_ 📋 UserRouter.ts
 |_ 📁 services _
                |_ 📋 index.ts
-               |_ 📋 InformationService.ts
-               |_ 📋 ScheduleService.ts
-               |_ 📋 UserService.ts
 |_ 📋 index.ts
 ```
 <br>
