@@ -52,6 +52,15 @@
 ```
 <br>
 
+## ERD
+https://www.erdcloud.com/d/X9GnjASe9fSv26YWg
+<img width="768" alt="image" src="https://user-images.githubusercontent.com/81394850/210384573-1429aa53-81bf-4737-b397-4a1bd340acb1.png">
+
+## Api 명세서
+https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
+현정 : 프로젝트 세팅, EC2 세팅, DB 설계, API 명세서 작성
+예슬 : RDS 세팅, Datagrip 세팅, DB 설계, API 명세서 작성
+
 ## 📌 Coding Convention
 <details>
  <summary >함수에 대한 주석  </summary>
