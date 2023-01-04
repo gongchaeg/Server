@@ -60,6 +60,10 @@ https://www.erdcloud.com/d/X9GnjASe9fSv26YWg
 
 ## Api 명세서
 https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
+
+<img width="1054" alt="image" src="https://user-images.githubusercontent.com/81394850/210496096-6baf5338-14b8-4249-88a3-8914d42ae9b1.png">
+
+
 <br>
 현정 : 프로젝트 세팅, EC2 세팅, DB 설계, API 명세서 작성
 <br>
