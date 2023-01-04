@@ -1,1 +1,1 @@
-.
+export { default as bookshelfController } from "./bookshelfController";
