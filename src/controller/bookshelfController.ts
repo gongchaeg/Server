@@ -25,7 +25,7 @@ const createMybook = async (req: Request, res: Response) => {
 };
 
 /**
- * @route GET /bookshelf/detail?bookId={}
+ * @route GET /bookshelf/detail/:bookId
  * @desc 등록한 책의 상세 정보 불러오기
  */
 const getBookById = async (req: Request, res: Response) => {
