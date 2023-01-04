@@ -63,13 +63,24 @@ https://www.erdcloud.com/d/X9GnjASe9fSv26YWg
 ## Api 명세서
 https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 
-<img width="1054" alt="image" src="https://user-images.githubusercontent.com/81394850/210496096-6baf5338-14b8-4249-88a3-8914d42ae9b1.png">
+<img width="1433" alt="image" src="https://user-images.githubusercontent.com/68415644/210502901-a128c197-6c3f-474f-bd28-43616a6b4d04.png">
 
 
-<br>
-현정 : 프로젝트 세팅, EC2 세팅, DB 설계, API 명세서 작성
-<br>
-예슬 : RDS 세팅, Datagrip 세팅, DB 설계, API 명세서 작성
+## 🙋🏻‍♀️ 역할 분담
+
+<div markdown="1">  
+ 
+| 기능명 | 담당자 | 완료 여부 |
+| :-----: | :---: | :---: |
+| 프로젝트 세팅 | `현정🐸` | 완료 |
+| EC2 세팅 | `현정🐸` | 완료 |
+| RDS 세팅 | `예슬🐼` | 완료 |
+| Datagrip 세팅 | `예슬🐼` | 완료 |
+| DB 설계 | `예슬🐼` `현정🐸` | 완료 |
+| API 명세서 작성 | `예슬🐼` `현정🐸` | 완료 |
+ 
+</div>
+ <br>
 
 ## 📌 Coding Convention
 <details>
