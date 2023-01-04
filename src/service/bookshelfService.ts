@@ -50,9 +50,11 @@ const createMybook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
 
 //* 등록한 책 상세 정보 조회
 const getBookById = async (bookId: number)=> {
-  const bookData = await prisma.bookshelf.findUnique({
+  const bookData = await prisma.bookshelf.findFirst({
     where: {
-      id: bookId
+      bookId : bookId,
+      // 일단 userId 박아두고 작업
+      userId : 1
     },
     select : {
       description : true,
