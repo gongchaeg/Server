@@ -11,12 +11,17 @@ import { bookshelfService } from "../service";
 const createMybook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
-    const data = await bookshelfService.createMybook(bookshelfCreateDto); 
+    const data = await bookshelfService.createMybook(bookshelfCreateDto);
+
+    const result = {
+        bookId : data.bookId,
+        bookshelfId : data.id
+    }
 
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
     }
-    return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS, data)); 
+    return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS, result)); 
 };
 
 const bookshelfController = {
