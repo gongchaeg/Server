@@ -24,8 +24,25 @@ const createMybook = async (req: Request, res: Response) => {
     return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS, result)); 
 };
 
+/**
+ * @route GET /bookshelf/detail?bookId={}
+ * @desc 등록한 책의 상세 정보 불러오기
+ */
+const getBookById = async (req: Request, res: Response) => {
+
+    const { bookId } = req.params;
+
+    const data = await bookshelfService.getBookById(+bookId); 
+
+    if (!data) {
+        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
+}
+
 const bookshelfController = {
-    createMybook
+    createMybook,
+    getBookById
 };
   
 export default bookshelfController;
