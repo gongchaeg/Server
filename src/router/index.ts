@@ -3,11 +3,11 @@ import friendRouter from "./friendRouter";
 
 const router: Router = Router();
 
-router.use("/user", userRouter);
+router.use("/user", friendRouter);
 router.use("/friend", friendRouter);
-router.use("/bookshelf", bookshelfRouter);
-router.use("/recommend", recommendRouter);
-router.use("/pick", pickRouter);
-router.use("/alarm", alarmRouter);
+router.use("/bookshelf", friendRouter);
+router.use("/recommend", friendRouter);
+router.use("/pick", friendRouter);
+router.use("/alarm", friendRouter);
 
 export default router;

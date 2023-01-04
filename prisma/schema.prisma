@@ -35,9 +35,9 @@ model Bookshelf {
   pickIndex   Int
   description String?  @db.VarChar(200)
   memo        String?  @db.VarChar(50)
-  createdAt   DateTime @db.Timestamp(6)
   userId      Int
   bookId      Int
+  createdAt   DateTime @db.Timestamp(6)
   Book        Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
   User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
 }
@@ -66,7 +66,7 @@ model Recommend {
   recommendedBy                      Int
   recommendTo                        Int
   bookId                             Int
-  createdAt                          DateTime @db.Timestamp(6)
+  createdAt                          DateTime @default(now())
   Book                               Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
   User_Recommend_recommendedByToUser User     @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
   User_Recommend_recommendToToUser   User     @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")

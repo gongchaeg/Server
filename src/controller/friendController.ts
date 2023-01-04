@@ -13,7 +13,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
-    const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO);
+    const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId);
 
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
