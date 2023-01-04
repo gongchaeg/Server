@@ -40,4 +40,7 @@ export default {
 
   INVALID_PASSWORD: "잘못된 비밀번호입니다.",
 
+  // 친구
+  NOT_FOUND_FRIEND_ID: "잘못된 친구 id 입니다",
+
 };
