@@ -8,8 +8,54 @@ datasource db {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  nickname     String  @unique @db.VarChar(50)
-  profileImage String? @db.VarChar(200)
-  intro        String? @db.VarChar(100)
+  id                                      Int         @id @default(autoincrement())
+  nickname                                String      @unique @db.VarChar(50)
+  profileImage                            String?     @db.VarChar(200)
+  intro                                   String?     @db.VarChar(100)
+  Bookshelf                               Bookshelf[]
+  Friend_Friend_receiverIdToUser          Friend[]    @relation("Friend_receiverIdToUser")
+  Friend_Friend_senderIdToUser            Friend[]    @relation("Friend_senderIdToUser")
+  Recommend_Recommend_recommendedByToUser Recommend[] @relation("Recommend_recommendedByToUser")
+  Recommend_Recommend_recommendToToUser   Recommend[] @relation("Recommend_recommendToToUser")
+}
+
+model Book {
+  id        Int         @id @default(autoincrement())
+  bookTitle String      @db.VarChar(100)
+  author    String      @db.VarChar(50)
+  bookImage String?     @db.VarChar(200)
+  Bookshelf Bookshelf[]
+  Recommend Recommend[]
+}
+
+model Bookshelf {
+  id          Int      @id @default(autoincrement())
+  pickIndex   Int
+  description String?  @db.VarChar(200)
+  memo        String?  @db.VarChar(50)
+  createdAt   DateTime @db.Timestamp(6)
+  userId      Int
+  bookId      Int
+  Book        Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
+  User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
+}
+
+model Friend {
+  followId                     Int  @id @default(autoincrement())
+  receiverId                   Int
+  senderId                     Int
+  User_Friend_receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_id_fk")
+  User_Friend_senderIdToUser   User @relation("Friend_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "friend_user_id_fk_2")
+}
+
+model Recommend {
+  id                                 Int      @id @default(autoincrement())
+  recommendDesc                      String?  @db.VarChar(200)
+  recommendedBy                      Int
+  recommendTo                        Int
+  bookId                             Int
+  createdAt                          DateTime @db.Timestamp(6)
+  Book                               Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
+  User_Recommend_recommendedByToUser User     @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
+  User_Recommend_recommendToToUser   User     @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
 }
