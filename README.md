@@ -35,21 +35,21 @@
 
 📁 src _
 |_ 📁 config _
-             |_ 📋 index.ts
-|_ 📁 controllers _
+              |_ 📋 index.ts
+|_ 📁 controller _
                   |_ 📋 index.ts
 |_ 📁 interfaces _
-                 |_ 📁 user
-|_ 📁 models _
-             |_ 📋 User.ts
-|_ 📁 modules _
-             |_ 📋 responseMessage.ts
-             |_ 📋 statusCode.ts
-             |_ 📋 util.ts
-|_ 📁 routes _
-            |_ 📋 index.ts
-|_ 📁 services _
+|_ 📁 middlwares _
+|_ 📁 constants _
+                 |_ 📋 index.ts
+                 |_ 📋 responseMessage.ts
+                 |_ 📋 statusCode.ts
+                 |_ 📋 util.ts
+|_ 📁 router _
+              |_ 📋 index.ts
+|_ 📁 service _
                |_ 📋 index.ts
+|_ 📁 modules _
 |_ 📋 index.ts
 ```
 <br>
