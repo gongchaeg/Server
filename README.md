@@ -43,7 +43,9 @@
 |_ 📁 constants _
                  |_ 📋 index.ts
                  |_ 📋 responseMessage.ts
+                 |_ 📋 response.ts
                  |_ 📋 statusCode.ts
+                 |_ 📋 tokenType.ts                 
                  |_ 📋 util.ts
 |_ 📁 router _
               |_ 📋 index.ts
