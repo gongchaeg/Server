@@ -18,7 +18,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK));
+    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
 }
 
 const friendController = {
