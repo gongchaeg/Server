@@ -25,8 +25,24 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return data;
 }
 
+const searchUser = async (nickname: string) => {
+    const data = await prisma.user.findMany({
+        where: {
+            nickname: {
+                contains: nickname,
+            }
+        },
+        orderBy: {
+            nickname: "desc"
+        },
+    });
+
+    return data;
+}
+
 const friendService = {
     recommendBookToFriend,
+    searchUser,
 }
 
 export default friendService;

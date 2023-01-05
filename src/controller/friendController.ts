@@ -21,8 +21,20 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
 }
 
+const searchUser = async (req: Request, res: Response) => {
+    const { nickname } = req.query;
+
+    if (!nickname) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_NICKNAME));
+    }
+
+    const data = await friendService.searchUser(nickname as string);
+    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
+}
+
 const friendController = {
     recommendBookToFriend,
+    searchUser,
 }
 
 export default friendController;
