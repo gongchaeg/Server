@@ -4,8 +4,6 @@ const prisma = new PrismaClient();
 
 //* 추천책 조회하기
 const getRecommend = async () => {
-    let data: object[] = [];
-
     //? 내가(userId:1) 추천받은책
     const recommendedBook = await prisma.recommend.findMany({
         where: {
@@ -14,16 +12,16 @@ const getRecommend = async () => {
         select: {
             id: true,
             recommendDesc: true,
-            bookId: true,
-            recommendedBy: true,
             createdAt: true,
-            User_Recommend_recommendedByToUser: {
+            recommendedByToUser: {
                 select: {
+                    id: true,
                     nickname: true,
                 }
             },
             Book: {
                 select: {
+                    id: true,
                     bookTitle: true,
                     author: true,
                     bookImage: true,
@@ -40,16 +38,16 @@ const getRecommend = async () => {
         select: {
             id: true,
             recommendDesc: true,
-            bookId: true,
-            recommendTo: true,
             createdAt: true,
-            User_Recommend_recommendedByToUser: {
+            recommendToToUser: {
                 select: {
+                    id: true,
                     nickname: true,
                 }
             },
             Book: {
                 select: {
+                    id: true,
                     bookTitle: true,
                     author: true,
                     bookImage: true,
@@ -58,9 +56,12 @@ const getRecommend = async () => {
         }
     })
 
+    let data: { recommendedBook: object, recommendingBook: object } = {
+        recommendedBook: recommendedBook,
+        recommendingBook: recommendingBook
+    }
 
-    data.push(recommendedBook);
-    data.push(recommendingBook);
+
     return data;
 
 }
