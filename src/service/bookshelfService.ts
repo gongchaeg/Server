@@ -76,7 +76,7 @@ const getBookById = async (bookId: number)=> {
 const deleteMyBook = async (bookId : number) => {
   const data = await prisma.bookshelf.deleteMany({
     where: {
-      id: bookId,
+      bookId: bookId,
       // 일단 userId 박아두고 작업
       userId : 1
     }
