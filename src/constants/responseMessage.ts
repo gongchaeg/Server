@@ -38,6 +38,8 @@ export default {
   // 책장
   CREATE_MYBOOK_SUCCESS: "책 등록 성공",
   CREATE_MYBOOK_FAIL: "책 등록 실패",
+  READ_MYBOOK_SUCCESS: "등록된 책 상세 조회 성공",
+  READ_MYBOOK_FAIL: "해당하는 책을 찾을 수 없습니다.",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",

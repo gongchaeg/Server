@@ -48,8 +48,33 @@ const createMybook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
   return data;
 };
 
+//* 등록한 책 상세 정보 조회
+const getBookById = async (bookId: number)=> {
+  const bookData = await prisma.bookshelf.findFirst({
+    where: {
+      bookId : bookId,
+      // 일단 userId 박아두고 작업
+      userId : 1
+    },
+    select : {
+      description : true,
+      memo : true,
+      Book : {
+        select : {
+          bookImage : true,
+          bookTitle : true,
+          author : true
+        }
+      }
+    }
+  });
+
+  return bookData;
+};
+
 const bookshelfService = {
-    createMybook
+    createMybook,
+    getBookById
 };
 
 export default bookshelfService;
