@@ -42,6 +42,8 @@ export default {
   READ_MYBOOK_FAIL: "해당하는 책을 찾을 수 없습니다.",
   DELETE_MYBOOK_SUCCESS: "등록한 책 삭제 성공",
   DELETE_MYBOOK_FAIL: "등록한 책 삭제 실패",
+  UPDATE_MYBOOK_SUCCESS: "등록한 책 수정하기 성공",
+  UPDATE_MYBOOK_FAIL: "등록한 책 수정하기 실패",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",

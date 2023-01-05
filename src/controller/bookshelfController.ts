@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
+import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
 import { bookshelfService } from "../service";
 
 /**
@@ -51,6 +52,23 @@ const deleteMyBook = async (req: Request, res: Response) => {
     await bookshelfService.deleteMyBook(+bookId);
 
     return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS));
+}
+
+/**
+ * @route PATCH /bookshelf/:bookId
+ * @desc 등록한 책 정보 수정하기
+ */
+const updateMyBook = async (req: Request, res: Response) => {
+    const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
+    const { bookId } = req.params;
+  
+    if (!bookshelfUpdateDto) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
+    }
+  
+    const updatedMyBook = await bookshelfService.updateMyBook(bookId, bookshelfUpdateDto);
+  
+    return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS, updatedMyBook));
 }
 
 const bookshelfController = {
