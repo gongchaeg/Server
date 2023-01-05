@@ -4,7 +4,7 @@ import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
 const prisma = new PrismaClient();
 
 //* 내 책장에 책 등록
-const createMybook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
+const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
 
   const bookData = await prisma.book.findFirst({
       where : {
@@ -72,9 +72,21 @@ const getBookById = async (bookId: number)=> {
   return bookData;
 };
 
+//* 등록한 책 삭제
+const deleteMyBook = async (bookId : number) => {
+  const data = await prisma.bookshelf.deleteMany({
+    where: {
+      id: bookId,
+      // 일단 userId 박아두고 작업
+      userId : 1
+    }
+  });
+}
+
 const bookshelfService = {
-    createMybook,
-    getBookById
+    createMyBook,
+    getBookById,
+    deleteMyBook
 };
 
 export default bookshelfService;

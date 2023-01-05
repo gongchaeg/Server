@@ -11,7 +11,7 @@ import { bookshelfService } from "../service";
 const createMyBook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
-    const data = await bookshelfService.createMybook(bookshelfCreateDto);
+    const data = await bookshelfService.createMyBook(bookshelfCreateDto);
 
     const result = {
         bookId : data.bookId,
@@ -48,12 +48,9 @@ const deleteMyBook = async (req: Request, res: Response) => {
 
     const { bookId } = req.params;
 
-    const data = await bookshelfService.deleteMyBook(+bookId);
+    await bookshelfService.deleteMyBook(+bookId);
 
-    if (!data) {
-        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.DELETE_MYBOOK_FAIL));
-    }
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS, data));
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS));
 }
 
 const bookshelfController = {

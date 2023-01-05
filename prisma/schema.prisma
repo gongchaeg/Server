@@ -31,16 +31,15 @@ model Book {
 }
 
 model Bookshelf {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   pickIndex   Int
-  description String? @db.VarChar(200)
-  memo        String? @db.VarChar(50)
+  description String?  @db.VarChar(200)
+  memo        String?  @db.VarChar(50)
   userId      Int
   bookId      Int
-  createdAt   DateTime  @default(now())
-  Book        Book    @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
-  User        User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
-
+  createdAt   DateTime @db.Timestamp(6)
+  Book        Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
+  User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
 }
 
 model Friend {
