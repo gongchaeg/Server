@@ -45,4 +45,8 @@ export default {
   SUCCESS_RECOMMEND_BOOK: "친구에게 책 추천하기 성공",
   FAIL_RECOMMEND_BOOK: "친구에게 책 추천하기 성공",
 
+  // 추천
+  FAIL_GET_RECOMMEND: "추천 책 조회 실패",
+  SUCCESS_GET_RECOMMEND: "추천 책 조회 성공",
+
 };
