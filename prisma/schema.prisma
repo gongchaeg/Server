@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id                                      Int         @id @default(autoincrement())
-  nickname                                String      @unique @db.VarChar(50)
-  profileImage                            String?     @db.VarChar(200)
-  intro                                   String?     @db.VarChar(100)
-  Alarm_Alarm_receiverIdToUser            Alarm[]     @relation("Alarm_receiverIdToUser")
-  Alarm_Alarm_senderIdToUser              Alarm[]     @relation("Alarm_senderIdToUser")
-  Bookshelf                               Bookshelf[]
-  Friend_Friend_receiverIdToUser          Friend[]    @relation("Friend_receiverIdToUser")
-  Friend_Friend_senderIdToUser            Friend[]    @relation("Friend_senderIdToUser")
-  Recommend_Recommend_recommendedByToUser Recommend[] @relation("Recommend_recommendedByToUser")
-  Recommend_Recommend_recommendToToUser   Recommend[] @relation("Recommend_recommendToToUser")
+  id                             Int         @id @default(autoincrement())
+  nickname                       String      @unique @db.VarChar(50)
+  profileImage                   String?     @db.VarChar(200)
+  intro                          String?     @db.VarChar(100)
+  Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
+  Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
+  Bookshelf                      Bookshelf[]
+  Friend_Friend_receiverIdToUser Friend[]    @relation("Friend_receiverIdToUser")
+  Friend_Friend_senderIdToUser   Friend[]    @relation("Friend_senderIdToUser")
+  recommendedByToUser            Recommend[] @relation("Recommend_recommendedByToUser")
+  recommendToToUser              Recommend[] @relation("Recommend_recommendToToUser")
 }
 
 model Book {
@@ -44,31 +44,31 @@ model Bookshelf {
 }
 
 model Friend {
-  followId                     Int  @id @default(autoincrement())
-  receiverId                   Int
-  senderId                     Int
-  User_Friend_receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_id_fk")
-  User_Friend_senderIdToUser   User @relation("Friend_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "friend_user_id_fk_2")
+  followId         Int  @id @default(autoincrement())
+  receiverId       Int
+  senderId         Int
+  receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_id_fk")
+  senderIdToUser   User @relation("Friend_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "friend_user_id_fk_2")
 }
 
 model Alarm {
-  id                          Int      @id @default(autoincrement())
-  createdAt                   DateTime @db.Timestamp(6)
-  receiverId                  Int
-  senderId                    Int
-  typeId                      Int
-  User_Alarm_receiverIdToUser User     @relation("Alarm_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk")
-  User_Alarm_senderIdToUser   User     @relation("Alarm_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk_2")
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @db.Timestamp(6)
+  receiverId       Int
+  senderId         Int
+  typeId           Int
+  receiverIdToUser User     @relation("Alarm_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk")
+  senderIdToUser   User     @relation("Alarm_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk_2")
 }
 
 model Recommend {
-  id                                 Int      @id @default(autoincrement())
-  recommendDesc                      String?  @db.VarChar(200)
-  recommendedBy                      Int
-  recommendTo                        Int
-  bookId                             Int
-  createdAt                          DateTime @default(now())
-  Book                               Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
-  User_Recommend_recommendedByToUser User     @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
-  User_Recommend_recommendToToUser   User     @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
+  id                  Int      @id @default(autoincrement())
+  recommendDesc       String?  @db.VarChar(200)
+  recommendedBy       Int
+  recommendTo         Int
+  bookId              Int
+  createdAt           DateTime @default(now())
+  Book                Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
+  recommendedByToUser User     @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
+  recommendToToUser   User     @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
 }

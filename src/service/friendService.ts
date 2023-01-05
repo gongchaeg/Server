@@ -6,20 +6,20 @@ const prisma = new PrismaClient();
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number) => {
-    const book = await prisma.Book.findFirst({
+    const books = await prisma.book.findFirst({
         where: {
             bookTitle: friendRecommendRequestDTO.bookTitle
         },
     });
 
 
-    const data = await prisma.Recommend.create({
+    const data = await prisma.recommend.create({
         data: {
-            bookId: book.id,
+            bookId: books.id,
             recommendDesc: friendRecommendRequestDTO.recommendDesc,
             recommendedBy: 1,
             recommendTo: friendId,
-        }
+        },
     })
 
     return data;

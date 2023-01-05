@@ -1,6 +1,7 @@
 import { Router } from "express";
 import bookshelfRouter from "./bookshelfRouter";
 import friendRouter from "./friendRouter";
+import recommendRouter from "./recommendRouter";
 
 const router: Router = Router();
 
