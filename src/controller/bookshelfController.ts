@@ -8,7 +8,7 @@ import { bookshelfService } from "../service";
  * @route POST /bookshelf
  * @desc 내 책장에 책 등록하기
  **/
-const createMybook = async (req: Request, res: Response) => {
+const createMyBook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
     const data = await bookshelfService.createMybook(bookshelfCreateDto);
@@ -40,9 +40,26 @@ const getBookById = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
 }
 
+/**
+ * @route DELETE /bookshelf/:bookId
+ * @desc 등록한 책 삭제하기
+ */
+const deleteMyBook = async (req: Request, res: Response) => {
+
+    const { bookId } = req.params;
+
+    const data = await bookshelfService.deleteMyBook(+bookId);
+
+    if (!data) {
+        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.DELETE_MYBOOK_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS, data));
+}
+
 const bookshelfController = {
-    createMybook,
-    getBookById
+    createMyBook,
+    getBookById,
+    deleteMyBook
 };
   
 export default bookshelfController;
