@@ -1,1 +1,1 @@
-.
+export { default as friendController } from "./friendController"
