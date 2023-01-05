@@ -17,8 +17,8 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         data: {
             bookId: book.id,
             recommendDesc: friendRecommendRequestDTO.recommendDesc,
-            recommendedBy: friendId,
-            recommendTo: 1,
+            recommendedBy: 1,
+            recommendTo: friendId,
         }
     })
 
