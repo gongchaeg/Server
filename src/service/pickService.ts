@@ -6,12 +6,13 @@ const prisma = new PrismaClient();
 const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO) => {
 
     // 원래 pick값 false로 수정하기
+    //! pickIndex 초기에 null 가능한지
     const previousPick = await prisma.bookshelf.updateMany({
         where: {
             pickIndex: { in: [1, 2, 3] },
         },
         data: {
-            pickIndex: undefined,
+            pickIndex: 0,
         }
     });
 
