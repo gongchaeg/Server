@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
+import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
 
 const prisma = new PrismaClient();
 
@@ -83,10 +84,42 @@ const deleteMyBook = async (bookId : number) => {
   });
 }
 
+//* 등록한 책 수정
+const updateMyBook = async (bookId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
+
+  //unique한 bookshelfId 값
+  const bookshelfData = await prisma.bookshelf.findFirst({
+    where : {
+      bookId : bookId,
+      userId : 1
+    }
+  });
+
+  const bookshelfId = bookshelfData?.id;
+
+  //요청한 bookId와 userId에 해당하는 데이터가 없음
+  if (!bookshelfData) {
+    return null;
+  }
+
+  const data = await prisma.bookshelf.update({
+    where: {
+      id : bookshelfId
+    },
+    data: {
+      description : bookshelfUpdateDto.description,
+      memo : bookshelfUpdateDto.memo
+    },
+  });
+
+  return data;
+}
+
 const bookshelfService = {
     createMyBook,
     getBookById,
-    deleteMyBook
+    deleteMyBook,
+    updateMyBook
 };
 
 export default bookshelfService;

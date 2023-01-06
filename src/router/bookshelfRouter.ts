@@ -13,7 +13,7 @@ router.get("/detail/:bookId", bookshelfController.getBookById);
 //* 등록한 책 삭제하기 DELETE /bookshelf/:bookId
 router.delete("/:bookId", bookshelfController.deleteMyBook);
 
-//* 등록한 정보 수정하기 PATCH /bookshelf/:bookId
+//* 등록한 책 정보 수정하기 PATCH /bookshelf/:bookId
 router.patch("/:bookId", bookshelfController.updateMyBook);
 
 export default router;

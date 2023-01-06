@@ -66,15 +66,19 @@ const updateMyBook = async (req: Request, res: Response) => {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
     }
   
-    const updatedMyBook = await bookshelfService.updateMyBook(bookId, bookshelfUpdateDto);
-  
-    return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS, updatedMyBook));
+    const data = await bookshelfService.updateMyBook(+bookId, bookshelfUpdateDto);
+
+    if (!data) {
+        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS));
 }
 
 const bookshelfController = {
     createMyBook,
     getBookById,
-    deleteMyBook
+    deleteMyBook,
+    updateMyBook
 };
   
 export default bookshelfController;
