@@ -25,15 +25,23 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return data;
 }
 
+//* 유저 검색하기
 const searchUser = async (nickname: string) => {
-    const data = await prisma.user.findMany({
+    const data = await prisma.user.findFirst({
         where: {
-            nickname: {
-                contains: nickname,
-            }
+            nickname: nickname,
         },
-        orderBy: {
-            nickname: "desc"
+    });
+
+    return data;
+}
+
+//* 팔로우 하기
+const followFriend = async (friendId: number) => {
+    const data = await prisma.friend.create({
+        data: {
+            receiverId: friendId,
+            senderId: 1,
         },
     });
 
@@ -43,6 +51,7 @@ const searchUser = async (nickname: string) => {
 const friendService = {
     recommendBookToFriend,
     searchUser,
+    followFriend,
 }
 
 export default friendService;
