@@ -68,5 +68,7 @@ export default {
   //pick
   FAIL_PATCH_PICK: "책 pick 수정 실패",
   SUCCESS_PATCH_PICK: "책 pick 수정 성공",
+  FAIL_GET_BOOK: "책 전체 조회 실패",
+  SUCCESS_GET_BOOK: "책 전체 조회 실패",
 
 };
