@@ -19,8 +19,13 @@ const patchPick = async (req: Request, res: Response) => {
 
 }
 
+const getBook = async (req: Request, res: Response) => {
+
+}
+
 const pickController = {
     patchPick,
+    getBook,
 }
 
 export default pickController;
