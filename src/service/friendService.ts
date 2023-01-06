@@ -25,11 +25,11 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return data;
 }
 
-//* 유저 검색하기
+//* 사용자 검색하기
 const searchUser = async (nickname: string) => {
     const data = await prisma.user.findFirst({
         where: {
-            nickname: nickname,
+            nickname: nickname
         },
     });
 
@@ -42,11 +42,6 @@ const followFriend = async (friendId: number) => {
         data: {
             receiverId: friendId,
             senderId: 1,
-        },
-    });
-
-    return data;
-}
 
 const friendService = {
     recommendBookToFriend,
