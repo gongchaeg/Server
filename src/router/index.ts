@@ -2,7 +2,7 @@ import { Router } from "express";
 import bookshelfRouter from "./bookshelfRouter";
 import friendRouter from "./friendRouter";
 import recommendRouter from "./recommendRouter";
-
+import pickRouter from "./pickRouter";
 
 const router: Router = Router();
 
