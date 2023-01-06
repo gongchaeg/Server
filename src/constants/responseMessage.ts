@@ -57,6 +57,9 @@ export default {
   FAIL_FOUND_NICKNAME: "닉네임을 찾을 수 없습니다.",
   FAIL_GET_USER: "사용자 검색 실패",
   SUCCESS_GET_USER: "사용자 검색 성공",
+  FAIL_FOUND_FRIEND_ID: "친구 닉네임 찾기 실패",
+  SUCCESS_POST_FOLLOW: "친구 팔로우 성공",
+  FAIL_POST_FOLLOW: "친구 팔로우 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
