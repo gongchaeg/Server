@@ -42,6 +42,11 @@ const followFriend = async (friendId: number) => {
         data: {
             receiverId: friendId,
             senderId: 1,
+        }
+    });
+
+    return data;
+}
 
 const friendService = {
     recommendBookToFriend,
