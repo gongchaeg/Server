@@ -16,4 +16,7 @@ router.delete("/:bookId", bookshelfController.deleteMyBook);
 //* 등록한 책 정보 수정하기 PATCH /bookshelf/:bookId
 router.patch("/:bookId", bookshelfController.updateMyBook);
 
+//* 내 책장 (메인 뷰) 조회하기 GET /bookshelf
+router.get("/bookshelf", bookshelfController.getMyBookshelf);
+
 export default router;
