@@ -19,8 +19,20 @@ const patchPick = async (req: Request, res: Response) => {
 
 }
 
+//* 책 전체 조회
+const getBook = async (req: Request, res: Response) => {
+    const data = await pickService.getBook();
+
+    if (!data) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
+    }
+
+    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
+}
+
 const pickController = {
     patchPick,
+    getBook,
 }
 
 export default pickController;
