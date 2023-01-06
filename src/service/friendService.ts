@@ -25,15 +25,11 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return data;
 }
 
+//* 사용자 검색하기
 const searchUser = async (nickname: string) => {
-    const data = await prisma.user.findMany({
+    const data = await prisma.user.findFirst({
         where: {
-            nickname: {
-                contains: nickname,
-            }
-        },
-        orderBy: {
-            nickname: "desc"
+            nickname: nickname
         },
     });
 
