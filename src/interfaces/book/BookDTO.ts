@@ -1,8 +1,10 @@
 export interface BookDTO {
-    bookId : number,
-    bookTitle : string,
-    bookImage : string,
+    Book? : {
+        bookTitle? : string|null,
+        bookImage? : string|null
+    }|null,
+    bookId? : number|null,
     description? : string | null,
     memo? : string | null,
-    pickIndex? : number
+    pickIndex? : number|null
 }
