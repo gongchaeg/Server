@@ -53,8 +53,28 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO) => {
 
 }
 
+//* 책 전체 조회
+const getBook = async () => {
+    const books = await prisma.bookshelf.findMany({
+        where: {
+            userId: 1,
+        },
+        select: {
+            pickIndex: true,
+            Book: {
+                select: {
+                    id: true,
+                    bookImage: true,
+                }
+            }
+        },
+    });
+    return books;
+}
+
 const pickService = {
     patchPick,
+    getBook
 }
 
 export default pickService;
