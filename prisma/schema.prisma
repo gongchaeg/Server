@@ -76,20 +76,21 @@ model Recommend {
   RecommendAlarm      RecommendAlarm[]
 }
 
-model NewBookAlarm {
-  id          Int       @id @default(autoincrement())
-  alarmId     Int
-  bookshelfId Int
-  Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
-  Bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id], onDelete: Cascade, map: "bookshelf_id_fk")
-}
-
 model RecommendAlarm {
   id          Int       @id @default(autoincrement())
   alarmId     Int
   recommendId Int
   Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
   Recommend   Recommend @relation(fields: [recommendId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_id_fk")
+}
+
+model NewBookAlarm {
+  id          Int       @id @default(autoincrement())
+  alarmId     Int
+  bookshelfId Int
+  Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
+  Bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id], onDelete: Cascade, map: "bookshelf_id_fk")
+
 }
 
 model AlarmType {

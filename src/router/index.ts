@@ -3,6 +3,7 @@ import bookshelfRouter from "./bookshelfRouter";
 import friendRouter from "./friendRouter";
 import recommendRouter from "./recommendRouter";
 import pickRouter from "./pickRouter";
+import alarmRouter from "./alarmRouter";
 
 const router: Router = Router();
 
@@ -11,6 +12,6 @@ router.use("/friend", friendRouter);
 router.use("/bookshelf", bookshelfRouter);
 router.use("/recommend", recommendRouter);
 router.use("/pick", pickRouter);
-//router.use("/alarm",)alarmRouter;
+router.use("/alarm", alarmRouter);
 
 export default router;
