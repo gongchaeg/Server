@@ -45,6 +45,15 @@ const followFriend = async (friendId: number) => {
         }
     });
 
+    // 알림 테이블에도 추가
+    await prisma.alarm.create({
+        data : {
+          senderId : 1,
+          receiverId : friendId,
+          typeId : 1
+        }
+    });
+
     return data;
 }
 
