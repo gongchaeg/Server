@@ -71,4 +71,8 @@ export default {
   FAIL_GET_BOOK: "책 전체 조회 실패",
   SUCCESS_GET_BOOK: "책 전체 조회 실패",
 
+  // alarm
+  FAIL_GET_ALARM: "알림 조회 실패",
+  SUCCESS_GET_ALARM: "알림 조회 성공",
+
 };
