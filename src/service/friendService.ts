@@ -13,7 +13,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     });
 
 
-    const data = await prisma.recommend.create({
+    const recommendData = await prisma.recommend.create({
         data: {
             bookId: books.id,
             recommendDesc: friendRecommendRequestDTO.recommendDesc,
@@ -22,7 +22,23 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         },
     })
 
-    return data;
+    //알림 테이블에도 추가
+    const alarm = await prisma.alarm.create({
+        data : {
+            senderId : 1,
+            receiverId : friendId,
+            typeId : 2
+        }
+    });
+    
+    await prisma.recommendAlarm.create({
+        data : {
+            alarmId : alarm.id,
+            recommendId : recommendData.id
+        }
+    });
+
+    return recommendData;
 }
 
 //* 사용자 검색하기
@@ -42,6 +58,15 @@ const followFriend = async (friendId: number) => {
         data: {
             receiverId: friendId,
             senderId: 1,
+        }
+    });
+
+    // 알림 테이블에도 추가
+    await prisma.alarm.create({
+        data : {
+          senderId : 1,
+          receiverId : friendId,
+          typeId : 1
         }
     });
 
