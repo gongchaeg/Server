@@ -93,7 +93,8 @@ const getMyBookshelf = async (req: Request, res: Response) => {
  * @desc 친구 책장 조회하기
  */
 const getFriendBookshelf = async (req: Request, res: Response) => {
-    const data = await bookshelfService.getFriendBookshelf();
+    const { friendId } = req.params;
+    const data = await bookshelfService.getFriendBookshelf(+friendId);
 
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_FRIEND_BOOKSHELF_FAIL));
