@@ -32,9 +32,26 @@ const searchUser = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
 }
 
+const followFriend = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+
+    if (!friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+    }
+
+    const data = await friendService.followFriend(+friendId);
+
+    if (!data) {
+        return res.status(sc.OK).send(success(sc.OK, rm.FAIL_POST_FOLLOW));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
+
+}
+
 const friendController = {
     recommendBookToFriend,
     searchUser,
+    followFriend,
 }
 
 export default friendController;

@@ -36,9 +36,22 @@ const searchUser = async (nickname: string) => {
     return data;
 }
 
+//* 팔로우 하기
+const followFriend = async (friendId: number) => {
+    const data = await prisma.friend.create({
+        data: {
+            receiverId: friendId,
+            senderId: 1,
+        }
+    });
+
+    return data;
+}
+
 const friendService = {
     recommendBookToFriend,
     searchUser,
+    followFriend,
 }
 
 export default friendService;
