@@ -64,7 +64,6 @@ const getAlarm = async () => {
             }
 
             alarmAll.push(bookResult);
-            console.log(alarmAll);
         }
         //? 책 추가한 경우
         if (data.typeId === 3) {
