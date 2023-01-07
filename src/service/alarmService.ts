@@ -4,44 +4,9 @@ import { AlarmResponseDTO } from "../interfaces/alarm/AlarmResponseDTO";
 
 const prisma = new PrismaClient();
 
-let alarmAll: AlarmResponseDTO[] = [];
-
-async function getBookData(data: any) {
-
-    const bookIds = await prisma.recommendAlarm.findFirst({
-        where: {
-            alarmId: data.id,
-        },
-        select: {
-            Recommend: {
-                select: {
-                    bookId: true
-                }
-            }
-        }
-    })
-    const bookDetail = await prisma.book.findFirst({
-        where: {
-            id: bookIds?.Recommend.bookId
-        },
-        select: {
-            bookTitle: true
-        }
-    })
-
-    const bookResult = {
-        typeId: data.typeId,
-        senderId: data.senderId,
-        createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
-        bookTitle: bookDetail?.bookTitle
-    }
-    alarmAll.push(bookResult);
-    console.log(alarmAll);
-
-}
-
 //* 알림 조회
 const getAlarm = async () => {
+    let alarmAll: AlarmResponseDTO[] = [];
 
     const alarmData = await prisma.alarm.findMany({
         where: {
@@ -56,6 +21,7 @@ const getAlarm = async () => {
     });
 
     const promises = alarmData.map(async (data) => {
+
         //? 팔로우 한 경우
         if (data.typeId === 1) {
             const followResult = {
@@ -100,13 +66,47 @@ const getAlarm = async () => {
             alarmAll.push(bookResult);
             console.log(alarmAll);
         }
+        //? 책 추가한 경우
+        if (data.typeId === 3) {
+            const bookIds = await prisma.newBookAlarm.findFirst({
+                where: {
+                    alarmId: data.id
+                },
+                select: {
+                    Bookshelf: {
+                        select: {
+                            bookId: true
+                        }
+                    }
+                }
+            })
 
+            const bookDetail = await prisma.book.findFirst({
+                where: {
+                    id: bookIds?.Bookshelf.bookId
+                },
+                select: {
+                    bookTitle: true
+                }
+            })
+
+            const bookResult = {
+                typeId: data.typeId,
+                senderId: data.senderId,
+                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
+                bookTitle: bookDetail?.bookTitle
+            }
+
+            alarmAll.push(bookResult);
+            console.log(alarmAll);
+        }
     });
     await Promise.all(promises);
 
     alarmAll.sort(function (a, b) {
         return a.createdAt > b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0;
     });
+
     return alarmAll;
 }
 
