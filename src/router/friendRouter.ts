@@ -9,5 +9,7 @@ router.post("/:friendId/recommend", friendController.recommendBookToFriend);
 router.get("/", friendController.searchUser);
 //* 친구 팔로우하기 - POST /friend/:friendId
 router.post("/:friendId", friendController.followFriend);
+//* 친구 팔로우 취소하기 - DELETE /friend/:friendId
+router.delete("/:friendId", friendController.deleteFollowFriend);
 
 export default router;

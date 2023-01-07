@@ -64,6 +64,8 @@ export default {
   FAIL_FOUND_FRIEND_ID: "친구 닉네임 찾기 실패",
   SUCCESS_POST_FOLLOW: "친구 팔로우 성공",
   FAIL_POST_FOLLOW: "친구 팔로우 실패",
+  DELETE_FRIEND_SUCCESS : "친구 팔로우 취소 성공",
+  DELETE_FRIEND_FAIL : "친구 팔로우 취소 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
