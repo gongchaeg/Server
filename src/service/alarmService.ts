@@ -4,6 +4,42 @@ import { AlarmResponseDTO } from "../interfaces/alarm/AlarmResponseDTO";
 
 const prisma = new PrismaClient();
 
+let alarmAll: AlarmResponseDTO[] = [];
+
+async function getBookData(data: any) {
+
+    const bookIds = await prisma.recommendAlarm.findFirst({
+        where: {
+            alarmId: data.id,
+        },
+        select: {
+            Recommend: {
+                select: {
+                    bookId: true
+                }
+            }
+        }
+    })
+    const bookDetail = await prisma.book.findFirst({
+        where: {
+            id: bookIds?.Recommend.bookId
+        },
+        select: {
+            bookTitle: true
+        }
+    })
+
+    const bookResult = {
+        typeId: data.typeId,
+        senderId: data.senderId,
+        createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
+        bookTitle: bookDetail?.bookTitle
+    }
+    alarmAll.push(bookResult);
+    console.log(alarmAll);
+
+}
+
 //* 알림 조회
 const getAlarm = async () => {
 
@@ -12,40 +48,65 @@ const getAlarm = async () => {
             receiverId: 1,
         },
         select: {
+            id: true,
             typeId: true,
             senderId: true,
             createdAt: true,
         }
     });
 
-    let alarmAll: AlarmResponseDTO[] = [];
+    const promises = alarmData.map(async (data) => {
+        //? 팔로우 한 경우
+        if (data.typeId === 1) {
+            const followResult = {
+                typeId: data.typeId,
+                senderId: data.senderId,
+                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
+            };
+            alarmAll.push(followResult);
+        }
 
-    const alarmDetailData = await Promise.all(
-        alarmData.map((data: any) => {
-
-            // 팔로우 한 경우
-            if (data.typeId === 1) {
-                const followResult = {
-                    typeId: data.typeId,
-                    senderId: data.senderId,
-                    createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
-                };
-                alarmAll.push(followResult);
-
-            }
-            // 친구 책 추천, 책 추가한 경우
-            else {
-                const bookResult = {
-                    typeId: data.typeId,
-                    senderId: data.senderId,
-                    createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
+        //? 친구 책 추천한 경우
+        if (data.typeId === 2) {
+            const bookIds = await prisma.recommendAlarm.findFirst({
+                where: {
+                    alarmId: data.id
+                },
+                select: {
+                    Recommend: {
+                        select: {
+                            bookId: true
+                        }
+                    }
                 }
-                alarmAll.push(bookResult);
+            })
+
+            const bookDetail = await prisma.book.findFirst({
+                where: {
+                    id: bookIds?.Recommend.bookId
+                },
+                select: {
+                    bookTitle: true
+                }
+            })
+
+            const bookResult = {
+                typeId: data.typeId,
+                senderId: data.senderId,
+                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
+                bookTitle: bookDetail?.bookTitle
             }
 
-        })
-    );
+            alarmAll.push(bookResult);
+            console.log(alarmAll);
+        }
 
+    });
+    await Promise.all(promises);
+
+    alarmAll.sort(function (a, b) {
+        return a.createdAt > b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0;
+    });
     return alarmAll;
 }
 

@@ -53,7 +53,7 @@ model Friend {
 
 model Alarm {
   id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @db.Timestamp(6)
+  createdAt        DateTime         @default(now())
   receiverId       Int
   senderId         Int
   typeId           Int
@@ -90,4 +90,9 @@ model NewBookAlarm {
   bookshelfId Int
   Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
   Bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id], onDelete: Cascade, map: "bookshelf_id_fk")
+}
+
+model AlarmType {
+  id       Int    @id(map: "alarmType_pkey") @default(autoincrement())
+  typeName String @db.VarChar(50)
 }
