@@ -42,9 +42,29 @@ const followFriend = async (req: Request, res: Response) => {
     const data = await friendService.followFriend(+friendId);
 
     if (!data) {
-        return res.status(sc.OK).send(success(sc.OK, rm.FAIL_POST_FOLLOW));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
     }
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
+
+}
+
+/**
+ * @route DELETE /friend/:friendId
+ * @desc 팔로우 취소하기
+ **/
+const deleteFollowFriend = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+
+    if (!friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+    }
+
+    const data = await friendService.deleteFollowFriend(+friendId);
+
+    if (!data) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_FRIEND_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_FRIEND_SUCCESS));
 
 }
 
@@ -52,6 +72,7 @@ const friendController = {
     recommendBookToFriend,
     searchUser,
     followFriend,
+    deleteFollowFriend
 }
 
 export default friendController;
