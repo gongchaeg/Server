@@ -25,7 +25,7 @@ const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
   }
 
   const data = await prisma.bookshelf.create({
-      data : {
+      data: {
         pickIndex : 0,
         description : bookshelfCreateDto.description,
         memo : bookshelfCreateDto.memo,
