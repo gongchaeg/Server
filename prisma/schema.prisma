@@ -31,15 +31,16 @@ model Book {
 }
 
 model Bookshelf {
-  id          Int      @id @default(autoincrement())
-  pickIndex   Int
-  description String?  @db.VarChar(200)
-  memo        String?  @db.VarChar(50)
-  userId      Int
-  bookId      Int
-  createdAt   DateTime @db.Timestamp(6)
-  Book        Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
-  User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
+  id           Int            @id @default(autoincrement())
+  pickIndex    Int
+  description  String?        @db.VarChar(200)
+  memo         String?        @db.VarChar(50)
+  userId       Int
+  bookId       Int
+  createdAt    DateTime       @default(now())
+  Book         Book           @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
+  User         User           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
+  NewBookAlarm NewBookAlarm[]
 }
 
 model Friend {
@@ -51,23 +52,42 @@ model Friend {
 }
 
 model Alarm {
-  id               Int      @id @default(autoincrement())
-  createdAt        DateTime @db.Timestamp(6)
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @db.Timestamp(6)
   receiverId       Int
   senderId         Int
   typeId           Int
-  receiverIdToUser User     @relation("Alarm_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk")
-  senderIdToUser   User     @relation("Alarm_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk_2")
+  receiverIdToUser User             @relation("Alarm_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk")
+  senderIdToUser   User             @relation("Alarm_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "alarm_user_id_fk_2")
+  NewBookAlarm     NewBookAlarm[]
+  RecommendAlarm   RecommendAlarm[]
 }
 
 model Recommend {
-  id                  Int      @id @default(autoincrement())
-  recommendDesc       String?  @db.VarChar(200)
+  id                  Int              @id @default(autoincrement())
+  recommendDesc       String?          @db.VarChar(200)
   recommendedBy       Int
   recommendTo         Int
   bookId              Int
-  createdAt           DateTime @default(now())
-  Book                Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
-  recommendedByToUser User     @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
-  recommendToToUser   User     @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
+  createdAt           DateTime         @default(now())
+  Book                Book             @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
+  recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
+  recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
+  RecommendAlarm      RecommendAlarm[]
+}
+
+model RecommendAlarm {
+  id          Int       @id @default(autoincrement())
+  alarmId     Int
+  recommendId Int
+  Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
+  Recommend   Recommend @relation(fields: [recommendId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_id_fk")
+}
+
+model NewBookAlarm {
+  id          Int       @id @default(autoincrement())
+  alarmId     Int
+  bookshelfId Int
+  Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
+  Bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id], onDelete: Cascade, map: "bookshelf_id_fk")
 }
