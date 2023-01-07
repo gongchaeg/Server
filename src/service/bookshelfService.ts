@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import { BookDTO } from "../interfaces/book/BookDTO";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
+import { BookshelfResDTO } from "../interfaces/bookshelf/BookshelfResDTO";
 import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
+import { UserDTO } from "../interfaces/user/userDTO";
+import userService from "./userService";
 
 const prisma = new PrismaClient();
 
@@ -21,7 +25,7 @@ const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
   }
 
   const data = await prisma.bookshelf.create({
-      data: {
+      data : {
         pickIndex : 0,
         description : bookshelfCreateDto.description,
         memo : bookshelfCreateDto.memo,
@@ -115,11 +119,91 @@ const updateMyBook = async (bookId : number, bookshelfUpdateDto : BookshelfUpdat
   return data;
 }
 
+//* 내 책장 (메인 뷰) 조회
+const getMyBookshelf = async () => {
+
+  // section1 : friendList
+  let friendList: UserDTO[] = [];
+  const friendIdList = await prisma.friend.findMany({
+    where : {
+      // 임의로 유저 아이디 1로 박아놓음
+      senderId : 1
+    },
+    select : {
+      receiverId : true
+    }
+  });
+
+  for (const user of friendIdList) {
+    const userId = user.receiverId;
+    const friend = await userService.getUser(userId);
+
+    friendList?.push(friend);
+  }
+
+  // section2 : myIntro
+  const myIntro = await prisma.user.findUnique({
+    where : {
+      // 임의로 유저 아이디 1로 박아놓음
+      id : 1
+    }
+  });
+
+  // section3 : picks
+  const picks = await prisma.bookshelf.findMany({
+    where : {
+      pickIndex : { in: [1, 2, 3] } 
+    },
+    orderBy : {
+      pickIndex : 'asc'
+    },
+    select : {
+      pickIndex: true,
+      Book : {
+        select : {
+          id : true,
+          bookImage : true,
+          bookTitle : true
+        }
+      },
+      description : true
+
+    }
+  });
+
+  // section4 : books
+  const books = await prisma.bookshelf.findMany({
+    where : {
+      userId :1
+    },
+    select : {
+      bookId: true,
+      pickIndex: true,
+      Book : {
+        select : {
+          bookImage : true,
+        }
+      }
+    }
+  })
+
+  const data : BookshelfResDTO = {
+    friendList : friendList,
+    myIntro : myIntro,
+    picks : picks,
+    bookTotalNum : books.length,
+    books: books
+  };
+
+  return data;
+}
+
 const bookshelfService = {
     createMyBook,
     getBookById,
     deleteMyBook,
-    updateMyBook
+    updateMyBook,
+    getMyBookshelf
 };
 
 export default bookshelfService;

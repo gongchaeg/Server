@@ -44,6 +44,8 @@ export default {
   DELETE_MYBOOK_FAIL: "등록한 책 삭제 실패",
   UPDATE_MYBOOK_SUCCESS: "등록한 책 수정하기 성공",
   UPDATE_MYBOOK_FAIL: "등록한 책 수정하기 실패",
+  READ_BOOKSHELF_SUCCESS: "책장 불러오기 성공",
+  READ_BOOKSHELF_FAIL: "책장 불러오기 실패",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
