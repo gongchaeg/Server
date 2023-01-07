@@ -37,7 +37,7 @@ model Bookshelf {
   memo        String?  @db.VarChar(50)
   userId      Int
   bookId      Int
-  createdAt   DateTime @db.Timestamp(6)
+  createdAt   DateTime @default(now())
   Book        Book     @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
   User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
 }
