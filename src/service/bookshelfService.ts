@@ -26,7 +26,7 @@ const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
     bookId = -1;
   }
 
-  const data = await prisma.bookshelf.create({
+  const bookshelf = await prisma.bookshelf.create({
       data: {
         pickIndex : 0,
         description : bookshelfCreateDto.description,
@@ -52,7 +52,36 @@ const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
       }
   });
 
-  return data;
+  // 나를 팔로우하는 친구들에게 알림 보내기
+  const follows = await prisma.friend.findMany({
+    where : {
+      receiverId : 1
+    },
+    select : {
+      senderId : true
+    }
+  });
+
+  //console.log(follows.length);
+
+  for ( const follow of follows ) {
+    const alarm = await prisma.alarm.create({
+      data : {
+        senderId : 1,
+        receiverId : follow.senderId,
+        typeId : 3
+      }
+    });
+
+    const newBookAlarm =  await prisma.newBookAlarm.create({
+      data : {
+        alarmId : alarm.id,
+        bookshelfId : bookshelf.id
+      }
+    });
+  }
+
+  return bookshelf;
 };
 
 //* 등록한 책 상세 정보 조회

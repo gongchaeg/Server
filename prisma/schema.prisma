@@ -53,7 +53,7 @@ model Friend {
 
 model Alarm {
   id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @db.Timestamp(6)
+  createdAt        DateTime         @default(now())
   receiverId       Int
   senderId         Int
   typeId           Int
