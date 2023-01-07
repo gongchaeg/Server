@@ -44,6 +44,10 @@ export default {
   DELETE_MYBOOK_FAIL: "등록한 책 삭제 실패",
   UPDATE_MYBOOK_SUCCESS: "등록한 책 수정하기 성공",
   UPDATE_MYBOOK_FAIL: "등록한 책 수정하기 실패",
+  READ_BOOKSHELF_SUCCESS: "책장 불러오기 성공",
+  READ_BOOKSHELF_FAIL: "책장 불러오기 실패",
+  READ_FRIEND_BOOKSHELF_SUCCESS : "친구 책장 불러오기 성공",
+  READ_FRIEND_BOOKSHELF_FAIL : "친구 책장 불러오기 실패",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
@@ -60,6 +64,8 @@ export default {
   FAIL_FOUND_FRIEND_ID: "친구 닉네임 찾기 실패",
   SUCCESS_POST_FOLLOW: "친구 팔로우 성공",
   FAIL_POST_FOLLOW: "친구 팔로우 실패",
+  DELETE_FRIEND_SUCCESS : "친구 팔로우 취소 성공",
+  DELETE_FRIEND_FAIL : "친구 팔로우 취소 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",

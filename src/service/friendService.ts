@@ -48,10 +48,22 @@ const followFriend = async (friendId: number) => {
     return data;
 }
 
+//* 팔로우 취소하기
+const deleteFollowFriend = async (friendId : number) => {
+    const data = await prisma.friend.deleteMany({
+        where : {
+            receiverId : friendId,
+            senderId : 1
+        }
+    })
+    return data;
+}
+
 const friendService = {
     recommendBookToFriend,
     searchUser,
     followFriend,
+    deleteFollowFriend
 }
 
 export default friendService;

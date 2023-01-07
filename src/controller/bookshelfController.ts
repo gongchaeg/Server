@@ -74,11 +74,42 @@ const updateMyBook = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS));
 }
 
+/**
+ * @route GET /bookshelf
+ * @desc 내 책장 (메인 뷰) 조회하기
+ */
+const getMyBookshelf = async (req: Request, res: Response) => {
+    const data = await bookshelfService.getMyBookshelf();
+
+    if (!data) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_BOOKSHELF_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.READ_BOOKSHELF_SUCCESS, data));
+
+}
+
+/**
+ * @route GET /bookshelf/friend/:friendId
+ * @desc 친구 책장 조회하기
+ */
+const getFriendBookshelf = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+    const data = await bookshelfService.getFriendBookshelf(+friendId);
+
+    if (!data) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_FRIEND_BOOKSHELF_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.READ_FRIEND_BOOKSHELF_SUCCESS, data));
+
+}
+
 const bookshelfController = {
     createMyBook,
     getBookById,
     deleteMyBook,
-    updateMyBook
+    updateMyBook,
+    getMyBookshelf,
+    getFriendBookshelf
 };
   
 export default bookshelfController;
