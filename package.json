@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.241.0",
@@ -26,6 +27,7 @@
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.18",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "husky": "^8.0.0"
   }
 }
