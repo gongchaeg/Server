@@ -5,6 +5,10 @@ on:
     branches: [develop]
   pull_request:
     branches: [develop]
+    
+env:
+  using: 'node16'
+  main: 'main.js'
 
 jobs:
   build:
