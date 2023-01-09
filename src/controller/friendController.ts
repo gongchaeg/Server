@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { fail, success } from "../constants/response";
 import { rm, sc } from "../constants";
 import { friendService } from '../service';
+import { slackErrorMessage } from '../modules/slackErrorMessage';
 
 
 //* 친구에게 책 추천하기 
