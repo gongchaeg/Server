@@ -21,6 +21,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
 }
 
+//* 사용자 검색하기
 const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
 
