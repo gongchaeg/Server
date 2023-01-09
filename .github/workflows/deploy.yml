@@ -46,9 +46,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
+          
+      - name: upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./peekabook.zip s3://peekabook-build/deploy/
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
-          --application-name peekabook
+          --application-name peekabook-codedeploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name peekabook-deploy-group
+          --deployment-group-name GROUP
+          --s3-location bucket=peekabook-build,bundleType=zip,key=deploy/peekabook.zip
