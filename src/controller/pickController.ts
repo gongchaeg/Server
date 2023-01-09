@@ -13,7 +13,7 @@ const patchPick = async (req: Request, res: Response) => {
 
     try {
         // 슬랙 메시지 에러 확인을 하기 위함
-        let pickData = JSON.parse(req.body);
+        // let pickData = JSON.parse(req.body);
         const data = await pickService.patchPick(pickPatchRequestDTO);
 
         if (!data) {
@@ -29,8 +29,7 @@ const patchPick = async (req: Request, res: Response) => {
         sendWebhookMessage(errorMessage);
 
         res.status(sc.INTERNAL_SERVER_ERROR)
-            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR),
-            );
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
 
