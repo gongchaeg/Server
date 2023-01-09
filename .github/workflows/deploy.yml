@@ -28,7 +28,7 @@ jobs:
         run: |
           pwd
           touch .env
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env
           cat .env
       
       - name: build server files
