@@ -12,6 +12,9 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         },
     });
 
+    if (books == null) {
+        return null;
+    }
 
     const recommendData = await prisma.recommend.create({
         data: {
@@ -24,17 +27,17 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 
     //알림 테이블에도 추가
     const alarm = await prisma.alarm.create({
-        data : {
-            senderId : 1,
-            receiverId : friendId,
-            typeId : 2
+        data: {
+            senderId: 1,
+            receiverId: friendId,
+            typeId: 2
         }
     });
-    
+
     await prisma.recommendAlarm.create({
-        data : {
-            alarmId : alarm.id,
-            recommendId : recommendData.id
+        data: {
+            alarmId: alarm.id,
+            recommendId: recommendData.id
         }
     });
 
@@ -63,10 +66,10 @@ const followFriend = async (friendId: number) => {
 
     // 알림 테이블에도 추가
     await prisma.alarm.create({
-        data : {
-          senderId : 1,
-          receiverId : friendId,
-          typeId : 1
+        data: {
+            senderId: 1,
+            receiverId: friendId,
+            typeId: 1
         }
     });
 
@@ -74,11 +77,11 @@ const followFriend = async (friendId: number) => {
 }
 
 //* 팔로우 취소하기
-const deleteFollowFriend = async (friendId : number) => {
+const deleteFollowFriend = async (friendId: number) => {
     const data = await prisma.friend.deleteMany({
-        where : {
-            receiverId : friendId,
-            senderId : 1
+        where: {
+            receiverId: friendId,
+            senderId: 1
         }
     })
     return data;
