@@ -75,7 +75,7 @@ export default {
   FAIL_PATCH_PICK: "책 pick 수정 실패",
   SUCCESS_PATCH_PICK: "책 pick 수정 성공",
   FAIL_GET_BOOK: "책 전체 조회 실패",
-  SUCCESS_GET_BOOK: "책 전체 조회 실패",
+  SUCCESS_GET_BOOK: "책 전체 조회 성공",
 
   // alarm
   FAIL_GET_ALARM: "알림 조회 실패",
