@@ -12,6 +12,9 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         },
     });
 
+    if (books == null) {
+        return null;
+    }
 
     const recommendData = await prisma.recommend.create({
         data: {
