@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { BookDTO } from "../book/BookDTO";
 import { PickBook } from "../pick/PickBook";
 import { IntroDTO } from "../user/IntroDTO";
-import { UserDTO } from "../user/userDTO";
+import { UserDTO } from "../user/UserDTO";
 
 export interface MyBookshelfResDTO {
     friendList? : UserDTO[]|null,
