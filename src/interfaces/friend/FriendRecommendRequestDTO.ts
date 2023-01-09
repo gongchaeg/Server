@@ -1,4 +1,6 @@
 export interface FriendRecommendRequestDTO {
     bookTitle: string,
-    recommendDesc: string
+    recommendDesc: string,
+    author: string,
+    bookImage: string
 }

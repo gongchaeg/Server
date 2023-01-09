@@ -46,8 +46,8 @@ export default {
   UPDATE_MYBOOK_FAIL: "등록한 책 수정하기 실패",
   READ_BOOKSHELF_SUCCESS: "책장 불러오기 성공",
   READ_BOOKSHELF_FAIL: "책장 불러오기 실패",
-  READ_FRIEND_BOOKSHELF_SUCCESS : "친구 책장 불러오기 성공",
-  READ_FRIEND_BOOKSHELF_FAIL : "친구 책장 불러오기 실패",
+  READ_FRIEND_BOOKSHELF_SUCCESS: "친구 책장 불러오기 성공",
+  READ_FRIEND_BOOKSHELF_FAIL: "친구 책장 불러오기 실패",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
@@ -57,15 +57,15 @@ export default {
   // 친구
   NOT_FOUND_FRIEND_ID: "잘못된 친구 id 입니다",
   SUCCESS_RECOMMEND_BOOK: "친구에게 책 추천하기 성공",
-  FAIL_RECOMMEND_BOOK: "친구에게 책 추천하기 성공",
+  FAIL_RECOMMEND_BOOK: "친구에게 책 추천하기 실패",
   FAIL_FOUND_NICKNAME: "닉네임을 찾을 수 없습니다.",
   FAIL_GET_USER: "사용자 검색 실패",
   SUCCESS_GET_USER: "사용자 검색 성공",
   FAIL_FOUND_FRIEND_ID: "친구 닉네임 찾기 실패",
   SUCCESS_POST_FOLLOW: "친구 팔로우 성공",
   FAIL_POST_FOLLOW: "친구 팔로우 실패",
-  DELETE_FRIEND_SUCCESS : "친구 팔로우 취소 성공",
-  DELETE_FRIEND_FAIL : "친구 팔로우 취소 실패",
+  DELETE_FRIEND_SUCCESS: "친구 팔로우 취소 성공",
+  DELETE_FRIEND_FAIL: "친구 팔로우 취소 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
@@ -75,7 +75,7 @@ export default {
   FAIL_PATCH_PICK: "책 pick 수정 실패",
   SUCCESS_PATCH_PICK: "책 pick 수정 성공",
   FAIL_GET_BOOK: "책 전체 조회 실패",
-  SUCCESS_GET_BOOK: "책 전체 조회 실패",
+  SUCCESS_GET_BOOK: "책 전체 조회 성공",
 
   // alarm
   FAIL_GET_ALARM: "알림 조회 실패",

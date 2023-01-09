@@ -12,13 +12,23 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         },
     });
 
+    let bookId = books?.id as number;
+
+    //* 책이 없는 경우 책 생성해주기
     if (books == null) {
-        return null;
+        const data = await prisma.book.create({
+            data: {
+                bookTitle: friendRecommendRequestDTO.bookTitle,
+                author: friendRecommendRequestDTO.author,
+                bookImage: friendRecommendRequestDTO.bookImage
+            }
+        })
+        bookId = data.id
     }
 
     const recommendData = await prisma.recommend.create({
         data: {
-            bookId: books.id,
+            bookId: bookId,
             recommendDesc: friendRecommendRequestDTO.recommendDesc,
             recommendedBy: 1,
             recommendTo: friendId,
