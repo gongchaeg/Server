@@ -48,7 +48,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 const searchUser = async (nickname: string) => {
     const user = await prisma.user.findFirst({
         where: {
-            nickname: nickname
+            nickname: nickname,
         },
     });
 
@@ -72,9 +72,12 @@ const searchUser = async (nickname: string) => {
         isFollowed = true;
     }
 
-
-
-
+    const data = {
+        fiendId: user.id,
+        nickname: user.nickname,
+        profileImage: user.profileImage,
+        isFollowed: isFollowed
+    }
 
     return data;
 }
