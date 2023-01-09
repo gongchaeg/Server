@@ -3,7 +3,7 @@ import { BookDTO } from "../interfaces/book/BookDTO";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
 import { MyBookshelfResDTO } from "../interfaces/bookshelf/MyBookshelfResDTO";
 import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
-import { UserDTO } from "../interfaces/user/userDTO";
+import { UserDTO } from "../interfaces/user/UserDTO";
 import userService from "./userService";
 import { FriendBookshelfResDTO } from "../interfaces/bookshelf/FriendBookshelfResDTO";
 import { IntroDTO } from "../interfaces/user/IntroDTO";
