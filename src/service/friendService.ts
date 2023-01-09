@@ -83,7 +83,7 @@ const searchUser = async (nickname: string) => {
     }
 
     const data = {
-        fiendId: user.id,
+        friendId: user.id,
         nickname: user.nickname,
         profileImage: user.profileImage,
         isFollowed: isFollowed
