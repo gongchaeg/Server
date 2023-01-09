@@ -46,11 +46,35 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 
 //* 사용자 검색하기
 const searchUser = async (nickname: string) => {
-    const data = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
         where: {
             nickname: nickname
         },
     });
+
+    if (user == null) {
+        return null;
+    }
+
+    let isFollowed: boolean = false;
+
+    const followed = await prisma.friend.findFirst({
+        where: {
+            receiverId: 1,
+            senderId: user?.id
+        },
+        select: {
+            followId: true
+        }
+    })
+
+    if (followed?.followId != null) {
+        isFollowed = true;
+    }
+
+
+
+
 
     return data;
 }
