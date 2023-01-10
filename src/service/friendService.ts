@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number) => {
+    //* 존재하는 책인지 확인하기
     const books = await prisma.book.findFirst({
         where: {
             bookTitle: friendRecommendRequestDTO.bookTitle
@@ -14,7 +15,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 
     let bookId = books?.id as number;
 
-    //* 책이 없는 경우 책 생성해주기
+    //? 책이 없는 경우 책 생성해주기
     if (books == null) {
         const data = await prisma.book.create({
             data: {
@@ -24,6 +25,18 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
             }
         })
         bookId = data.id
+    }
+
+    //* 친구 존재하는지 확인 후 없는 경우 추천 못 하도록 하기
+    const friendData = await prisma.friend.findFirst({
+        where: {
+            senderId: friendId
+        }
+    })
+
+    //? 친구 없는 경우
+    if (friendData == null) {
+        return sc.NOT_FOUND;
     }
 
     const recommendData = await prisma.recommend.create({
@@ -51,7 +64,11 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         }
     });
 
-    return recommendData;
+    const result = {
+        recommendId: recommendData.id
+    }
+
+    return result;
 }
 
 //* 사용자 검색하기
