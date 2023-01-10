@@ -1,12 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { FriendBookshelfResDTO } from './../interfaces/bookshelf/FriendBookshelfResDTO';
+import {PrismaClient } from "@prisma/client";
 import { BookDTO } from "../interfaces/book/BookDTO";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
 import { MyBookshelfResDTO } from "../interfaces/bookshelf/MyBookshelfResDTO";
 import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
 import { UserDTO } from "../interfaces/user/UserDTO";
 import userService from "./userService";
-import { FriendBookshelfResDTO } from "../interfaces/bookshelf/FriendBookshelfResDTO";
 import { IntroDTO } from "../interfaces/user/IntroDTO";
+import { sc } from '../constants';
+import { rm } from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -232,6 +234,18 @@ const getMyBookshelf = async () => {
 
 //* 친구 책장 조회
 const getFriendBookshelf = async (friendId : number) => {
+
+  //? 친구 테이블에 데이터가 없다면 에러
+  const isFriend = await prisma.friend.findFirst({
+    where : {
+      receiverId : friendId,
+      senderId : 1
+    }
+  });
+
+  if (isFriend == null) {
+    return sc.NOT_FOUND;
+  }
 
   // section1 : myIntro
   const myIntro = await prisma.user.findUnique({
