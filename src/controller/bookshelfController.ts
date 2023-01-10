@@ -3,6 +3,8 @@ import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
 import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
+import { slackErrorMessage } from "../modules/slackErrorMessage";
+import { sendWebhookMessage } from "../modules/slackWebhook";
 import { bookshelfService } from "../service";
 
 /**
@@ -83,10 +85,20 @@ const updateMyBook = async (req: Request, res: Response) => {
 const getMyBookshelf = async (req: Request, res: Response) => {
     const data = await bookshelfService.getMyBookshelf();
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_BOOKSHELF_FAIL));
+    try {
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_BOOKSHELF_SUCCESS, data));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.READ_BOOKSHELF_SUCCESS, data));
+
 
 }
 
