@@ -24,13 +24,32 @@ const getAlarm = async () => {
 
         //? 팔로우 한 경우
         if (data.typeId === 1) {
-            const followResult = {
-                typeId: data.typeId,
-                senderId: data.senderId,
-                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
-            };
-            alarmAll.push(followResult);
+
+            const userData = await prisma.user.findFirst({
+                where: {
+                    id: data.senderId
+                },
+                select: {
+                    profileImage: true,
+                    nickname: true
+                }
+            })
+
+            if (userData != null) {
+                const followResult = {
+                    alarmId: data.id,
+                    typeId: data.typeId,
+                    senderId: data.senderId,
+                    senderName: userData.nickname,
+                    profileImage: userData?.profileImage,
+                    createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
+                };
+                alarmAll.push(followResult);
+            }
         }
+
+
+
 
         //? 친구 책 추천한 경우
         if (data.typeId === 2) {
@@ -56,14 +75,29 @@ const getAlarm = async () => {
                 }
             })
 
-            const bookResult = {
-                typeId: data.typeId,
-                senderId: data.senderId,
-                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
-                bookTitle: bookDetail?.bookTitle
+            const userData = await prisma.user.findFirst({
+                where: {
+                    id: data.senderId
+                },
+                select: {
+                    profileImage: true,
+                    nickname: true
+                }
+            })
+
+            if (userData != null) {
+                const bookResult = {
+                    alarmId: data.id,
+                    typeId: data.typeId,
+                    senderId: data.senderId,
+                    senderName: userData.nickname,
+                    profileImage: userData?.profileImage,
+                    createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
+                    bookTitle: bookDetail?.bookTitle
+                };
+                alarmAll.push(bookResult);
             }
 
-            alarmAll.push(bookResult);
         }
         //? 책 추가한 경우
         if (data.typeId === 3) {
@@ -89,15 +123,29 @@ const getAlarm = async () => {
                 }
             })
 
-            const bookResult = {
-                typeId: data.typeId,
-                senderId: data.senderId,
-                createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
-                bookTitle: bookDetail?.bookTitle
+            const userData = await prisma.user.findFirst({
+                where: {
+                    id: data.senderId
+                },
+                select: {
+                    profileImage: true,
+                    nickname: true
+                }
+            })
+
+            if (userData != null) {
+                const bookResult = {
+                    alarmId: data.id,
+                    typeId: data.typeId,
+                    senderId: data.senderId,
+                    senderName: userData.nickname,
+                    profileImage: userData?.profileImage,
+                    bookTitle: bookDetail?.bookTitle,
+                    createdAt: dayjs(data.createdAt).format('YYYY-MM-DD')
+                };
+                alarmAll.push(bookResult);
             }
 
-            alarmAll.push(bookResult);
-            console.log(alarmAll);
         }
     });
     await Promise.all(promises);
