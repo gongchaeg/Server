@@ -1,4 +1,5 @@
 export interface AlarmResponseDTO {
+    alarmId: number,
     senderId: number,
     senderName: string,
     profileImage: string,
