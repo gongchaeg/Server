@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id                             Int         @id @default(autoincrement())
+  id                             Int         @id @unique @default(autoincrement())
   nickname                       String      @unique @db.VarChar(50)
   profileImage                   String?     @db.VarChar(200)
   intro                          String?     @db.VarChar(100)
@@ -22,7 +22,7 @@ model User {
 }
 
 model Book {
-  id        Int         @id @default(autoincrement())
+  id        Int         @id @unique @default(autoincrement())
   bookTitle String      @db.VarChar(100)
   author    String      @db.VarChar(50)
   bookImage String?     @db.VarChar(200)
@@ -31,7 +31,7 @@ model Book {
 }
 
 model Bookshelf {
-  id           Int            @id @default(autoincrement())
+  id           Int            @id @unique @default(autoincrement())
   pickIndex    Int            @default(0)
   description  String?        @db.VarChar(200)
   memo         String?        @db.VarChar(50)
@@ -44,7 +44,7 @@ model Bookshelf {
 }
 
 model Friend {
-  followId         Int  @id @default(autoincrement())
+  followId         Int  @id @unique @default(autoincrement())
   receiverId       Int
   senderId         Int
   receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_id_fk")
@@ -52,7 +52,7 @@ model Friend {
 }
 
 model Alarm {
-  id               Int              @id @default(autoincrement())
+  id               Int              @id @unique @default(autoincrement())
   createdAt        DateTime         @default(now())
   receiverId       Int
   senderId         Int
@@ -64,7 +64,7 @@ model Alarm {
 }
 
 model Recommend {
-  id                  Int              @id @default(autoincrement())
+  id                  Int              @id @unique @default(autoincrement())
   recommendDesc       String?          @db.VarChar(200)
   recommendedBy       Int
   recommendTo         Int
@@ -77,7 +77,7 @@ model Recommend {
 }
 
 model RecommendAlarm {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id @unique @default(autoincrement())
   alarmId     Int
   recommendId Int
   Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
@@ -85,7 +85,7 @@ model RecommendAlarm {
 }
 
 model NewBookAlarm {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id @unique @default(autoincrement())
   alarmId     Int
   bookshelfId Int
   Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
