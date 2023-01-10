@@ -19,6 +19,11 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
     }
+
+    if (data == sc.NOT_FOUND) {
+        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.FAIL_NO_FRIEND));
+    }
+
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
 }
 
