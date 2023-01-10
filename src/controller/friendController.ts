@@ -32,7 +32,7 @@ const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
 
     if (!nickname) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_NICKNAME));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
 
     const data = await friendService.searchUser(nickname as string);
@@ -48,7 +48,7 @@ const followFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
 
     if (!friendId) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
 
     const data = await friendService.followFriend(+friendId);
