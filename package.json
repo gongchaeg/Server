@@ -9,7 +9,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "postinstall": "prisma generate",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "greeting": "hello husky!"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.241.0",
