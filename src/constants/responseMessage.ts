@@ -67,6 +67,7 @@ export default {
   DELETE_FRIEND_SUCCESS: "친구 팔로우 취소 성공",
   DELETE_FRIEND_FAIL: "친구 팔로우 취소 실패",
   FAIL_NO_FRIEND: "팔로우 하지 않는 친구입니다",
+  FAIL_NO_FRIEND_EXIST: "존재하지 않는 유저입니다.",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",

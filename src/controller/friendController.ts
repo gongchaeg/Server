@@ -36,6 +36,11 @@ const searchUser = async (req: Request, res: Response) => {
     }
 
     const data = await friendService.searchUser(nickname as string);
+
+    if (!data) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_NO_FRIEND_EXIST));
+    }
+
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
 }
 
