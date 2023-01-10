@@ -51,7 +51,11 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         }
     });
 
-    return recommendData.id;
+    const result = {
+        recommendId: recommendData.id
+    }
+
+    return result;
 }
 
 //* 사용자 검색하기
