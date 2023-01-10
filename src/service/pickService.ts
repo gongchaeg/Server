@@ -60,6 +60,7 @@ const getBook = async () => {
             userId: 1,
         },
         select: {
+            id: true,
             pickIndex: true,
             Book: {
                 select: {

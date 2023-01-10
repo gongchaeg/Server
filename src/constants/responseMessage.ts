@@ -63,7 +63,7 @@ export default {
   SUCCESS_GET_USER: "사용자 검색 성공",
   FAIL_FOUND_FRIEND_ID: "친구 닉네임 찾기 실패",
   SUCCESS_POST_FOLLOW: "친구 팔로우 성공",
-  FAIL_POST_FOLLOW: "친구 팔로우 실패",
+  FAIL_POST_FOLLOW: "이미 팔로우한 사용자 입니다.",
   DELETE_FRIEND_SUCCESS: "친구 팔로우 취소 성공",
   DELETE_FRIEND_FAIL: "친구 팔로우 취소 실패",
   FAIL_NO_FRIEND: "팔로우 하지 않는 친구입니다",

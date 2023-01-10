@@ -87,8 +87,8 @@ const searchUser = async (nickname: string) => {
 
     const followed = await prisma.friend.findFirst({
         where: {
-            receiverId: 1,
-            senderId: user?.id
+            senderId: 1,
+            receiverId: user?.id
         },
         select: {
             followId: true
@@ -111,6 +111,21 @@ const searchUser = async (nickname: string) => {
 
 //* 팔로우 하기
 const followFriend = async (friendId: number) => {
+    const followData = await prisma.friend.findFirst({
+        where: {
+            receiverId: friendId,
+            senderId: 1
+        },
+        select: {
+            followId: true
+        }
+    })
+
+    // 이미 사용자가 있는 경우 
+    if (followData != null) {
+        return null;
+    }
+
     const data = await prisma.friend.create({
         data: {
             receiverId: friendId,
@@ -126,8 +141,9 @@ const followFriend = async (friendId: number) => {
             typeId: 1
         }
     });
-
     return data;
+
+
 }
 
 //* 팔로우 취소하기

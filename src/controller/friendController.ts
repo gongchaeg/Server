@@ -44,6 +44,7 @@ const searchUser = async (req: Request, res: Response) => {
     return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
 }
 
+//* 사용자 팔로우 하기
 const followFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
 
