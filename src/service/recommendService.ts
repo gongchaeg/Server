@@ -22,6 +22,7 @@ const getRecommend = async () => {
                 select: {
                     id: true,
                     nickname: true,
+                    profileImage: true
                 }
             },
             Book: {
@@ -36,7 +37,6 @@ const getRecommend = async () => {
     })
 
 
-
     const recommendedPromise = recommendedBook.map(async (data) => {
         const result = {
             recommendId: data.id,
@@ -44,6 +44,7 @@ const getRecommend = async () => {
             createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
             friendId: data.recommendedByToUser.id,
             friendNickname: data.recommendedByToUser.nickname,
+            friendImage: data.recommendedByToUser.profileImage,
             bookId: data.Book.id,
             bookTitle: data.Book.bookTitle,
             author: data.Book.author,
