@@ -98,8 +98,6 @@ const getMyBookshelf = async (req: Request, res: Response) => {
         res.status(sc.INTERNAL_SERVER_ERROR)
             .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-
-
 }
 
 /**
@@ -108,12 +106,34 @@ const getMyBookshelf = async (req: Request, res: Response) => {
  */
 const getFriendBookshelf = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+
+    console.log(friendId);
+    
+    if (!friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
     const data = await bookshelfService.getFriendBookshelf(+friendId);
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_FRIEND_BOOKSHELF_FAIL));
+    try {
+        if (data == sc.NOT_FOUND) {
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND_FRIEND_ID));
+        }
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_FRIEND_BOOKSHELF_SUCCESS, data));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.READ_FRIEND_BOOKSHELF_SUCCESS, data));
+
 
 }
 
