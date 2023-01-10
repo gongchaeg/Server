@@ -12,8 +12,6 @@ import { bookshelfService } from "../service";
 const createMyBook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
-    
-
     const data = await bookshelfService.createMyBook(bookshelfCreateDto);
 
     const result = {
