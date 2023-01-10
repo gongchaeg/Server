@@ -69,6 +69,7 @@ const getRecommend = async () => {
                 select: {
                     id: true,
                     nickname: true,
+                    profileImage: true
                 }
             },
             Book: {
@@ -90,6 +91,7 @@ const getRecommend = async () => {
             createdAt: dayjs(data.createdAt).format('YYYY-MM-DD'),
             friendId: data.recommendToToUser.id,
             friendNickname: data.recommendToToUser.nickname,
+            friendImage: data.recommendToToUser.profileImage,
             bookId: data.Book.id,
             bookTitle: data.Book.bookTitle,
             author: data.Book.author,
