@@ -9,7 +9,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "postinstall": "prisma generate",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "mocha ./test/"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.241.0",
@@ -27,7 +28,10 @@
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.18",
+    "chai": "^4.3.7",
+    "husky": "^8.0.0",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
-    "husky": "^8.0.0"
+    "supertest": "^6.3.3"
   }
 }
