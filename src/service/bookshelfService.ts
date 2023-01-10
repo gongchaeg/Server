@@ -211,6 +211,7 @@ const getMyBookshelf = async () => {
       userId :1
     },
     select : {
+      id:true,
       bookId: true,
       pickIndex: true,
       Book : {
@@ -313,6 +314,7 @@ const getFriendBookshelf = async (friendId : number) => {
       userId : friendId
     },
     select : {
+      id : true,
       bookId: true,
       pickIndex: true,
       Book : {

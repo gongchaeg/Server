@@ -1,4 +1,5 @@
 export interface BookDTO {
+    id : number|null,
     Book? : {
         bookTitle? : string|null,
         bookImage? : string|null
