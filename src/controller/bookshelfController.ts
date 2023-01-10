@@ -14,17 +14,30 @@ import { bookshelfService } from "../service";
 const createMyBook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
-    const data = await bookshelfService.createMyBook(bookshelfCreateDto);
-
-    const result = {
-        bookId : data.bookId,
-        bookshelfId : data.id
+    if (!bookshelfCreateDto.author || !bookshelfCreateDto.bookTitle) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL)); 
     }
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
+    try {
+        const data = await bookshelfService.createMyBook(bookshelfCreateDto);
+
+        const result = {
+            bookId : data.bookId,
+            bookshelfId : data.id
+        }
+    
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
+        }
+        return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS)); 
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-    return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS, result)); 
 };
 
 /**
@@ -105,8 +118,6 @@ const getMyBookshelf = async (req: Request, res: Response) => {
 const getFriendBookshelf = async (req: Request, res: Response) => {
     const { friendId } = req.params;
 
-    console.log(friendId);
-    
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
