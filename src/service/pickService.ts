@@ -3,7 +3,7 @@ import { PickPatchRequestDTO } from "../interfaces/pick/PickPatchRequestDTO";
 const prisma = new PrismaClient();
 
 //* Pick한 책 수정
-const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO) => {
+const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number) => {
 
     // 원래 pick값 false로 수정하기
     //! pickIndex 초기에 null 가능한지
@@ -56,10 +56,10 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO) => {
 }
 
 //* 책 전체 조회
-const getBook = async () => {
+const getBook = async (auth: number) => {
     const books = await prisma.bookshelf.findMany({
         where: {
-            userId: 1,
+            userId: auth,
         },
         select: {
             id: true,

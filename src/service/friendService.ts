@@ -147,11 +147,11 @@ const followFriend = async (friendId: number, auth: number) => {
 }
 
 //* 팔로우 취소하기
-const deleteFollowFriend = async (friendId: number) => {
+const deleteFollowFriend = async (friendId: number, auth: number) => {
     const data = await prisma.friend.deleteMany({
         where: {
             receiverId: friendId,
-            senderId: 1
+            senderId: auth
         }
     })
     return data;

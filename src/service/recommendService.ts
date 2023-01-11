@@ -5,14 +5,14 @@ import dayjs from "dayjs";
 const prisma = new PrismaClient();
 
 //* 추천책 조회하기
-const getRecommend = async () => {
+const getRecommend = async (auth: number) => {
     let recommendedList: RecommendGetDTO[] = [];
     let recommendingList: RecommendGetDTO[] = [];
 
     //? 내가(userId:1) 추천받은책
     const recommendedBook = await prisma.recommend.findMany({
         where: {
-            recommendTo: 1,
+            recommendTo: auth,
         },
         select: {
             id: true,
@@ -59,7 +59,7 @@ const getRecommend = async () => {
     //? 내가 추천한책
     const recommendingBook = await prisma.recommend.findMany({
         where: {
-            recommendedBy: 1,
+            recommendedBy: auth,
         },
         select: {
             id: true,
