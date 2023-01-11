@@ -27,7 +27,6 @@ const patchPick = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_PATCH_PICK));
 
     } catch (error) {
-        console.log(error);
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
 
         sendWebhookMessage(errorMessage);
@@ -44,11 +43,21 @@ const getBook = async (req: Request, res: Response) => {
     const data = await pickService.getBook();
     const auth = req.header("auth");
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
+    try {
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
 }
 
 const pickController = {
