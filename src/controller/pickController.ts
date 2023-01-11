@@ -9,7 +9,7 @@ import { slackErrorMessage } from "../modules/slackErrorMessage";
 //* Pick한 책 수정
 const patchPick = async (req: Request, res: Response) => {
     const pickPatchRequestDTO: PickPatchRequestDTO = req.body;
-
+    const auth = req.header("auth");
 
     if (pickPatchRequestDTO.firstPick == null || pickPatchRequestDTO.secondPick == null || pickPatchRequestDTO.thirdPick == null) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
