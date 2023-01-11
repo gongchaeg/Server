@@ -16,7 +16,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId);
+        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId, +{ auth });
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
@@ -47,13 +47,23 @@ const searchUser = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
 
-    const data = await friendService.searchUser(nickname as string);
+    try {
+        const data = await friendService.searchUser(nickname as string, +{ auth });
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_NO_FRIEND_EXIST));
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_NO_FRIEND_EXIST));
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
 }
 
 //* 사용자 팔로우 하기
