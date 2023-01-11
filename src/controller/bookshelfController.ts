@@ -51,7 +51,7 @@ const getBookById = async (req: Request, res: Response) => {
 
     try {
         if (!bookId) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_MYBOOK_FAIL));
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND));       
         }
 
         const data = await bookshelfService.getBookById(+bookId);
@@ -80,9 +80,26 @@ const deleteMyBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
     const { bookId } = req.params;
 
-    await bookshelfService.deleteMyBook(+bookId);
+    try {
+        if (!bookId) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));       
+        }
+    
+        const data = await bookshelfService.deleteMyBook(+bookId);
+    
+        if (data == sc.NOT_FOUND) {
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS));
+        
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
 
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS));
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
 }
 
 /**
