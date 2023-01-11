@@ -27,11 +27,6 @@ const createMyBook = async (req: Request, res: Response) => {
     try {
         const data = await bookshelfService.createMyBook(+auth, bookshelfCreateDto);
 
-        const result = {
-            bookId: data.bookId,
-            bookshelfId: data.id
-        }
-
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
         }
