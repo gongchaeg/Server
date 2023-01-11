@@ -107,7 +107,7 @@ const getBookById = async (bookId: number)=> {
     }
   });
 
-  return bookData;
+return bookData;
 };
 
 //* 등록한 책 삭제

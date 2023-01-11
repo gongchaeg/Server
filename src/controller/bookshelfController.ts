@@ -48,12 +48,27 @@ const getBookById = async (req: Request, res: Response) => {
 
     const { bookId } = req.params;
 
-    const data = await bookshelfService.getBookById(+bookId); 
+    try { 
+        if (!bookId) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_MYBOOK_FAIL));       
+        }
+    
+        const data = await bookshelfService.getBookById(+bookId);
+    
+        if (!data) {
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
+        }
+    
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
 
-    if (!data) {
-        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
+
 }
 
 /**
