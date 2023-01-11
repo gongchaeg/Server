@@ -10,6 +10,7 @@ import { slackErrorMessage } from '../modules/slackErrorMessage';
 const recommendBookToFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendRecommendRequestDTO: FriendRecommendRequestDTO = req.body;
+    const auth = req.header("auth");
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
@@ -30,6 +31,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 //* 사용자 검색하기
 const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
+    const auth = req.header("auth");
 
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
@@ -47,6 +49,7 @@ const searchUser = async (req: Request, res: Response) => {
 //* 사용자 팔로우 하기
 const followFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+    const auth = req.header("auth");
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
@@ -67,6 +70,7 @@ const followFriend = async (req: Request, res: Response) => {
  **/
 const deleteFollowFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+    const auth = req.header("auth");
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
