@@ -135,13 +135,13 @@ const deleteMyBook = async (userId: number, bookId : number) => {
 }
 
 //* 등록한 책 수정
-const updateMyBook = async (bookId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
+const updateMyBook = async (userId: number, bookId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
 
   //unique한 bookshelfId 값
   const bookshelfData = await prisma.bookshelf.findFirst({
     where : {
       bookId : bookId,
-      userId : 1
+      userId : userId
     }
   });
 
