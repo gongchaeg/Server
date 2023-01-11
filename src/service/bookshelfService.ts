@@ -13,7 +13,7 @@ import { rm } from 'fs';
 const prisma = new PrismaClient();
 
 //* 내 책장에 책 등록
-const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
+const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreateDTO) => {
 
   const bookData = await prisma.book.findFirst({
       where : {
@@ -33,10 +33,10 @@ const createMyBook = async (bookshelfCreateDto : BookshelfCreateDTO) => {
         pickIndex : 0,
         description : bookshelfCreateDto.description,
         memo : bookshelfCreateDto.memo,
-        // 일단 userId 박아두고 작업
+
         User : { 
           connect : {
-            id : 1
+            id : userId
           }
         },
         Book : {
