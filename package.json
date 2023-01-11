@@ -10,7 +10,7 @@
     "build": "tsc",
     "postinstall": "prisma generate",
     "prepare": "husky install",
-    "test": "mocha ./test/"
+    "test": "yarn mocha ./test/* -r ts-node/register"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.241.0",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.15",
+    "@types/mocha": "^10.0.1",
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.18",
