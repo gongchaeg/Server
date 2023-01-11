@@ -248,13 +248,13 @@ const getMyBookshelf = async (userId : number) => {
 }
 
 //* 친구 책장 조회
-const getFriendBookshelf = async (friendId : number) => {
+const getFriendBookshelf = async (userId : number, friendId : number) => {
 
   //? 친구 테이블에 데이터가 없다면 에러
   const isFriend = await prisma.friend.findFirst({
     where : {
       receiverId : friendId,
-      senderId : 1
+      senderId : userId
     }
   });
 
@@ -265,8 +265,7 @@ const getFriendBookshelf = async (friendId : number) => {
   // section1 : myIntro
   const myIntro = await prisma.user.findUnique({
     where : {
-      // 임의로 유저 아이디 1로 박아놓음
-      id : 1
+      id : userId
     },
     select : {
       nickname : true,
@@ -278,8 +277,7 @@ const getFriendBookshelf = async (friendId : number) => {
   let friendList: UserDTO[] = [];
   const friendIdList = await prisma.friend.findMany({
     where : {
-      // 임의로 유저 아이디 1로 박아놓음
-      senderId : 1
+      senderId : userId
     },
     select : {
       receiverId : true
