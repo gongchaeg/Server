@@ -16,40 +16,42 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO) => {
         }
     });
 
+
     // 새롭게 pick한 값 index 세팅하기
-    const firstPick = await prisma.bookshelf.updateMany({
-        where: {
-            bookId: pickPatchRequestDTO.firstPick,
-        },
-        data: {
-            pickIndex: 1
-        }
-    });
-
-    const secondPick = await prisma.bookshelf.updateMany({
-        where: {
-            bookId: pickPatchRequestDTO.secondPick,
-        },
-        data: {
-            pickIndex: 2,
-        }
-    })
-
-    const thirdPick = await prisma.bookshelf.updateMany({
-        where: {
-            bookId: pickPatchRequestDTO.thirdPick,
-        },
-        data: {
-            pickIndex: 3,
-        }
-    })
-
-    let data: { first: object, second: object, third: object } = {
-        first: firstPick,
-        second: secondPick,
-        third: thirdPick
+    if (pickPatchRequestDTO.firstPick != null) {
+        const firstPick = await prisma.bookshelf.updateMany({
+            where: {
+                bookId: pickPatchRequestDTO.firstPick,
+            },
+            data: {
+                pickIndex: 1
+            }
+        });
     }
-    return data;
+
+    if (pickPatchRequestDTO.secondPick != null) {
+        const secondPick = await prisma.bookshelf.updateMany({
+            where: {
+                bookId: pickPatchRequestDTO.secondPick,
+            },
+            data: {
+                pickIndex: 2,
+            }
+        })
+    }
+
+    if (pickPatchRequestDTO.thirdPick != null) {
+        const thirdPick = await prisma.bookshelf.updateMany({
+            where: {
+                bookId: pickPatchRequestDTO.thirdPick,
+            },
+            data: {
+                pickIndex: 3,
+            }
+        })
+    }
+
+    return previousPick.count;
 
 }
 
