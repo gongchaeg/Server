@@ -31,7 +31,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 //* 사용자 검색하기
 const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
-    const Authorization = req.header("auth");
+    const auth = req.header("auth");
 
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
