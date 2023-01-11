@@ -64,13 +64,22 @@ const followFriend = async (req: Request, res: Response) => {
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
+    try {
+        const data = await friendService.followFriend(+friendId);
 
-    const data = await friendService.followFriend(+friendId);
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
 
 }
 
