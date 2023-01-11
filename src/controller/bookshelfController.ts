@@ -12,7 +12,7 @@ import { bookshelfService } from "../service";
  * @desc 내 책장에 책 등록하기
  **/
 const createMyBook = async (req: Request, res: Response) => {
-    const Authorization = req.header("auth");
+    const auth = req.header("auth");
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
     if (!bookshelfCreateDto.author || !bookshelfCreateDto.bookTitle) {
@@ -46,7 +46,7 @@ const createMyBook = async (req: Request, res: Response) => {
  * @desc 등록한 책의 상세 정보 불러오기
  */
 const getBookById = async (req: Request, res: Response) => {
-
+    const auth = req.header("auth");
     const { bookId } = req.params;
 
     try {
@@ -77,7 +77,7 @@ const getBookById = async (req: Request, res: Response) => {
  * @desc 등록한 책 삭제하기
  */
 const deleteMyBook = async (req: Request, res: Response) => {
-
+    const auth = req.header("auth");
     const { bookId } = req.params;
 
     await bookshelfService.deleteMyBook(+bookId);
@@ -92,6 +92,7 @@ const deleteMyBook = async (req: Request, res: Response) => {
 const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
     const { bookId } = req.params;
+    const auth = req.header("auth");
 
     if (!bookshelfUpdateDto) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
@@ -111,6 +112,7 @@ const updateMyBook = async (req: Request, res: Response) => {
  */
 const getMyBookshelf = async (req: Request, res: Response) => {
     const data = await bookshelfService.getMyBookshelf();
+    const auth = req.header("auth");
 
     try {
         if (!data) {
