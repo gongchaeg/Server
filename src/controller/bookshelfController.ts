@@ -89,7 +89,7 @@ const getBookById = async (req: Request, res: Response) => {
 const deleteMyBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
     const { bookId } = req.params;
-    
+
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
@@ -125,6 +125,11 @@ const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
     const { bookId } = req.params;
     const auth = req.header("auth");
+
+    //* 헤더로 유저 아이디 안넘겨줬을 때
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
     if (!bookshelfUpdateDto) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
