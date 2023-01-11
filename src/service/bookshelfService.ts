@@ -13,7 +13,8 @@ import { rm } from 'fs';
 const prisma = new PrismaClient();
 
 //* 내 책장에 책 등록
-const createMyBook = async (bookshelfCreateDto: BookshelfCreateDTO) => {
+
+const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreateDTO) => {
 
   const bookData = await prisma.book.findFirst({
     where: {
@@ -29,25 +30,28 @@ const createMyBook = async (bookshelfCreateDto: BookshelfCreateDTO) => {
   }
 
   const bookshelf = await prisma.bookshelf.create({
-    data: {
-      pickIndex: 0,
-      description: bookshelfCreateDto.description,
-      memo: bookshelfCreateDto.memo,
-      // 일단 userId 박아두고 작업
-      User: {
-        connect: {
-          id: 1
-        }
-      },
-      Book: {
-        connectOrCreate: {
-          where: {
-            id: bookId
-          },
-          create: {
-            bookTitle: bookshelfCreateDto.bookTitle,
-            author: bookshelfCreateDto.author,
-            bookImage: bookshelfCreateDto.bookImage
+
+      data: {
+        pickIndex : 0,
+        description : bookshelfCreateDto.description,
+        memo : bookshelfCreateDto.memo,
+
+        User : { 
+          connect : {
+            id : userId
+          }
+        },
+        Book : {
+          connectOrCreate : {
+            where : {
+              id : bookId
+            },
+            create : {
+              bookTitle : bookshelfCreateDto.bookTitle,
+              author : bookshelfCreateDto.author,
+              bookImage : bookshelfCreateDto.bookImage
+            }
+
           }
         }
       }
@@ -87,12 +91,12 @@ const createMyBook = async (bookshelfCreateDto: BookshelfCreateDTO) => {
 };
 
 //* 등록한 책 상세 정보 조회
-const getBookById = async (bookId: number) => {
+
+const getBookById = async (userId: number, bookId: number)=> {
   const bookData = await prisma.bookshelf.findFirst({
     where: {
-      bookId: bookId,
-      // 일단 userId 박아두고 작업
-      userId: 1
+      bookId : bookId,
+      userId : userId
     },
     select: {
       description: true,
@@ -111,24 +115,38 @@ const getBookById = async (bookId: number) => {
 };
 
 //* 등록한 책 삭제
-const deleteMyBook = async (bookId: number) => {
+const deleteMyBook = async (userId: number, bookId : number) => {
+
+  //* 책장에 없는 책을 삭제하려고 하면 에러
+  const bookdata = await prisma.bookshelf.findFirst({
+    where : {
+      bookId : bookId,
+      userId : userId
+    }
+  });
+
+  if (!bookdata) {
+    return sc.NOT_FOUND;
+  }
+
   const data = await prisma.bookshelf.deleteMany({
     where: {
       bookId: bookId,
-      // 일단 userId 박아두고 작업
-      userId: 1
+      userId : userId
     }
   });
+
+  return data;
 }
 
 //* 등록한 책 수정
-const updateMyBook = async (bookId: number, bookshelfUpdateDto: BookshelfUpdateDTO) => {
+const updateMyBook = async (userId: number, bookId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
 
   //unique한 bookshelfId 값
   const bookshelfData = await prisma.bookshelf.findFirst({
-    where: {
-      bookId: bookId,
-      userId: 1
+    where : {
+      bookId : bookId,
+      userId : userId
     }
   });
 
@@ -153,14 +171,13 @@ const updateMyBook = async (bookId: number, bookshelfUpdateDto: BookshelfUpdateD
 }
 
 //* 내 책장 (메인 뷰) 조회
-const getMyBookshelf = async () => {
+const getMyBookshelf = async (userId : number) => {
 
   // section1 : friendList
   let friendList: UserDTO[] = [];
   const friendIdList = await prisma.friend.findMany({
-    where: {
-      // 임의로 유저 아이디 1로 박아놓음
-      senderId: 1
+    where : {
+      senderId : userId
     },
     select: {
       receiverId: true
@@ -178,18 +195,17 @@ const getMyBookshelf = async () => {
   }
 
   // section2 : myIntro
-  const myIntro: IntroDTO | null = await prisma.user.findUnique({
-    where: {
-      // 임의로 유저 아이디 1로 박아놓음
-      id: 1
+  const myIntro : IntroDTO|null = await prisma.user.findUnique({
+    where : {
+      id : userId
     }
   });
 
   // section3 : picks
   const picks = await prisma.bookshelf.findMany({
-    where: {
-      pickIndex: { in: [1, 2, 3] },
-      userId: 1
+    where : {
+      pickIndex : { in: [1, 2, 3] },
+      userId : userId
     },
     orderBy: {
       pickIndex: 'asc'
@@ -210,8 +226,8 @@ const getMyBookshelf = async () => {
 
   // section4 : books
   const books = await prisma.bookshelf.findMany({
-    where: {
-      userId: 1
+    where : {
+      userId : userId
     },
     select: {
       id: true,
@@ -237,13 +253,13 @@ const getMyBookshelf = async () => {
 }
 
 //* 친구 책장 조회
-const getFriendBookshelf = async (friendId: number) => {
+const getFriendBookshelf = async (userId : number, friendId : number) => {
 
   //? 친구 테이블에 데이터가 없다면 에러
   const isFriend = await prisma.friend.findFirst({
-    where: {
-      receiverId: friendId,
-      senderId: 1
+    where : {
+      receiverId : friendId,
+      senderId : userId
     }
   });
 
@@ -253,9 +269,8 @@ const getFriendBookshelf = async (friendId: number) => {
 
   // section1 : myIntro
   const myIntro = await prisma.user.findUnique({
-    where: {
-      // 임의로 유저 아이디 1로 박아놓음
-      id: 1
+    where : {
+      id : userId
     },
     select: {
       nickname: true,
@@ -266,9 +281,8 @@ const getFriendBookshelf = async (friendId: number) => {
   // section2 : friendList
   let friendList: UserDTO[] = [];
   const friendIdList = await prisma.friend.findMany({
-    where: {
-      // 임의로 유저 아이디 1로 박아놓음
-      senderId: 1
+    where : {
+      senderId : userId
     },
     select: {
       receiverId: true
