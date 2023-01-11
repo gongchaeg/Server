@@ -164,6 +164,9 @@ const getMyBookshelf = async () => {
     },
     select : {
       receiverId : true
+    },
+    orderBy : {
+      receiverId : "asc"
     }
   });
 
@@ -269,6 +272,9 @@ const getFriendBookshelf = async (friendId : number) => {
     },
     select : {
       receiverId : true
+    },
+    orderBy : {
+      receiverId : "asc"
     }
   });
 
