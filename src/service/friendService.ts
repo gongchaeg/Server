@@ -30,7 +30,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     //* 친구 존재하는지 확인 후 없는 경우 추천 못 하도록 하기
     const friendData = await prisma.friend.findFirst({
         where: {
-            senderId: friendId
+            receiverId: friendId
         }
     })
 
