@@ -1,10 +1,10 @@
-import { sendWebhookMessage } from './../modules/slackWebhook';
 import { Request, Response } from "express";
 import { fail, success } from "../constants/response";
 import { rm, sc } from "../constants";
 import { pickService } from "../service";
 import { PickPatchRequestDTO } from "../interfaces/pick/PickPatchRequestDTO";
 import { slackErrorMessage } from "../modules/slackErrorMessage";
+import { sendWebhookMessage } from "../modules/slackWebhook";
 
 //* Pick한 책 수정
 const patchPick = async (req: Request, res: Response) => {
@@ -27,8 +27,7 @@ const patchPick = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_PATCH_PICK));
 
     } catch (error) {
-        console.log(error);
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -44,11 +43,21 @@ const getBook = async (req: Request, res: Response) => {
     const data = await pickService.getBook();
     const auth = req.header("auth");
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
+    try {
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
 }
 
 const pickController = {

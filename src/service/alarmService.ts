@@ -5,12 +5,12 @@ import { AlarmResponseDTO } from "../interfaces/alarm/AlarmResponseDTO";
 const prisma = new PrismaClient();
 
 //* 알림 조회
-const getAlarm = async () => {
+const getAlarm = async (auth: number) => {
     let alarmAll: AlarmResponseDTO[] = [];
 
     const alarmData = await prisma.alarm.findMany({
         where: {
-            receiverId: 1,
+            receiverId: auth,
         },
         select: {
             id: true,

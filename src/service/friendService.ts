@@ -5,7 +5,7 @@ import { sc } from "../constants";
 const prisma = new PrismaClient();
 
 //* 친구에게 책 추천하기 
-const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number) => {
+const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number, auth: number) => {
     //* 존재하는 책인지 확인하기
     const books = await prisma.book.findFirst({
         where: {
@@ -30,7 +30,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     //* 친구 존재하는지 확인 후 없는 경우 추천 못 하도록 하기
     const friendData = await prisma.friend.findFirst({
         where: {
-            senderId: friendId
+            receiverId: friendId
         }
     })
 
@@ -43,7 +43,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
         data: {
             bookId: bookId,
             recommendDesc: friendRecommendRequestDTO.recommendDesc,
-            recommendedBy: 1,
+            recommendedBy: auth,
             recommendTo: friendId,
         },
     })
@@ -51,7 +51,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     //알림 테이블에도 추가
     const alarm = await prisma.alarm.create({
         data: {
-            senderId: 1,
+            senderId: auth,
             receiverId: friendId,
             typeId: 2
         }
@@ -72,7 +72,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 }
 
 //* 사용자 검색하기
-const searchUser = async (nickname: string) => {
+const searchUser = async (nickname: string, auth: number) => {
     const user = await prisma.user.findFirst({
         where: {
             nickname: nickname,
@@ -87,7 +87,7 @@ const searchUser = async (nickname: string) => {
 
     const followed = await prisma.friend.findFirst({
         where: {
-            senderId: 1,
+            senderId: auth,
             receiverId: user?.id
         },
         select: {
@@ -110,11 +110,11 @@ const searchUser = async (nickname: string) => {
 }
 
 //* 팔로우 하기
-const followFriend = async (friendId: number) => {
+const followFriend = async (friendId: number, auth: number) => {
     const followData = await prisma.friend.findFirst({
         where: {
             receiverId: friendId,
-            senderId: 1
+            senderId: auth
         },
         select: {
             followId: true
@@ -129,14 +129,14 @@ const followFriend = async (friendId: number) => {
     const data = await prisma.friend.create({
         data: {
             receiverId: friendId,
-            senderId: 1,
+            senderId: auth,
         }
     });
 
     // 알림 테이블에도 추가
     await prisma.alarm.create({
         data: {
-            senderId: 1,
+            senderId: auth,
             receiverId: friendId,
             typeId: 1
         }

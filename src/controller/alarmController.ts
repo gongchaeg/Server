@@ -6,9 +6,9 @@ import { slackErrorMessage } from "../modules/slackErrorMessage";
 import { sendWebhookMessage } from "../modules/slackWebhook";
 
 const getAlarm = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
+    const auth = req.header('auth');
     try {
-        const data = await alarmService.getAlarm();
+        const data = await alarmService.getAlarm(+{ auth });
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_ALARM));
@@ -16,7 +16,7 @@ const getAlarm = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_ALARM, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
