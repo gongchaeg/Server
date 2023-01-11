@@ -11,7 +11,6 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendRecommendRequestDTO: FriendRecommendRequestDTO = req.body;
     const auth = req.get('auth');
-    const Authorization = req.header("auth")
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
