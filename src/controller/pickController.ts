@@ -1,10 +1,10 @@
-import { sendWebhookMessage } from './../modules/slackWebhook';
 import { Request, Response } from "express";
 import { fail, success } from "../constants/response";
 import { rm, sc } from "../constants";
 import { pickService } from "../service";
 import { PickPatchRequestDTO } from "../interfaces/pick/PickPatchRequestDTO";
 import { slackErrorMessage } from "../modules/slackErrorMessage";
+import { sendWebhookMessage } from "../modules/slackWebhook";
 
 //* Pick한 책 수정
 const patchPick = async (req: Request, res: Response) => {
