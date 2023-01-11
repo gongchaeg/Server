@@ -4,7 +4,7 @@ import { fail, success } from "../constants/response";
 import { alarmService } from "../service";
 
 const getAlarm = async (req: Request, res: Response) => {
-
+    const auth = req.header("auth");
     const data = await alarmService.getAlarm();
 
     if (!data) {
