@@ -75,7 +75,7 @@ const followFriend = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.followFriend(+friendId);
+        const data = await friendService.followFriend(+friendId, +{ auth });
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
