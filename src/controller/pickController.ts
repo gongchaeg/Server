@@ -28,7 +28,7 @@ const patchPick = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error);
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
