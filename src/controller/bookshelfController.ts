@@ -15,6 +15,11 @@ const createMyBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
+    //* 헤더로 유저 아이디 안넘겨줬을 때
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
     if (!bookshelfCreateDto.author || !bookshelfCreateDto.bookTitle) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
     }
