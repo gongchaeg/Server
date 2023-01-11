@@ -8,7 +8,7 @@ dotenv.config();
 describe('Friend Test', () => {
     it('[GET] 사용자 검색하기 성공', (done) => {
         req(app)
-            .get('/friend?nickname=현정이')  // api 요청
+            .get(encodeURI('/friend?nickname=예스리'))  // api 요청
             .set('Content-Type', 'application/json')
             .set('auth', '1')  // header 설정
             .expect(200) // 예측 상태 코드
@@ -24,7 +24,7 @@ describe('Friend Test', () => {
 
     it('[POST] 팔로우 하기 성공', done => {
         req(app)
-            .post('/friend/3')
+            .post('/friend/300')
             .set('Content-Type', 'application/json')
             .set('auth', '1')
             .expect(200)
@@ -32,11 +32,28 @@ describe('Friend Test', () => {
             .then((res) => {
                 done();
             })
-            .catch(err => {
+            .catch((err) => {
                 console.error("<< -- Error -- >>", err);
                 done(err);
             })
     });
+
+    it('[POST] 이미 팔로우 한 경우, 팔로우 하기 실패 ', done => {
+        req(app)
+            .post('/friend/4')
+            .set('Content-Type', 'application/json')
+            .set('auth', '1')
+            .expect(400)
+            .expect('Content-Type', /json/) // 예측 content-type
+            .then((res) => {
+                done();
+            })
+            .catch((err) => {
+                console.error("<< -- Error -- >>", err);
+                done(err);
+            })
+    });
+
     it('[POST] 친구에게 책 추천하기 성공', done => {
         req(app)
             .post('/friend/3/recommend')
@@ -53,7 +70,7 @@ describe('Friend Test', () => {
             .then((res) => {
                 done();
             })
-            .catch(err => {
+            .catch((err) => {
                 console.error("<< -- Error -- >>", err);
                 done(err);
             })
