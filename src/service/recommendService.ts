@@ -33,6 +33,9 @@ const getRecommend = async (auth: number) => {
                     bookImage: true,
                 }
             }
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
 
@@ -80,6 +83,9 @@ const getRecommend = async (auth: number) => {
                     bookImage: true,
                 }
             }
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
 
