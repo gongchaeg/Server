@@ -33,26 +33,31 @@
 
 ```
 
-📁 src _
-|_ 📁 config _
-              |_ 📋 index.ts
-|_ 📁 controller _
-                  |_ 📋 index.ts
-|_ 📁 interfaces _
-|_ 📁 middlwares _
-|_ 📁 constants _
-                 |_ 📋 index.ts
-                 |_ 📋 responseMessage.ts
-                 |_ 📋 response.ts
-                 |_ 📋 statusCode.ts
-                 |_ 📋 tokenType.ts                 
-                 |_ 📋 util.ts
-|_ 📁 router _
-              |_ 📋 index.ts
-|_ 📁 service _
-               |_ 📋 index.ts
-|_ 📁 modules _
-|_ 📋 index.ts
+├── husky
+├── prisma
+├── src
+│   ├── config
+│       └── index.ts
+│       └── response.ts
+│       └── responseMessage.ts
+│       └── statusCode.ts
+│       └── tokenType.ts
+│   ├── constants
+│       └── index.ts
+│   ├── controller
+│       └── index.ts
+│   ├── interfaces
+│   ├── middlwares
+│       └── slackErrorMessage.ts
+│       └── slackWebhook.ts
+│   ├── modules
+│       └── index.ts
+│   ├── router
+│       └── index.ts
+│   └── service
+│       └── index.ts
+└── test
+
 ```
 <br>
 

@@ -9,7 +9,11 @@ import { slackErrorMessage } from "../modules/slackErrorMessage";
 //* Pick한 책 수정
 const patchPick = async (req: Request, res: Response) => {
     const pickPatchRequestDTO: PickPatchRequestDTO = req.body;
+    const auth = req.header("auth");
 
+    if (pickPatchRequestDTO.firstPick == null || pickPatchRequestDTO.secondPick == null || pickPatchRequestDTO.thirdPick == null) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
+    }
 
     try {
         // 슬랙 메시지 에러 확인을 하기 위함
@@ -38,6 +42,7 @@ const patchPick = async (req: Request, res: Response) => {
 //* 책 전체 조회
 const getBook = async (req: Request, res: Response) => {
     const data = await pickService.getBook();
+    const auth = req.header("auth");
 
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BOOK));
