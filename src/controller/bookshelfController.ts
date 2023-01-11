@@ -20,7 +20,7 @@ const createMyBook = async (req: Request, res: Response) => {
     }
 
     try {
-        const data = await bookshelfService.createMyBook(bookshelfCreateDto);
+        const data = await bookshelfService.createMyBook(+auth, bookshelfCreateDto);
 
         const result = {
             bookId: data.bookId,
@@ -54,7 +54,7 @@ const getBookById = async (req: Request, res: Response) => {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND));       
         }
 
-        const data = await bookshelfService.getBookById(+bookId);
+        const data = await bookshelfService.getBookById(+auth, +bookId);
 
         if (!data) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
@@ -85,7 +85,7 @@ const deleteMyBook = async (req: Request, res: Response) => {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));       
         }
     
-        const data = await bookshelfService.deleteMyBook(+bookId);
+        const data = await bookshelfService.deleteMyBook(+auth, +bookId);
     
         if (data == sc.NOT_FOUND) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
@@ -115,7 +115,7 @@ const updateMyBook = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
     }
 
-    const data = await bookshelfService.updateMyBook(+bookId, bookshelfUpdateDto);
+    const data = await bookshelfService.updateMyBook(+auth, +bookId, bookshelfUpdateDto);
 
     if (!data) {
         return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
@@ -128,8 +128,9 @@ const updateMyBook = async (req: Request, res: Response) => {
  * @desc 내 책장 (메인 뷰) 조회하기
  */
 const getMyBookshelf = async (req: Request, res: Response) => {
-    const data = await bookshelfService.getMyBookshelf();
     const auth = req.header("auth");
+
+    const data = await bookshelfService.getMyBookshelf(+auth);
 
     try {
         if (!data) {
@@ -158,7 +159,7 @@ const getFriendBookshelf = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
-    const data = await bookshelfService.getFriendBookshelf(+friendId);
+    const data = await bookshelfService.getFriendBookshelf(+auth, +friendId);
 
     try {
         if (data == sc.NOT_FOUND) {
