@@ -135,6 +135,7 @@ const getMyBookshelf = async (req: Request, res: Response) => {
  */
 const getFriendBookshelf = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+    const auth = req.header("auth");
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
