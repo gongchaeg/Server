@@ -54,7 +54,7 @@ const createMyBook = async (bookshelfCreateDto: BookshelfCreateDTO) => {
     }
   });
 
-  //? 나를 팔로우하는 친구들에게 알림 보내기
+  // 나를 팔로우하는 친구들에게 알림 보내기
   const follows = await prisma.friend.findMany({
     where: {
       receiverId: 1
