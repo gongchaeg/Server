@@ -166,14 +166,13 @@ const updateMyBook = async (userId: number, bookId : number, bookshelfUpdateDto 
 }
 
 //* 내 책장 (메인 뷰) 조회
-const getMyBookshelf = async () => {
+const getMyBookshelf = async (userId : number) => {
 
   // section1 : friendList
   let friendList: UserDTO[] = [];
   const friendIdList = await prisma.friend.findMany({
     where : {
-      // 임의로 유저 아이디 1로 박아놓음
-      senderId : 1
+      senderId : userId
     },
     select : {
       receiverId : true
@@ -193,8 +192,7 @@ const getMyBookshelf = async () => {
   // section2 : myIntro
   const myIntro : IntroDTO|null = await prisma.user.findUnique({
     where : {
-      // 임의로 유저 아이디 1로 박아놓음
-      id : 1
+      id : userId
     }
   });
 
@@ -202,7 +200,7 @@ const getMyBookshelf = async () => {
   const picks = await prisma.bookshelf.findMany({
     where : {
       pickIndex : { in: [1, 2, 3] },
-      userId : 1
+      userId : userId
     },
     orderBy : {
       pickIndex : 'asc'
@@ -224,7 +222,7 @@ const getMyBookshelf = async () => {
   // section4 : books
   const books = await prisma.bookshelf.findMany({
     where : {
-      userId :1
+      userId : userId
     },
     select : {
       id:true,
