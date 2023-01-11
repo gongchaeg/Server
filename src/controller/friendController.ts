@@ -11,12 +11,15 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendRecommendRequestDTO: FriendRecommendRequestDTO = req.body;
     const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId, +{ auth });
+        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId, +auth);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
@@ -28,7 +31,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -42,13 +45,16 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
     const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
 
     try {
-        const data = await friendService.searchUser(nickname as string, +{ auth });
+        const data = await friendService.searchUser(nickname as string, +auth);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_NO_FRIEND_EXIST));
@@ -56,7 +62,7 @@ const searchUser = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -70,12 +76,15 @@ const searchUser = async (req: Request, res: Response) => {
 const followFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.followFriend(+friendId, +{ auth });
+        const data = await friendService.followFriend(+friendId, +auth);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
@@ -83,7 +92,7 @@ const followFriend = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
 
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -99,12 +108,16 @@ const followFriend = async (req: Request, res: Response) => {
  **/
 const deleteFollowFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+    const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
     }
 
-    const data = await friendService.deleteFollowFriend(+friendId);
+    const data = await friendService.deleteFollowFriend(+friendId, +auth);
 
     if (!data) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_FRIEND_FAIL));

@@ -10,7 +10,13 @@ import { sendWebhookMessage } from "../modules/slackWebhook";
 const patchPick = async (req: Request, res: Response) => {
     const pickPatchRequestDTO: PickPatchRequestDTO = req.body;
     const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
 
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
     if (pickPatchRequestDTO.firstPick == null || pickPatchRequestDTO.secondPick == null || pickPatchRequestDTO.thirdPick == null) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
     }
@@ -18,7 +24,7 @@ const patchPick = async (req: Request, res: Response) => {
     try {
         // 슬랙 메시지 에러 확인을 하기 위함
         // let pickData = JSON.parse(req.body);
-        const data = await pickService.patchPick(pickPatchRequestDTO);
+        const data = await pickService.patchPick(pickPatchRequestDTO, +auth);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
@@ -27,7 +33,7 @@ const patchPick = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_PATCH_PICK));
 
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -40,8 +46,12 @@ const patchPick = async (req: Request, res: Response) => {
 
 //* 책 전체 조회
 const getBook = async (req: Request, res: Response) => {
-    const data = await pickService.getBook();
     const auth = req.header("auth");
+    console.log(auth)
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+    const data = await pickService.getBook(+auth);
 
     try {
         if (!data) {
@@ -50,7 +60,7 @@ const getBook = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +{ auth }, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
