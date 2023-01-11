@@ -47,7 +47,7 @@ const patchPick = async (req: Request, res: Response) => {
 //* 책 전체 조회
 const getBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
-    console.log(auth)
+
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
