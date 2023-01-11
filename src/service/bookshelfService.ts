@@ -110,13 +110,13 @@ return bookData;
 };
 
 //* 등록한 책 삭제
-const deleteMyBook = async (bookId : number) => {
+const deleteMyBook = async (userId: number, bookId : number) => {
 
   //* 책장에 없는 책을 삭제하려고 하면 에러
   const bookdata = await prisma.bookshelf.findFirst({
     where : {
       bookId : bookId,
-      userId : 1
+      userId : userId
     }
   });
 
@@ -127,8 +127,7 @@ const deleteMyBook = async (bookId : number) => {
   const data = await prisma.bookshelf.deleteMany({
     where: {
       bookId: bookId,
-      // 일단 userId 박아두고 작업
-      userId : 1
+      userId : userId
     }
   });
 
