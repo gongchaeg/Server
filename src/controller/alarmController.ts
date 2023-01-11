@@ -5,13 +5,18 @@ import { alarmService } from "../service";
 
 const getAlarm = async (req: Request, res: Response) => {
     const auth = req.header("auth");
-    const data = await alarmService.getAlarm();
+    try {
+        const data = await alarmService.getAlarm();
 
-    if (!data) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_ALARM));
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_ALARM));
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_ALARM, data));
+    } catch (error) {
+
     }
 
-    return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_ALARM, data));
 }
 
 const alarmController = {
