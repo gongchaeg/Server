@@ -12,24 +12,25 @@ import { bookshelfService } from "../service";
  * @desc 내 책장에 책 등록하기
  **/
 const createMyBook = async (req: Request, res: Response) => {
+    const Authorization = req.header("auth");
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
 
     if (!bookshelfCreateDto.author || !bookshelfCreateDto.bookTitle) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL)); 
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
     }
 
     try {
         const data = await bookshelfService.createMyBook(bookshelfCreateDto);
 
         const result = {
-            bookId : data.bookId,
-            bookshelfId : data.id
+            bookId: data.bookId,
+            bookshelfId: data.id
         }
-    
+
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
         }
-        return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS)); 
+        return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS));
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
 
@@ -48,17 +49,17 @@ const getBookById = async (req: Request, res: Response) => {
 
     const { bookId } = req.params;
 
-    try { 
+    try {
         if (!bookId) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_MYBOOK_FAIL));       
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_MYBOOK_FAIL));
         }
-    
+
         const data = await bookshelfService.getBookById(+bookId);
-    
+
         if (!data) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
         }
-    
+
         return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, 1, req.statusCode);
@@ -91,11 +92,11 @@ const deleteMyBook = async (req: Request, res: Response) => {
 const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
     const { bookId } = req.params;
-  
+
     if (!bookshelfUpdateDto) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
     }
-  
+
     const data = await bookshelfService.updateMyBook(+bookId, bookshelfUpdateDto);
 
     if (!data) {
@@ -169,5 +170,5 @@ const bookshelfController = {
     getMyBookshelf,
     getFriendBookshelf
 };
-  
+
 export default bookshelfController;
