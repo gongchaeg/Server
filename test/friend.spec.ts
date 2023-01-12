@@ -9,7 +9,7 @@ describe('***** Friend Test *****', () => {
     context('[GET] /friend?nickname={}', () => {
         it('사용자 검색하기 성공', done => {
             req(app)
-                .get(encodeURI('/friend?nickname=예스리'))  // api 요청
+                .get(encodeURI('/friend?nickname=test2'))  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header 설정
                 .expect(200) // 예측 상태 코드
@@ -25,14 +25,22 @@ describe('***** Friend Test *****', () => {
     });
 
     context('[POST] /friend/:friendId', () => {
+        //?  after 작업
         after(async () => {
             await prisma.friend.deleteMany({
                 where: {
                     receiverId: 301,
                     senderId: 300
                 }
+            });
+            await prisma.alarm.deleteMany({
+                where: {
+                    receiverId: 301,
+                    senderId: 300
+                }
             })
-        })
+
+        });
 
         it('팔로우 하기 성공', done => {
             req(app)
@@ -52,7 +60,7 @@ describe('***** Friend Test *****', () => {
 
         it('이미 팔로우 한 경우, 팔로우 하기 실패 ', done => {
             req(app)
-                .post('/friend/301')
+                .post('/friend/302')
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')
                 .expect(400)
@@ -68,9 +76,27 @@ describe('***** Friend Test *****', () => {
     });
 
     context('[POST] /friend/:friendId/recommend', () => {
+        //?  after 작업
+        after(async () => {
+            await prisma.recommend.deleteMany({
+                where: {
+                    recommendedBy: 300,
+                    recommendTo: 302
+                }
+            });
+
+            await prisma.alarm.deleteMany({
+                where: {
+                    receiverId: 302,
+                    senderId: 300
+                }
+            });
+
+        });
+
         it('친구에게 책 추천하기 성공', done => {
             req(app)
-                .post('/friend/3/recommend')
+                .post('/friend/302/recommend')
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')
                 .send({
