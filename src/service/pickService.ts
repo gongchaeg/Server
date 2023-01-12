@@ -72,6 +72,9 @@ const getBook = async (auth: number) => {
                 }
             }
         },
+        orderBy: {
+            createdAt: "desc"
+        }
     });
     return books;
 }

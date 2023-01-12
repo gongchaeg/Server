@@ -11,7 +11,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .get(encodeURI('/friend?nickname=예스리'))  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '1')  // header 설정
+                .set('auth', '300')  // header 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -29,7 +29,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/301')
                 .set('Content-Type', 'application/json')
-                .set('auth', '1')
+                .set('auth', '300')
                 .expect(200)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -44,7 +44,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/4')
                 .set('Content-Type', 'application/json')
-                .set('auth', '1')
+                .set('auth', '300')
                 .expect(400)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -62,7 +62,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/3/recommend')
                 .set('Content-Type', 'application/json')
-                .set('auth', '1')
+                .set('auth', '300')
                 .send({
                     "recommendDesc": "좋아요 너무나도 ~~",
                     "bookTitle": "잘될 수밖에 없는 너에게",
