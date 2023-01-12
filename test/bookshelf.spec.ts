@@ -15,39 +15,40 @@ describe('***** Bookshelf Test *****', () => {
     context('[POST] /bookshelf', () => {
         after(async () => {
             const book = await prisma.book.findFirst({
-                where : {
+                where: {
                     bookTitle: "데미안",
-                    author : "헤르만 헤세"
+                    author: "헤르만 헤세"
+
                 }
             });
 
 
             await prisma.bookshelf.deleteMany({
-                where : {
-                    userId : 300,
-                    bookId : book?.id
+                where: {
+                    userId: 300,
+                    bookId: book?.id
                 }
             })
 
-              // 나를 팔로우하는 친구들에게 알림 삭제하기
+            // 나를 팔로우하는 친구들에게 알림 삭제하기
             const follows = await prisma.friend.findMany({
-                where : {
-                receiverId : 300
+                where: {
+                    receiverId: 300
                 },
-                select : {
-                senderId : true
+                select: {
+                    senderId: true
                 }
             });
 
-            for ( const follow of follows ) {
+            for (const follow of follows) {
                 const alarm = await prisma.alarm.deleteMany({
-                where : {
-                    senderId : 300,
-                    receiverId : follow.senderId,
-                    typeId : 3
-                }
-            });
-          }
+                    where: {
+                        senderId: 300,
+                        receiverId: follow.senderId,
+                        typeId: 3
+                    }
+                });
+            }
         });
 
         it("내 책장에 책 등록 성공", done => {
@@ -87,7 +88,7 @@ describe('***** Bookshelf Test *****', () => {
                 })
         });
     });
-        
+
     //* 등록한 책 상세 정보 조회
     context('[GET] /bookshelf/detail/25', () => {
         it('등록한 책 상세 정보 조회 성공', done => { 
@@ -158,8 +159,6 @@ describe('***** Bookshelf Test *****', () => {
                         author : "장류진",
                         bookImage : "https://image.yes24.com/goods/99111756/XL"
                     }
-                    }
-                }
                 }
             });
         });
@@ -206,7 +205,7 @@ describe('***** Bookshelf Test *****', () => {
                 })
         });
     });
-        
+
     //* 등록한 책 수정
     context('[DELETE] /bookshelf/25', () => {
         after(async () => {
@@ -228,8 +227,8 @@ describe('***** Bookshelf Test *****', () => {
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .send({
-                    "description" : "테스트를 위해 한 마디 수정합니다",
-                    "memo" : "테스트를 위해 한 마디 수정합니다"
+                    "description": "테스트를 위해 한 마디 수정합니다",
+                    "memo": "테스트를 위해 한 마디 수정합니다"
                 }) // request body
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
@@ -268,10 +267,10 @@ describe('***** Bookshelf Test *****', () => {
                 })
         });
     });
-        
+
     //* 내 책장 (메인 뷰) 조회
     context('[GET] /bookshelf', () => {
-        it('내 책장 조회 성공', done => { 
+        it('내 책장 조회 성공', done => {
             req(app)
                 .get('/bookshelf')  // api 요청
                 .set('Content-Type', 'application/json')
@@ -300,10 +299,10 @@ describe('***** Bookshelf Test *****', () => {
                 })
         });
     });
-        
+
     //* 친구 책장 조회
     context('[GET] /bookshelf/friend/302', () => {
-        it('내 책장 조회 성공', done => { 
+        it('내 책장 조회 성공', done => {
             req(app)
                 .get('/bookshelf/friend/302')  // api 요청
                 .set('Content-Type', 'application/json')

@@ -28,7 +28,16 @@ describe('***** Pick Test *****', () => {
     context('[PATCH] /pick', () => {
         //?  after 작업
         after(async () => {
-            await prisma.bookshelf.update({
+            await prisma.bookshelf.updateMany({
+                where: {
+                    id: 122,
+                },
+                data: {
+                    pickIndex: 0
+                }
+            });
+
+            await prisma.bookshelf.updateMany({
                 where: {
                     id: 123,
                 },
@@ -37,18 +46,9 @@ describe('***** Pick Test *****', () => {
                 }
             });
 
-            await prisma.bookshelf.update({
+            await prisma.bookshelf.updateMany({
                 where: {
                     id: 124,
-                },
-                data: {
-                    pickIndex: 0
-                }
-            });
-
-            await prisma.bookshelf.update({
-                where: {
-                    id: 125,
                 },
                 data: {
                     pickIndex: 0
@@ -62,9 +62,9 @@ describe('***** Pick Test *****', () => {
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header 설정
                 .send({
-                    "firstPick": 123,
-                    "secondPick": 124,
-                    "thirdPick": 125
+                    "firstPick": 122,
+                    "secondPick": 123,
+                    "thirdPick": 124
                 })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
