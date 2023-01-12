@@ -40,6 +40,7 @@ describe('***** Friend Test *****', () => {
                     done(err);
                 })
         });
+
         it('이미 팔로우 한 경우, 팔로우 하기 실패 ', done => {
             req(app)
                 .post('/friend/4')

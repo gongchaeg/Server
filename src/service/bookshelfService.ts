@@ -105,6 +105,7 @@ const getBookById = async (userId: number, bookId: number)=> {
       }
     }
   });
+  console.log(bookData);
 
 return bookData;
 };
