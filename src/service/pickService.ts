@@ -10,6 +10,7 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number)
     const previousPick = await prisma.bookshelf.updateMany({
         where: {
             pickIndex: { in: [1, 2, 3] },
+            userId: auth
         },
         data: {
             pickIndex: 0,
@@ -21,7 +22,7 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number)
     if (pickPatchRequestDTO.firstPick != 0) {
         const firstPick = await prisma.bookshelf.updateMany({
             where: {
-                bookId: pickPatchRequestDTO.firstPick,
+                id: pickPatchRequestDTO.firstPick,
             },
             data: {
                 pickIndex: 1
@@ -32,7 +33,7 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number)
     if (pickPatchRequestDTO.secondPick != 0) {
         const secondPick = await prisma.bookshelf.updateMany({
             where: {
-                bookId: pickPatchRequestDTO.secondPick,
+                id: pickPatchRequestDTO.secondPick,
             },
             data: {
                 pickIndex: 2,
@@ -43,7 +44,7 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number)
     if (pickPatchRequestDTO.thirdPick != 0) {
         const thirdPick = await prisma.bookshelf.updateMany({
             where: {
-                bookId: pickPatchRequestDTO.thirdPick,
+                id: pickPatchRequestDTO.thirdPick,
             },
             data: {
                 pickIndex: 3,
@@ -71,6 +72,9 @@ const getBook = async (auth: number) => {
                 }
             }
         },
+        orderBy: {
+            createdAt: "desc"
+        }
     });
     return books;
 }

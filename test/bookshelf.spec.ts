@@ -1,6 +1,6 @@
+import { expect } from 'chai';
 import app from "../src/index";
 import req from "supertest";
-import expect from "chai";
 import dotenv from "dotenv";
 import { Response } from 'supertest';
 import { PrismaClient } from '@prisma/client';
