@@ -64,8 +64,6 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
     }
   });
 
-  //console.log(follows.length);
-
   for ( const follow of follows ) {
     const alarm = await prisma.alarm.create({
       data : {
