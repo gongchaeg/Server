@@ -25,7 +25,7 @@ describe('***** Friend Test *****', () => {
     });
 
     context('[POST] /friend/:friendId', () => {
-        it('[POST] 팔로우 하기 성공', done => {
+        it('팔로우 하기 성공', done => {
             req(app)
                 .post('/friend/301')
                 .set('Content-Type', 'application/json')
@@ -40,7 +40,8 @@ describe('***** Friend Test *****', () => {
                     done(err);
                 })
         });
-        it('[POST] 이미 팔로우 한 경우, 팔로우 하기 실패 ', done => {
+
+        it('이미 팔로우 한 경우, 팔로우 하기 실패 ', done => {
             req(app)
                 .post('/friend/4')
                 .set('Content-Type', 'application/json')
@@ -58,7 +59,7 @@ describe('***** Friend Test *****', () => {
     });
 
     context('[POST] /friend/:friendId/recommend', () => {
-        it('[POST] 친구에게 책 추천하기 성공', done => {
+        it('친구에게 책 추천하기 성공', done => {
             req(app)
                 .post('/friend/3/recommend')
                 .set('Content-Type', 'application/json')
@@ -82,3 +83,4 @@ describe('***** Friend Test *****', () => {
     })
 
 });
+
