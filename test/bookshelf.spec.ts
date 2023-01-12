@@ -1,3 +1,4 @@
+import { Book } from '@prisma/client';
 import { expect } from 'chai';
 import app from "../src/index";
 import req from "supertest";
@@ -207,6 +208,66 @@ describe('***** Bookshelf Test *****', () => {
     });
         
     //* 등록한 책 수정
+    context('[DELETE] /bookshelf/3', () => {
+        after(async () => {
+            await prisma.bookshelf.updateMany({
+                where : {
+                    bookId : 3,
+                    userId : 300
+                },
+                data : {
+                    description : "Test 책입니다.",
+                    memo : "엇"
+                }
+            });
+        });
+
+        it('책 수정하기 성공', done => {
+            req(app)
+                .patch('/bookshelf/3')  // api 요청
+                .set('Content-Type', 'application/json')
+                .set('auth', '300')  // header - userId 설정
+                .send({
+                    "description" : "테스트를 위해 한 마디 수정합니다",
+                    "memo" : "테스트를 위해 한 마디 수정합니다"
+                }) // request body
+                .expect(200) // 예측 상태 코드
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+        it('필요한 헤더 값이 없음', done => {
+            req(app)
+                .patch('/bookshelf/3')
+                .set('Content-Type', 'application/json')
+                .expect(400)
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+        it('해당하는 책을 찾을 수 없음', done => {
+            req(app)
+                .patch('/bookshelf/200')
+                .set('Content-Type', 'application/json')
+                .expect(400) // 추후 상태 코드 변경
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+    });
         
     //* 내 책장 (메인 뷰) 조회
         
