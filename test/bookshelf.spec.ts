@@ -270,6 +270,49 @@ describe('***** Bookshelf Test *****', () => {
     });
         
     //* 내 책장 (메인 뷰) 조회
+    context('[GET] /bookshelf', () => {
+        it('내 책장 조회 성공', done => { 
+            req(app)
+                .get('/bookshelf')  // api 요청
+                .set('Content-Type', 'application/json')
+                .set('auth', '300')  // header - userId 설정
+                .expect(200) // 예측 상태 코드
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+        it('필요한 헤더 값이 없음', done => {
+            req(app)
+                .get('/bookshelf')
+                .set('Content-Type', 'application/json')
+                .expect(400)
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+        it('해당하는 책을 찾을 수 없음', done => {
+            req(app)
+                .get('/bookshelf')
+                .set('Content-Type', 'application/json')
+                .then(res => {
+                    expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        });
+    });
         
     //* 친구 책장 조회
 
