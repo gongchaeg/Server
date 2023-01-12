@@ -52,7 +52,7 @@ const patchPick = async (pickPatchRequestDTO: PickPatchRequestDTO, auth: number)
         })
     }
 
-    return previousPick.count;
+    return true;
 
 }
 

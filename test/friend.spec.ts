@@ -78,15 +78,8 @@ describe('***** Friend Test *****', () => {
     context('[POST] /friend/:friendId/recommend', () => {
         //?  after 작업
         after(async () => {
-            await prisma.recommend.deleteMany({
-                where: {
-                    recommendedBy: 300,
-                    recommendTo: 302
-                }
-            });
-
-            await prisma.alarm.deleteMany({
-                where: {
+            await prisma.friend.create({
+                data: {
                     receiverId: 302,
                     senderId: 300
                 }
@@ -94,17 +87,11 @@ describe('***** Friend Test *****', () => {
 
         });
 
-        it('친구에게 책 추천하기 성공', done => {
+        it('팔로우 취소하기 성공', done => {
             req(app)
-                .post('/friend/302/recommend')
+                .delete('/friend/302')
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')
-                .send({
-                    "recommendDesc": "좋아요 너무나도 ~~",
-                    "bookTitle": "잘될 수밖에 없는 너에게",
-                    "author": "최서영",
-                    "bookImage": "http://image.yes24.com/goods/111750543/XL"
-                })
                 .expect(200)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -116,5 +103,7 @@ describe('***** Friend Test *****', () => {
                 })
         });
     });
+
+
 
 });
