@@ -53,25 +53,25 @@ describe('***** Bookshelf Test *****', () => {
 
         it("내 책장에 책 등록 성공", done => {
             req(app)
-            .post('/bookshelf')  // api 요청
-            .set('Content-Type', 'application/json')
-            .set('auth', '300')  // header - userId 설정
-            .send({
-                "bookImage" : "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954620147.jpg",
-                "bookTitle" : "데미안",
-                "author" : "헤르만 헤세",
-                "description" : "테스트를 위한 한 마디에요",
-                "memo" : "테스트를 위한 메모에요"
-            }) // request body
-            .expect(201) // 예측 상태 코드
-            .expect('Content-Type', /json/) // 예측 content-type
-            .then(res => {
-                done();
-            })
-            .catch(err => {
-                console.error("###### Error >>", err);
-                done(err);
-            })
+                .post('/bookshelf')  // api 요청
+                .set('Content-Type', 'application/json')
+                .set('auth', '300')  // header - userId 설정
+                .send({
+                    "bookImage": "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954620147.jpg",
+                    "bookTitle": "데미안",
+                    "author": "헤르만 헤세",
+                    "description": "테스트를 위한 한 마디에요",
+                    "memo": "테스트를 위한 메모에요"
+                }) // request body
+                .expect(201) // 예측 상태 코드
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then(res => {
+                    done();
+                })
+                .catch(err => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
         })
 
         it('필요한 헤더 값이 없음', done => {
@@ -91,7 +91,7 @@ describe('***** Bookshelf Test *****', () => {
 
     //* 등록한 책 상세 정보 조회
     context('[GET] /bookshelf/detail/25', () => {
-        it('등록한 책 상세 정보 조회 성공', done => { 
+        it('등록한 책 상세 정보 조회 성공', done => {
             req(app)
                 .get('/bookshelf/detail/25')  // api 요청
                 .set('Content-Type', 'application/json')
@@ -99,7 +99,7 @@ describe('***** Bookshelf Test *****', () => {
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
-                    expect(res.body.data.Book.bookTitle).to.equal("달까지 가자");  
+                    expect(res.body.data.Book.bookTitle).to.equal("달까지 가자");
                     expect(res.body.data.Book.author).to.equal("장류진"); //response body 예측값 검증
                     done();
                 })
@@ -141,23 +141,25 @@ describe('***** Bookshelf Test *****', () => {
         after(async () => {
             await prisma.bookshelf.create({
                 data: {
-                pickIndex : 0,
-                description : "테스트3",
-                memo : "메모3",
-                User : { 
-                    connect : {
-                    id : 300
-                    }
-                },
-                Book : {
-                    connectOrCreate : {
-                    where : {
-                        id : 25
+                    pickIndex: 0,
+                    description: "테스트3",
+                    memo: "메모3",
+                    User: {
+                        connect: {
+                            id: 300
+                        }
                     },
-                    create : {
-                        bookTitle : "달까지 가자",
-                        author : "장류진",
-                        bookImage : "https://image.yes24.com/goods/99111756/XL"
+                    Book: {
+                        connectOrCreate: {
+                            where: {
+                                id: 25
+                            },
+                            create: {
+                                bookTitle: "달까지 가자",
+                                author: "장류진",
+                                bookImage: "https://image.yes24.com/goods/99111756/XL"
+                            }
+                        }
                     }
                 }
             });
@@ -210,13 +212,13 @@ describe('***** Bookshelf Test *****', () => {
     context('[DELETE] /bookshelf/25', () => {
         after(async () => {
             await prisma.bookshelf.updateMany({
-                where : {
-                    bookId : 25,
-                    userId : 300
+                where: {
+                    bookId: 25,
+                    userId: 300
                 },
-                data : {
-                    description : "테스트3",
-                    memo : "메모3"
+                data: {
+                    description: "테스트3",
+                    memo: "메모3"
                 }
             });
         });
