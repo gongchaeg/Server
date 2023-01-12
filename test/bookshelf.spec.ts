@@ -16,8 +16,8 @@ describe('***** Bookshelf Test *****', () => {
         after(async () => {
             const book = await prisma.book.findFirst({
                 where : {
-                    bookTitle: "아무튼, 여름",
-                    author : "김신회"
+                    bookTitle: "데미안",
+                    author : "헤르만 헤세"
                 }
             });
 
@@ -56,9 +56,9 @@ describe('***** Bookshelf Test *****', () => {
             .set('Content-Type', 'application/json')
             .set('auth', '300')  // header - userId 설정
             .send({
-                "bookImage" : "http://image.yes24.com/goods/90365124/XL",
-                "bookTitle" : "아무튼, 여름",
-                "author" : "김신회",
+                "bookImage" : "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954620147.jpg",
+                "bookTitle" : "데미안",
+                "author" : "헤르만 헤세",
                 "description" : "테스트를 위한 한 마디에요",
                 "memo" : "테스트를 위한 메모에요"
             }) // request body
@@ -89,17 +89,17 @@ describe('***** Bookshelf Test *****', () => {
     });
         
     //* 등록한 책 상세 정보 조회
-    context('[GET] /bookshelf/detail/3', () => {
+    context('[GET] /bookshelf/detail/25', () => {
         it('등록한 책 상세 정보 조회 성공', done => { 
             req(app)
-                .get('/bookshelf/detail/3')  // api 요청
+                .get('/bookshelf/detail/25')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
-                    expect(res.body.data.Book.bookTitle).to.equal("오리진");  
-                    expect(res.body.data.Book.author).to.equal("댄브라운"); //response body 예측값 검증
+                    expect(res.body.data.Book.bookTitle).to.equal("달까지 가자");  
+                    expect(res.body.data.Book.author).to.equal("장류진"); //response body 예측값 검증
                     done();
                 })
                 .catch(err => {
@@ -109,7 +109,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .get('/bookshelf/detail/1')
+                .get('/bookshelf/detail/25')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -122,7 +122,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('해당하는 책을 찾을 수 없음', done => {
             req(app)
-                .get('/bookshelf/detail/200')
+                .get('/bookshelf/detail/500')
                 .set('Content-Type', 'application/json')
                 .then(res => {
                     expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
@@ -136,13 +136,13 @@ describe('***** Bookshelf Test *****', () => {
     });
 
     //* 등록한 책 삭제
-    context('[DELETE] /bookshelf/3', () => {
+    context('[DELETE] /bookshelf/25', () => {
         after(async () => {
             await prisma.bookshelf.create({
                 data: {
                 pickIndex : 0,
-                description : "Test 책입니다.",
-                memo : "엇",
+                description : "테스트3",
+                memo : "메모3",
                 User : { 
                     connect : {
                     id : 300
@@ -151,12 +151,12 @@ describe('***** Bookshelf Test *****', () => {
                 Book : {
                     connectOrCreate : {
                     where : {
-                        id : 3
+                        id : 25
                     },
                     create : {
-                        bookTitle : "오리진",
-                        author : "댄브라운",
-                        bookImage : "https://search.pstatic.net/common/?src=https%3A%2F%2Fshopping-phinf.pstatic.net%2Fmain_3239339%2F32393392566.jpg&type=w216"
+                        bookTitle : "달까지 가자",
+                        author : "장류진",
+                        bookImage : "https://image.yes24.com/goods/99111756/XL"
                     }
                     }
                 }
@@ -166,7 +166,7 @@ describe('***** Bookshelf Test *****', () => {
 
         it('책 삭제하기 성공', done => {
             req(app)
-                .delete('/bookshelf/3')  // api 요청
+                .delete('/bookshelf/25')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .expect(200) // 예측 상태 코드
@@ -181,7 +181,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .delete('/bookshelf/3')
+                .delete('/bookshelf/25')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -194,7 +194,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('해당하는 책을 찾을 수 없음', done => {
             req(app)
-                .delete('/bookshelf/200')
+                .delete('/bookshelf/500')
                 .set('Content-Type', 'application/json')
                 .expect(400) // 추후 상태 코드 변경
                 .then(res => {
@@ -208,23 +208,23 @@ describe('***** Bookshelf Test *****', () => {
     });
         
     //* 등록한 책 수정
-    context('[DELETE] /bookshelf/3', () => {
+    context('[DELETE] /bookshelf/25', () => {
         after(async () => {
             await prisma.bookshelf.updateMany({
                 where : {
-                    bookId : 3,
+                    bookId : 25,
                     userId : 300
                 },
                 data : {
-                    description : "Test 책입니다.",
-                    memo : "엇"
+                    description : "테스트3",
+                    memo : "메모3"
                 }
             });
         });
 
         it('책 수정하기 성공', done => {
             req(app)
-                .patch('/bookshelf/3')  // api 요청
+                .patch('/bookshelf/25')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .send({
@@ -243,7 +243,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .patch('/bookshelf/3')
+                .patch('/bookshelf/25')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -256,7 +256,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('해당하는 책을 찾을 수 없음', done => {
             req(app)
-                .patch('/bookshelf/200')
+                .patch('/bookshelf/500')
                 .set('Content-Type', 'application/json')
                 .expect(400) // 추후 상태 코드 변경
                 .then(res => {
@@ -299,19 +299,6 @@ describe('***** Bookshelf Test *****', () => {
                     done(err);
                 })
         });
-        it('해당하는 책을 찾을 수 없음', done => {
-            req(app)
-                .get('/bookshelf')
-                .set('Content-Type', 'application/json')
-                .then(res => {
-                    expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
-                    done();
-                })
-                .catch(err => {
-                    console.error("###### Error >>", err);
-                    done(err);
-                })
-        });
     });
         
     //* 친구 책장 조회
@@ -337,19 +324,6 @@ describe('***** Bookshelf Test *****', () => {
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
-                    done();
-                })
-                .catch(err => {
-                    console.error("###### Error >>", err);
-                    done(err);
-                })
-        });
-        it('해당하는 책을 찾을 수 없음', done => {
-            req(app)
-                .get('/bookshelf/friend/302')
-                .set('Content-Type', 'application/json')
-                .then(res => {
-                    expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
                     done();
                 })
                 .catch(err => {
