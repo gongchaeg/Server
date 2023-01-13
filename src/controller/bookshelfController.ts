@@ -86,7 +86,7 @@ const getBookById = async (req: Request, res: Response) => {
  */
 const deleteMyBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
-    const { id } = req.params;
+    const { bookshelfId } = req.params;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -94,11 +94,11 @@ const deleteMyBook = async (req: Request, res: Response) => {
     }
 
     try {
-        if (!id) {
+        if (!bookshelfId) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));       
         }
     
-        const data = await bookshelfService.deleteMyBook(+id);
+        const data = await bookshelfService.deleteMyBook(+bookshelfId);
     
         if (data == sc.NOT_FOUND) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
@@ -121,7 +121,7 @@ const deleteMyBook = async (req: Request, res: Response) => {
  */
 const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
-    const { id } = req.params;
+    const { bookshelfId } = req.params;
     const auth = req.header("auth");
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
@@ -134,7 +134,7 @@ const updateMyBook = async (req: Request, res: Response) => {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
         }
     
-        const data = await bookshelfService.updateMyBook(+id, bookshelfUpdateDto);
+        const data = await bookshelfService.updateMyBook(+bookshelfId, bookshelfUpdateDto);
     
         if (data == sc.NOT_FOUND) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
