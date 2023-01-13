@@ -85,10 +85,10 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
 };
 
 //* 등록한 책 상세 정보 조회
-const getBookById = async (id: number)=> {
+const getBookById = async (bookshelfId: number)=> {
   const bookData = await prisma.bookshelf.findUnique({
     where: {
-      id : id
+      id : bookshelfId
     },
     select : {
       description : true,
@@ -107,12 +107,12 @@ return bookData;
 };
 
 //* 등록한 책 삭제
-const deleteMyBook = async (id : number) => {
+const deleteMyBook = async (bookshelfId : number) => {
 
   //* 책장에 없는 책을 삭제하려고 하면 에러
   const bookdata = await prisma.bookshelf.findUnique({
     where : {
-      id : id
+      id : bookshelfId
     }
   });
 
@@ -122,7 +122,7 @@ const deleteMyBook = async (id : number) => {
 
   const data = await prisma.bookshelf.delete({
     where: {
-      id : id
+      id : bookshelfId
     }
   });
 
@@ -130,12 +130,12 @@ const deleteMyBook = async (id : number) => {
 };
 
 //* 등록한 책 수정
-const updateMyBook = async (id : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
+const updateMyBook = async (bookshelfId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
 
   //unique한 bookshelfId 값
   const bookshelfData = await prisma.bookshelf.findFirst({
     where : {
-      id : id
+      id : bookshelfId
     }
   });
 
@@ -145,7 +145,7 @@ const updateMyBook = async (id : number, bookshelfUpdateDto : BookshelfUpdateDTO
 
   const data = await prisma.bookshelf.update({
     where: {
-      id : id
+      id : bookshelfId
     },
     data: {
       description : bookshelfUpdateDto.description,
