@@ -73,7 +73,7 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
       }
     });
 
-    const newBookAlarm =  await prisma.newBookAlarm.create({
+    await prisma.newBookAlarm.create({
       data : {
         alarmId : alarm.id,
         bookshelfId : bookshelf.id
@@ -85,11 +85,10 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
 };
 
 //* 등록한 책 상세 정보 조회
-const getBookById = async (userId: number, bookId: number)=> {
+const getBookById = async (id: number)=> {
   const bookData = await prisma.bookshelf.findFirst({
     where: {
-      bookId : bookId,
-      userId : userId
+      id
     },
     select : {
       description : true,
@@ -103,19 +102,17 @@ const getBookById = async (userId: number, bookId: number)=> {
       }
     }
   });
-  console.log(bookData);
 
 return bookData;
 };
 
 //* 등록한 책 삭제
-const deleteMyBook = async (userId: number, bookId : number) => {
+const deleteMyBook = async (id : number) => {
 
   //* 책장에 없는 책을 삭제하려고 하면 에러
   const bookdata = await prisma.bookshelf.findFirst({
     where : {
-      bookId : bookId,
-      userId : userId
+      id
     }
   });
 
@@ -125,35 +122,30 @@ const deleteMyBook = async (userId: number, bookId : number) => {
 
   const data = await prisma.bookshelf.deleteMany({
     where: {
-      bookId: bookId,
-      userId : userId
+      id
     }
   });
 
   return data;
-}
+};
 
 //* 등록한 책 수정
-const updateMyBook = async (userId: number, bookId : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
+const updateMyBook = async (id : number, bookshelfUpdateDto : BookshelfUpdateDTO) => {
 
   //unique한 bookshelfId 값
   const bookshelfData = await prisma.bookshelf.findFirst({
     where : {
-      bookId : bookId,
-      userId : userId
+      id
     }
   });
 
-  const bookshelfId = bookshelfData?.id;
-
-  //요청한 bookId와 userId에 해당하는 데이터가 없음
   if (!bookshelfData) {
-    return null;
+    return sc.NOT_FOUND;
   }
 
   const data = await prisma.bookshelf.update({
     where: {
-      id : bookshelfId
+      id
     },
     data: {
       description : bookshelfUpdateDto.description,
@@ -205,6 +197,7 @@ const getMyBookshelf = async (userId : number) => {
       pickIndex : 'asc'
     },
     select : {
+      id : true,
       pickIndex: true,
       Book : {
         select : {
@@ -313,6 +306,7 @@ const getFriendBookshelf = async (userId : number, friendId : number) => {
       pickIndex : 'asc'
     },
     select : {
+      id : true,
       pickIndex: true,
       Book : {
         select : {

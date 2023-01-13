@@ -7,8 +7,8 @@ const router: Router = Router();
 //* 내 책장에 책 등록하기 POST /bookshelf
 router.post("/", bookshelfController.createMyBook);
 
-//* 등록한 책 상세 정보 불러오기 GET /bookshelf/detail/:userId/:bookshelfId
-router.get("/detail/:userId/:bookshelfId", bookshelfController.getBookById);
+//* 등록한 책 상세 정보 불러오기 GET /bookshelf/detail/:bookshelfId
+router.get("/detail/:bookshelfId", bookshelfController.getBookById);
 
 //* 등록한 책 삭제하기 DELETE /bookshelf/:bookshelfId
 router.delete("/:bookshelfId", bookshelfController.deleteMyBook);
