@@ -22,7 +22,6 @@ describe('***** Bookshelf Test *****', () => {
                 }
             });
 
-
             await prisma.bookshelf.deleteMany({
                 where: {
                     userId: 300,
@@ -90,17 +89,17 @@ describe('***** Bookshelf Test *****', () => {
     });
 
     //* 등록한 책 상세 정보 조회
-    context('[GET] /bookshelf/detail/25', () => {
+    context('[GET] /bookshelf/detail/195', () => {
         it('등록한 책 상세 정보 조회 성공', done => {
             req(app)
-                .get('/bookshelf/detail/25')  // api 요청
+                .get('/bookshelf/detail/195')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
-                    expect(res.body.data.Book.bookTitle).to.equal("달까지 가자");
-                    expect(res.body.data.Book.author).to.equal("장류진"); //response body 예측값 검증
+                    expect(res.body.data.Book.bookTitle).to.equal("공정하다는 착각");
+                    expect(res.body.data.Book.author).to.equal("마이클 샌델"); //response body 예측값 검증
                     done();
                 })
                 .catch(err => {
@@ -110,7 +109,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .get('/bookshelf/detail/25')
+                .get('/bookshelf/detail/195')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -136,84 +135,12 @@ describe('***** Bookshelf Test *****', () => {
         });
     });
 
-    //* 등록한 책 삭제
-    context('[DELETE] /bookshelf/25', () => {
-        after(async () => {
-            await prisma.bookshelf.create({
-                data: {
-                    pickIndex: 0,
-                    description: "테스트3",
-                    memo: "메모3",
-                    User: {
-                        connect: {
-                            id: 300
-                        }
-                    },
-                    Book: {
-                        connectOrCreate: {
-                            where: {
-                                id: 25
-                            },
-                            create: {
-                                bookTitle: "달까지 가자",
-                                author: "장류진",
-                                bookImage: "https://image.yes24.com/goods/99111756/XL"
-                            }
-                        }
-                    }
-                }
-            });
-        });
-
-        it('책 삭제하기 성공', done => {
-            req(app)
-                .delete('/bookshelf/25')  // api 요청
-                .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
-                .expect(200) // 예측 상태 코드
-                .expect('Content-Type', /json/) // 예측 content-type
-                .then(res => {
-                    done();
-                })
-                .catch(err => {
-                    console.error("###### Error >>", err);
-                    done(err);
-                })
-        });
-        it('필요한 헤더 값이 없음', done => {
-            req(app)
-                .delete('/bookshelf/25')
-                .set('Content-Type', 'application/json')
-                .expect(400)
-                .then(res => {
-                    done();
-                })
-                .catch(err => {
-                    console.error("###### Error >>", err);
-                    done(err);
-                })
-        });
-        it('해당하는 책을 찾을 수 없음', done => {
-            req(app)
-                .delete('/bookshelf/500')
-                .set('Content-Type', 'application/json')
-                .expect(400) // 추후 상태 코드 변경
-                .then(res => {
-                    done();
-                })
-                .catch(err => {
-                    console.error("###### Error >>", err);
-                    done(err);
-                })
-        });
-    });
-
     //* 등록한 책 수정
-    context('[DELETE] /bookshelf/25', () => {
+    context('[PATCH] /bookshelf/195', () => {
         after(async () => {
             await prisma.bookshelf.updateMany({
                 where: {
-                    bookId: 25,
+                    bookId: 32,
                     userId: 300
                 },
                 data: {
@@ -225,7 +152,7 @@ describe('***** Bookshelf Test *****', () => {
 
         it('책 수정하기 성공', done => {
             req(app)
-                .patch('/bookshelf/25')  // api 요청
+                .patch('/bookshelf/195')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .send({
@@ -244,7 +171,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .patch('/bookshelf/25')
+                .patch('/bookshelf/195')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
