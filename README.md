@@ -83,6 +83,10 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 | Datagrip 세팅 | `예슬🐼` | 완료 |
 | DB 설계 | `예슬🐼` `현정🐸` | 완료 |
 | API 명세서 작성 | `예슬🐼` `현정🐸` | 완료 |
+| CI/CD 구현 | `예슬🐼` `현정🐸` | 완료 |
+| Slack webhook 세팅 | `현정🐸` | 완료 |
+| macha를 통한 테스트 환경 구축 | `예슬🐼` | 완료 |
+| 테스트 코드 작성 | `예슬🐼` `현정🐸` | 완료 |
  
 </div>
  <br>
@@ -290,3 +294,55 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 - [chore] : gradle 세팅, 위의 것 이외에 거의 모든 것
 
 `ex) [feat] user api 구현`
+
+## 📌 Dependencies module
+```
+{
+  "name": "peekabook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/team-peekabook/Peekabook-server.git",
+  "author": "hyeonjeong Park <py0429@ewhain.net>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "postinstall": "prisma generate",
+    "prepare": "husky install",
+    "test": "yarn mocha ./test/* -r ts-node/register -exit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.241.0",
+    "@prisma/client": "^4.8.0",
+    "axios": "^1.2.2",
+    "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "prisma": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/express": "^4.17.15",
+    "@types/mocha": "^10.0.1",
+    "@types/multer": "^1.4.7",
+    "@types/multer-s3": "^3.0.0",
+    "@types/node": "^18.11.18",
+    "@types/supertest": "^2.0.12",
+    "chai": "^4.3.7",
+    "husky": "^8.0.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}
+```
+
+## 📌 Server architecture
+![최종과제1](https://user-images.githubusercontent.com/81394850/212317459-f952c179-f490-439e-8b8c-64ce0875d885.png)
+
+
+
