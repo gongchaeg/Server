@@ -35,27 +35,29 @@
 
 ├── husky
 ├── prisma
+├── scripts
+   ├── after-deploy.sh
 ├── src
-│   ├── config
+│   ├── constants
 │       └── index.ts
 │       └── response.ts
 │       └── responseMessage.ts
 │       └── statusCode.ts
 │       └── tokenType.ts
-│   ├── constants
+│   ├── config
 │       └── index.ts
 │   ├── controller
 │       └── index.ts
 │   ├── interfaces
 │   ├── middlwares
+│   ├── modules
 │       └── slackErrorMessage.ts
 │       └── slackWebhook.ts
-│   ├── modules
-│       └── index.ts
 │   ├── router
 │       └── index.ts
 │   └── service
 │       └── index.ts
+│   └── index.ts
 └── test
 
 ```
