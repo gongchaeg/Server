@@ -75,7 +75,7 @@ describe('***** Friend Test *****', () => {
         });
     });
 
-    context('[POST] /friend/:friendId/recommend', () => {
+    context('[DELETE] /friend/:friendId', () => {
         //?  after 작업
         after(async () => {
             await prisma.friend.create({
