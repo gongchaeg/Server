@@ -68,8 +68,6 @@ https://www.erdcloud.com/d/X9GnjASe9fSv26YWg
 ## Api 명세서
 https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 
-<img width="1433" alt="image" src="https://user-images.githubusercontent.com/68415644/210502901-a128c197-6c3f-474f-bd28-43616a6b4d04.png">
-
 
 ## 🙋🏻‍♀️ 역할 분담
 
