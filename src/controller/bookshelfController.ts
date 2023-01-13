@@ -28,7 +28,7 @@ const createMyBook = async (req: Request, res: Response) => {
         const data = await bookshelfService.createMyBook(+auth, bookshelfCreateDto);
 
         const createMybookDTO = {
-            "bookId" : data.bookId
+            "id" : data.id
         }
 
         if (!data) {
@@ -46,12 +46,12 @@ const createMyBook = async (req: Request, res: Response) => {
 };
 
 /**
- * @route GET /bookshelf/detail/:bookId
+ * @route GET /bookshelf/detail/:bookshelfId
  * @desc 등록한 책의 상세 정보 불러오기
  */
 const getBookById = async (req: Request, res: Response) => {
     const auth = req.header("auth");
-    const { bookId } = req.params;
+    const { bookshelfId } = req.params;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -59,17 +59,17 @@ const getBookById = async (req: Request, res: Response) => {
     }
 
     try {
-        if (!bookId) {
+        if (!bookshelfId) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND));       
         }
 
-        const data = await bookshelfService.getBookById(+auth, +bookId);
+        const data = await bookshelfService.getBookById(+bookshelfId);
 
         if (!data) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
         }
-
         return res.status(sc.OK).send(success(sc.OK, rm.READ_MYBOOK_SUCCESS, data));
+
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
@@ -78,16 +78,15 @@ const getBookById = async (req: Request, res: Response) => {
         res.status(sc.INTERNAL_SERVER_ERROR)
             .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-
 }
 
 /**
- * @route DELETE /bookshelf/:bookId
+ * @route DELETE /bookshelf/:bookshelfId
  * @desc 등록한 책 삭제하기
  */
 const deleteMyBook = async (req: Request, res: Response) => {
     const auth = req.header("auth");
-    const { bookId } = req.params;
+    const { id } = req.params;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -95,11 +94,11 @@ const deleteMyBook = async (req: Request, res: Response) => {
     }
 
     try {
-        if (!bookId) {
+        if (!id) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));       
         }
     
-        const data = await bookshelfService.deleteMyBook(+auth, +bookId);
+        const data = await bookshelfService.deleteMyBook(+id);
     
         if (data == sc.NOT_FOUND) {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
@@ -117,12 +116,12 @@ const deleteMyBook = async (req: Request, res: Response) => {
 }
 
 /**
- * @route PATCH /bookshelf/:bookId
+ * @route PATCH /bookshelf/:bookshelfId
  * @desc 등록한 책 정보 수정하기
  */
 const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
-    const { bookId } = req.params;
+    const { id } = req.params;
     const auth = req.header("auth");
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
@@ -130,16 +129,27 @@ const updateMyBook = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
-    if (!bookshelfUpdateDto) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
+    try {
+        if (!bookshelfUpdateDto) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
+        }
+    
+        const data = await bookshelfService.updateMyBook(+id, bookshelfUpdateDto);
+    
+        if (data == sc.NOT_FOUND) {
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS));
+        
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
-    const data = await bookshelfService.updateMyBook(+auth, +bookId, bookshelfUpdateDto);
-
-    if (!data) {
-        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
-    }
-    return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS));
 }
 
 /**
