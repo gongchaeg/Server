@@ -227,7 +227,7 @@ const getMyBookshelf = async (userId : number) => {
       }
     },
     orderBy : {
-      createdAt : "asc"
+      createdAt : "desc"
     }
   })
 
@@ -335,7 +335,7 @@ const getFriendBookshelf = async (userId : number, friendId : number) => {
       }
     },
     orderBy : {
-      createdAt : "asc"
+      createdAt : "desc"
     }
   })
 
