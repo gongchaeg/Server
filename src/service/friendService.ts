@@ -75,8 +75,11 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 const searchUser = async (nickname: string, auth: number) => {
     const user = await prisma.user.findFirst({
         where: {
-            nickname: nickname,
-        },
+            nickname: {
+                equals: nickname,
+                mode: 'insensitive'
+            },
+        }
     });
 
     if (user == null) {
