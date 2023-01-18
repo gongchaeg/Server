@@ -120,11 +120,36 @@ const deleteMyBook = async (bookshelfId : number) => {
     return sc.NOT_FOUND;
   }
 
-  const data = await prisma.bookshelf.delete({
-    where: {
-      id : bookshelfId
+    //* pick 되어 있는 책을 삭제하려고 하면 pickIndex 수정
+    if (bookdata.pickIndex==1) {
+      for (let idx = 2; idx < 4; idx++) {
+        await prisma.bookshelf.updateMany({
+          where : {
+            pickIndex : idx
+          },
+          data : {
+            pickIndex : (idx - 1)
+          }
+        });
+      }
     }
-  });
+  
+    if (bookdata.pickIndex==2) {
+        await prisma.bookshelf.updateMany({
+          where : {
+            pickIndex : 3
+          },
+          data : {
+            pickIndex : 2
+          }
+        });
+    }
+
+    const data = await prisma.bookshelf.delete({
+      where: {
+        id : bookshelfId
+      }
+    });
 
   return data;
 };
