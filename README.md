@@ -342,7 +342,8 @@ https://interesting-door-b57.notion.site/Api-d14d8f4bc9bb4ae9a55661ef609d4275
 ```
 
 ## 📌 Server architecture
-![최종과제1](https://user-images.githubusercontent.com/81394850/212349633-1d0a2396-2fea-4053-adeb-fd006df49a76.png)
+![최종과제1](https://user-images.githubusercontent.com/81394850/213858501-63fac067-228f-4792-a145-fd4654915e5f.png)
+
 
 
 
