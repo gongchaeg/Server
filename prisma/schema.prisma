@@ -10,7 +10,7 @@ datasource db {
 model User {
   id                             Int         @id @unique @default(autoincrement())
   nickname                       String      @unique @db.VarChar(50)
-  profileImage                   String?     @db.VarChar(200)
+  profileImage                   String?     @db.VarChar(500)
   intro                          String?     @db.VarChar(100)
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
@@ -25,7 +25,7 @@ model Book {
   id        Int         @id @unique @default(autoincrement())
   bookTitle String      @db.VarChar(100)
   author    String      @db.VarChar(50)
-  bookImage String?     @db.VarChar(200)
+  bookImage String?     @db.VarChar(500)
   Bookshelf Bookshelf[]
   Recommend Recommend[]
 }
@@ -38,8 +38,8 @@ model Bookshelf {
   userId       Int
   bookId       Int
   createdAt    DateTime       @default(now())
-  Book         Book           @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_book_id_fk")
-  User         User           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "bookshelf_user_id_fk")
+  Book         Book           @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "bookshelf_book_id_fk")
+  User         User           @relation(fields: [userId], references: [id], onDelete: NoAction, map: "bookshelf_user_id_fk")
   NewBookAlarm NewBookAlarm[]
 }
 
@@ -70,9 +70,9 @@ model Recommend {
   recommendTo         Int
   bookId              Int
   createdAt           DateTime         @default(now())
-  Book                Book             @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_book_id_fk")
-  recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk")
-  recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_user_id_fk_2")
+  Book                Book             @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "recommend_book_id_fk")
+  recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, map: "recommend_user_id_fk")
+  recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, map: "recommend_user_id_fk_2")
   RecommendAlarm      RecommendAlarm[]
 }
 
@@ -81,7 +81,7 @@ model RecommendAlarm {
   alarmId     Int
   recommendId Int
   Alarm       Alarm     @relation(fields: [alarmId], references: [id], onDelete: Cascade, map: "alarm_id_fk")
-  Recommend   Recommend @relation(fields: [recommendId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "recommend_id_fk")
+  Recommend   Recommend @relation(fields: [recommendId], references: [id], onDelete: Cascade, map: "recommend_id_fk")
 }
 
 model NewBookAlarm {
