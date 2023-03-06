@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && node dist",
+    "build": "tsc",
     "postinstall": "prisma generate",
     "prepare": "husky install",
     "test": "yarn mocha ./test/* -r ts-node/register -exit"
