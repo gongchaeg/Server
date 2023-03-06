@@ -12,6 +12,8 @@ model User {
   nickname                       String      @unique @db.VarChar(50)
   profileImage                   String?     @db.VarChar(500)
   intro                          String?     @db.VarChar(100)
+  createdAt                      DateTime    @default(now())
+  updatedAt                      DateTime?
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
   Bookshelf                      Bookshelf[]

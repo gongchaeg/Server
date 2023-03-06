@@ -28,7 +28,7 @@ const createMyBook = async (req: Request, res: Response) => {
         const data = await bookshelfService.createMyBook(+auth, bookshelfCreateDto);
 
         const createMybookDTO = {
-            "id" : data.id
+            "id": data.id
         }
 
         if (!data) {
@@ -60,7 +60,7 @@ const getBookById = async (req: Request, res: Response) => {
 
     try {
         if (!bookshelfId) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND));       
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND));
         }
 
         const data = await bookshelfService.getBookById(+bookshelfId);
@@ -95,16 +95,16 @@ const deleteMyBook = async (req: Request, res: Response) => {
 
     try {
         if (!bookshelfId) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));       
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
         }
-    
+
         const data = await bookshelfService.deleteMyBook(+bookshelfId);
-    
+
         if (data == sc.NOT_FOUND) {
-            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
         }
         return res.status(sc.OK).send(success(sc.OK, rm.DELETE_MYBOOK_SUCCESS));
-        
+
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
@@ -133,14 +133,14 @@ const updateMyBook = async (req: Request, res: Response) => {
         if (!bookshelfUpdateDto) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_MYBOOK_FAIL));
         }
-    
+
         const data = await bookshelfService.updateMyBook(+bookshelfId, bookshelfUpdateDto);
-    
+
         if (data == sc.NOT_FOUND) {
-            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));       
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.READ_MYBOOK_FAIL));
         }
         return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_MYBOOK_SUCCESS));
-        
+
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
 
