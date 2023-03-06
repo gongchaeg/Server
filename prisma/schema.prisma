@@ -38,6 +38,7 @@ model Bookshelf {
   userId       Int
   bookId       Int
   createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   Book         Book           @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "bookshelf_book_id_fk")
   User         User           @relation(fields: [userId], references: [id], onDelete: NoAction, map: "bookshelf_user_id_fk")
   NewBookAlarm NewBookAlarm[]
