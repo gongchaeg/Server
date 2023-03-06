@@ -195,17 +195,13 @@ const getMyBookshelf = async (userId : number) => {
   }
 
   // section2 : myIntro
-  const myIntro : IntroDTO|null = await prisma.user.findUnique({
-    where : {
-      id : userId
-    }
-  });
+  const myIntro:IntroDTO = await userService.getUserIntro(userId);
 
   // section3 : picks
   const picks = await prisma.bookshelf.findMany({
     where : {
-      pickIndex : { in: [1, 2, 3] },
-      userId : userId
+      userId : userId,
+      pickIndex : { in: [1, 2, 3] }
     },
     orderBy : {
       pickIndex : 'asc'
