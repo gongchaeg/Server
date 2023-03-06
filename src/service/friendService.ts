@@ -1,6 +1,8 @@
 import { FriendRecommendRequestDTO } from './../interfaces/friend/FriendRecommendRequestDTO';
 import { PrismaClient } from "@prisma/client";
 import { sc } from "../constants";
+import userService from './userService';
+import { UserDTO } from '../interfaces/user/UserDTO';
 
 const prisma = new PrismaClient();
 
@@ -160,11 +162,38 @@ const deleteFollowFriend = async (friendId: number, auth: number) => {
     return data;
 }
 
+//* 친구 리스트 가져오기
+const getFriendList = async (auth: number) => {
+    let friendList: UserDTO[] = [];
+
+    const friendIdList = await prisma.friend.findMany({
+        where : {
+          senderId : auth
+        },
+        select : {
+          receiverId : true
+        },
+        orderBy : {
+          receiverId : "asc"
+        }
+      });
+
+    for (const user of friendIdList) {
+        const userId = user.receiverId;
+        const friend = await userService.getUser(userId);
+    
+        friendList?.push(friend);
+    }
+
+    return friendList;
+
+}
 const friendService = {
     recommendBookToFriend,
     searchUser,
     followFriend,
-    deleteFollowFriend
+    deleteFollowFriend,
+    getFriendList
 }
 
 export default friendService;

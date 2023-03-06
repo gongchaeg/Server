@@ -9,6 +9,7 @@ import userService from "./userService";
 import { IntroDTO } from "../interfaces/user/IntroDTO";
 import { sc } from '../constants';
 import { rm } from 'fs';
+import friendService from './friendService';
 
 const prisma = new PrismaClient();
 
@@ -186,23 +187,11 @@ const getMyBookshelf = async (userId : number) => {
 
   // section1 : friendList
   let friendList: UserDTO[] = [];
-  const friendIdList = await prisma.friend.findMany({
-    where : {
-      senderId : userId
-    },
-    select : {
-      receiverId : true
-    },
-    orderBy : {
-      receiverId : "asc"
-    }
-  });
 
-  for (const user of friendIdList) {
-    const userId = user.receiverId;
-    const friend = await userService.getUser(userId);
+  const friends = friendService.getFriendList(userId);
 
-    friendList?.push(friend);
+  for (const friend of await friends) {
+      friendList.push(friend);
   }
 
   // section2 : myIntro
