@@ -188,12 +188,26 @@ const getFriendList = async (auth: number) => {
     return friendList;
 
 }
+
+//* 팔로우 조회
+const isFriend = async (userId : number, friendId : number) => {
+    const result = await prisma.friend.findFirst({
+        where : {
+          receiverId : friendId,
+          senderId : userId
+        }
+    });
+
+    return result;
+}
+
 const friendService = {
     recommendBookToFriend,
     searchUser,
     followFriend,
     deleteFollowFriend,
-    getFriendList
+    getFriendList,
+    isFriend
 }
 
 export default friendService;
