@@ -126,6 +126,7 @@ const deleteMyBook = async (bookshelfId : number) => {
       for (let idx = 2; idx < 4; idx++) {
         await prisma.bookshelf.updateMany({
           where : {
+            userId: bookdata.userId,
             pickIndex : idx
           },
           data : {
@@ -138,6 +139,7 @@ const deleteMyBook = async (bookshelfId : number) => {
     if (bookdata.pickIndex==2) {
         await prisma.bookshelf.updateMany({
           where : {
+            userId: bookdata.userId,
             pickIndex : 3
           },
           data : {
