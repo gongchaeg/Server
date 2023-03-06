@@ -126,6 +126,7 @@ const deleteMyBook = async (bookshelfId : number) => {
       for (let idx = 2; idx < 4; idx++) {
         await prisma.bookshelf.updateMany({
           where : {
+            userId: bookdata.userId,
             pickIndex : idx
           },
           data : {
@@ -138,6 +139,7 @@ const deleteMyBook = async (bookshelfId : number) => {
     if (bookdata.pickIndex==2) {
         await prisma.bookshelf.updateMany({
           where : {
+            userId: bookdata.userId,
             pickIndex : 3
           },
           data : {
@@ -187,9 +189,7 @@ const getMyBookshelf = async (userId : number) => {
 
   // section1 : friendList
   let friendList: UserDTO[] = [];
-
   const friends = friendService.getFriendList(userId);
-
   for (const friend of await friends) {
       friendList.push(friend);
   }
@@ -260,61 +260,33 @@ const getMyBookshelf = async (userId : number) => {
 const getFriendBookshelf = async (userId : number, friendId : number) => {
 
   //? 친구 테이블에 데이터가 없다면 에러
-  const isFriend = await prisma.friend.findFirst({
-    where : {
-      receiverId : friendId,
-      senderId : userId
-    }
-  });
-
+  const isFriend = friendService.isFriend(userId, friendId);
   if (isFriend == null) {
     return sc.NOT_FOUND;
   }
 
   // section1 : myIntro
-  const myIntro = await prisma.user.findUnique({
-    where : {
-      id : userId
-    },
-    select : {
-      nickname : true,
-      profileImage : true
-    }
-  });
+  const userIntro = await userService.getUserIntro(userId);
+  const myIntro = {
+      nickname : userIntro?.nickname,
+      profileImage : userIntro.profileImage
+  }
 
   // section2 : friendList
   let friendList: UserDTO[] = [];
-  const friendIdList = await prisma.friend.findMany({
-    where : {
-      senderId : userId
-    },
-    select : {
-      receiverId : true
-    },
-    orderBy : {
-      receiverId : "asc"
-    }
-  });
-
-  for (const user of friendIdList) {
-    const userId = user.receiverId;
-    const friend = await userService.getUser(userId);
-
-    friendList?.push(friend);
+  const friends = friendService.getFriendList(userId);
+  for (const friend of await friends) {
+      friendList.push(friend);
   }
 
   // section3 : friendIntro
-  const friendIntro : IntroDTO|null = await prisma.user.findUnique({
-    where : {
-      id : friendId
-    }
-  });
+  const friendIntro:IntroDTO = await userService.getUserIntro(friendId);
 
   // section4 : picks
   const picks = await prisma.bookshelf.findMany({
     where : {
-      pickIndex : { in: [1, 2, 3] },
-      userId : friendId
+      userId : friendId,
+      pickIndex : { in: [1, 2, 3] }
     },
     orderBy : {
       pickIndex : 'asc'

@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
+    "db:pull": "npx prisma db pull",
     "postinstall": "prisma generate",
     "prepare": "husky install",
     "test": "yarn mocha ./test/* -r ts-node/register -exit"
