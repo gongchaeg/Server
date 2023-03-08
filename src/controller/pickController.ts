@@ -14,9 +14,6 @@ const patchPick = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
-    if (!auth) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
     if (pickPatchRequestDTO.firstPick == null || pickPatchRequestDTO.secondPick == null || pickPatchRequestDTO.thirdPick == null) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
     }
