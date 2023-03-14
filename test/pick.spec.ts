@@ -30,7 +30,7 @@ describe('***** Pick Test *****', () => {
         after(async () => {
             await prisma.bookshelf.updateMany({
                 where: {
-                    id: 123,
+                    id: 1,
                 },
                 data: {
                     pickIndex: 0
@@ -39,7 +39,7 @@ describe('***** Pick Test *****', () => {
 
             await prisma.bookshelf.updateMany({
                 where: {
-                    id: 124,
+                    id: 2,
                 },
                 data: {
                     pickIndex: 0
@@ -48,7 +48,7 @@ describe('***** Pick Test *****', () => {
 
             await prisma.bookshelf.updateMany({
                 where: {
-                    id: 195,
+                    id: 3,
                 },
                 data: {
                     pickIndex: 0
@@ -62,9 +62,9 @@ describe('***** Pick Test *****', () => {
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header 설정
                 .send({
-                    "firstPick": 123,
-                    "secondPick": 124,
-                    "thirdPick": 195
+                    "firstPick": 1,
+                    "secondPick": 2,
+                    "thirdPick": 3
                 })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type

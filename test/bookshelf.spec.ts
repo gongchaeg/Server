@@ -17,8 +17,8 @@ describe('***** Bookshelf Test *****', () => {
             const book = await prisma.book.findFirst({
                 where: {
                     bookTitle: "데미안",
-                    author: "헤르만 헤세"
-
+                    author: "헤르만 헤세",
+                    publisher: "푸른 숲"
                 }
             });
 
@@ -59,6 +59,7 @@ describe('***** Bookshelf Test *****', () => {
                     "bookImage": "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954620147.jpg",
                     "bookTitle": "데미안",
                     "author": "헤르만 헤세",
+                    "publisher" : "푸른 숲",
                     "description": "테스트를 위한 한 마디에요",
                     "memo": "테스트를 위한 메모에요"
                 }) // request body
@@ -89,10 +90,10 @@ describe('***** Bookshelf Test *****', () => {
     });
 
     //* 등록한 책 상세 정보 조회
-    context('[GET] /bookshelf/detail/195', () => {
+    context('[GET] /bookshelf/detail/1', () => {
         it('등록한 책 상세 정보 조회 성공', done => {
             req(app)
-                .get('/bookshelf/detail/195')  // api 요청
+                .get('/bookshelf/detail/1')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .expect(200) // 예측 상태 코드
@@ -109,7 +110,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .get('/bookshelf/detail/195')
+                .get('/bookshelf/detail/1')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -122,7 +123,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('해당하는 책을 찾을 수 없음', done => {
             req(app)
-                .get('/bookshelf/detail/500')
+                .get('/bookshelf/detail/-1')
                 .set('Content-Type', 'application/json')
                 .then(res => {
                     expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
@@ -136,11 +137,11 @@ describe('***** Bookshelf Test *****', () => {
     });
 
     //* 등록한 책 수정
-    context('[PATCH] /bookshelf/195', () => {
+    context('[PATCH] /bookshelf/1', () => {
         after(async () => {
             await prisma.bookshelf.updateMany({
                 where: {
-                    bookId: 32,
+                    bookId: 1,
                     userId: 300
                 },
                 data: {
@@ -152,7 +153,7 @@ describe('***** Bookshelf Test *****', () => {
 
         it('책 수정하기 성공', done => {
             req(app)
-                .patch('/bookshelf/195')  // api 요청
+                .patch('/bookshelf/1')  // api 요청
                 .set('Content-Type', 'application/json')
                 .set('auth', '300')  // header - userId 설정
                 .send({
@@ -171,7 +172,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('필요한 헤더 값이 없음', done => {
             req(app)
-                .patch('/bookshelf/195')
+                .patch('/bookshelf/1')
                 .set('Content-Type', 'application/json')
                 .expect(400)
                 .then(res => {
@@ -184,7 +185,7 @@ describe('***** Bookshelf Test *****', () => {
         });
         it('해당하는 책을 찾을 수 없음', done => {
             req(app)
-                .patch('/bookshelf/500')
+                .patch('/bookshelf/-1')
                 .set('Content-Type', 'application/json')
                 .expect(400) // 추후 상태 코드 변경
                 .then(res => {

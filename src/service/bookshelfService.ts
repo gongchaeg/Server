@@ -10,21 +10,16 @@ import { IntroDTO } from "../interfaces/user/IntroDTO";
 import { sc } from '../constants';
 import { rm } from 'fs';
 import friendService from './friendService';
+import bookService from './bookService';
+import alarmService from './alarmService';
 
 const prisma = new PrismaClient();
 
 //* 내 책장에 책 등록
 const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreateDTO) => {
 
-  const bookData = await prisma.book.findFirst({
-      where : {
-        bookTitle : bookshelfCreateDto.bookTitle,
-        author : bookshelfCreateDto.author
-      }
-  });
-
+  const bookData = await bookService.getBookId(bookshelfCreateDto);
   let bookId = bookData?.id;
-
   if (!bookId) {
     bookId = -1;
   }
@@ -34,7 +29,6 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
         pickIndex : 0,
         description : bookshelfCreateDto.description,
         memo : bookshelfCreateDto.memo,
-
         User : { 
           connect : {
             id : userId
@@ -48,7 +42,8 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
             create : {
               bookTitle : bookshelfCreateDto.bookTitle,
               author : bookshelfCreateDto.author,
-              bookImage : bookshelfCreateDto.bookImage
+              bookImage : bookshelfCreateDto.bookImage,
+              publisher: bookshelfCreateDto.publisher
             }
           }
         }
@@ -56,31 +51,8 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
   });
 
   // 나를 팔로우하는 친구들에게 알림 보내기
-  const follows = await prisma.friend.findMany({
-    where : {
-      receiverId : userId
-    },
-    select : {
-      senderId : true
-    }
-  });
-
-  for ( const follow of follows ) {
-    const alarm = await prisma.alarm.create({
-      data : {
-        senderId : userId,
-        receiverId : follow.senderId,
-        typeId : 3
-      }
-    });
-
-    await prisma.newBookAlarm.create({
-      data : {
-        alarmId : alarm.id,
-        bookshelfId : bookshelf.id
-      }
-    });
-  }
+  const follows = await friendService.getFollowerIdList(userId);
+  const alarm = alarmService.createNewBookAlarm(userId, bookshelf, follows);
 
   return bookshelf;
 };
@@ -189,7 +161,7 @@ const getMyBookshelf = async (userId : number) => {
 
   // section1 : friendList
   let friendList: UserDTO[] = [];
-  const friends = friendService.getFriendList(userId);
+  const friends = friendService.getFriendInfoList(userId);
   for (const friend of await friends) {
       friendList.push(friend);
   }
@@ -270,7 +242,7 @@ const getFriendBookshelf = async (userId : number, friendId : number) => {
 
   // section2 : friendList
   let friendList: UserDTO[] = [];
-  const friends = friendService.getFriendList(userId);
+  const friends = friendService.getFriendInfoList(userId);
   for (const friend of await friends) {
       friendList.push(friend);
   }

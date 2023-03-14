@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Bookshelf, PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
 import { AlarmResponseDTO } from "../interfaces/alarm/AlarmResponseDTO";
 
@@ -157,8 +157,29 @@ const getAlarm = async (auth: number) => {
     return alarmAll;
 }
 
+//* 책 등록 시 알림 생성
+const createNewBookAlarm = async (userId: number, bookshelf: Bookshelf, follows:{senderId: number}[]) => {
+    for ( const follow of follows ) {
+        const alarm = await prisma.alarm.create({
+          data : {
+            senderId : userId,
+            receiverId : follow.senderId,
+            typeId : 3
+          }
+        });
+    
+        await prisma.newBookAlarm.create({
+          data : {
+            alarmId : alarm.id,
+            bookshelfId : bookshelf.id
+          }
+        });
+      }
+}
+
 const alarmService = {
     getAlarm,
+    createNewBookAlarm
 }
 
 export default alarmService;                                                                                                                                                                                                                                                    
