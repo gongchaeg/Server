@@ -16,11 +16,15 @@ model User {
   updatedAt                      DateTime?   @updatedAt
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
+  Block_Block_userIdToUser       Block[]     @relation("Block_userIdToUser")
+  Block_Block_friendIdToUser     Block[]     @relation("Block_friendIdToUser")
   Bookshelf                      Bookshelf[]
   Friend_Friend_receiverIdToUser Friend[]    @relation("Friend_receiverIdToUser")
   Friend_Friend_senderIdToUser   Friend[]    @relation("Friend_senderIdToUser")
   recommendedByToUser            Recommend[] @relation("Recommend_recommendedByToUser")
   recommendToToUser              Recommend[] @relation("Recommend_recommendToToUser")
+  Report_Report_userIdToUser     Report[]    @relation("Report_userIdToUser")
+  Report_Report_friendIdToUser   Report[]    @relation("Report_friendIdToUser")
 }
 
 model Book {
@@ -28,6 +32,7 @@ model Book {
   bookTitle String      @db.VarChar(100)
   author    String      @db.VarChar(50)
   bookImage String?     @db.VarChar(500)
+  publisher String      @db.VarChar(50)
   Bookshelf Bookshelf[]
   Recommend Recommend[]
 }
@@ -98,4 +103,20 @@ model NewBookAlarm {
 model AlarmType {
   id       Int    @id(map: "alarmType_pkey") @default(autoincrement())
   typeName String @db.VarChar(50)
+}
+
+model Block {
+  id                        Int  @id @unique @default(autoincrement())
+  userId                    Int
+  friendId                  Int
+  User_Block_userIdToUser   User @relation("Block_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "block_user_id_fk")
+  User_Block_friendIdToUser User @relation("Block_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "block_user_id_fk_2")
+}
+
+model Report {
+  id                         Int  @id @default(autoincrement())
+  userId                     Int
+  friendId                   Int
+  User_Report_userIdToUser   User @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
+  User_Report_friendIdToUser User @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
 }

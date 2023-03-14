@@ -26,6 +26,12 @@ const getUserIntro = async (userId: number) => {
     const userIntro : IntroDTO|null = await prisma.user.findUnique({
         where : {
           id : userId
+        },
+        select : {
+            id: true,
+            nickname : true,
+            profileImage: true,
+            intro : true
         }
     });
     if (!userIntro) throw new Error('no userIntro!');

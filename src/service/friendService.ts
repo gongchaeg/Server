@@ -11,7 +11,9 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     //* 존재하는 책인지 확인하기
     const books = await prisma.book.findFirst({
         where: {
-            bookTitle: friendRecommendRequestDTO.bookTitle
+            bookTitle: friendRecommendRequestDTO.bookTitle,
+            author : friendRecommendRequestDTO.author,
+            publisher : friendRecommendRequestDTO.publisher
         },
     });
 
@@ -23,7 +25,8 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
             data: {
                 bookTitle: friendRecommendRequestDTO.bookTitle,
                 author: friendRecommendRequestDTO.author,
-                bookImage: friendRecommendRequestDTO.bookImage
+                bookImage: friendRecommendRequestDTO.bookImage,
+                publisher : friendRecommendRequestDTO.publisher
             }
         })
         bookId = data.id
@@ -162,10 +165,8 @@ const deleteFollowFriend = async (friendId: number, auth: number) => {
     return data;
 }
 
-//* 친구 리스트 가져오기
-const getFriendList = async (auth: number) => {
-    let friendList: UserDTO[] = [];
-
+//* 내가 팔로우 하는 친구 리스트 가져오기
+const getFollowingIdList = async (auth: number) => {
     const friendIdList = await prisma.friend.findMany({
         where : {
           senderId : auth
@@ -176,7 +177,29 @@ const getFriendList = async (auth: number) => {
         orderBy : {
           receiverId : "asc"
         }
-      });
+    });
+    
+    return friendIdList;
+}
+
+//* 나를 팔로우 하는 친구 리스트 가져오기
+const getFollowerIdList = async (auth: number) => {
+    const friendIdList = await prisma.friend.findMany({
+        where : {
+          receiverId : auth
+        },
+        select : {
+          senderId : true
+        }
+    });
+    
+    return friendIdList;
+}
+
+//* 친구 리스트 정보 가져오기
+const getFriendInfoList = async (auth: number) => {
+    let friendList: UserDTO[] = [];
+    const friendIdList = await getFollowingIdList(auth);
 
     for (const user of friendIdList) {
         const userId = user.receiverId;
@@ -186,7 +209,6 @@ const getFriendList = async (auth: number) => {
     }
 
     return friendList;
-
 }
 
 //* 팔로우 조회
@@ -206,7 +228,9 @@ const friendService = {
     searchUser,
     followFriend,
     deleteFollowFriend,
-    getFriendList,
+    getFriendInfoList,
+    getFollowingIdList,
+    getFollowerIdList,
     isFriend
 }
 
