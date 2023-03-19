@@ -7,7 +7,7 @@ import { UserDTO } from '../interfaces/user/UserDTO';
 
 const prisma = new PrismaClient();
 
-//* 친구에게 책 추천하기 
+//* [POST] 친구에게 책 추천하기 
 const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number, auth: number) => {
     //* 존재하는 책인지 확인하기
     const books = await prisma.book.findFirst({
@@ -77,7 +77,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return result;
 }
 
-//* 사용자 검색하기
+//* [GET] 사용자 검색하기
 const searchUser = async (nickname: string, auth: number) => {
     const user = await prisma.user.findFirst({
         where: {
@@ -118,7 +118,7 @@ const searchUser = async (nickname: string, auth: number) => {
     return data;
 }
 
-//* 팔로우 하기
+//* [POST] 팔로우 하기
 const followFriend = async (friendId: number, auth: number) => {
     const followData = await prisma.friend.findFirst({
         where: {
@@ -155,7 +155,7 @@ const followFriend = async (friendId: number, auth: number) => {
 
 }
 
-//* 팔로우 취소하기
+//* [DELETE] 팔로우 취소하기
 const deleteFollowFriend = async (friendId: number, auth: number) => {
     const data = await prisma.friend.deleteMany({
         where: {
@@ -166,7 +166,7 @@ const deleteFollowFriend = async (friendId: number, auth: number) => {
     return data;
 }
 
-//* 내가 팔로우 하는 친구 리스트 가져오기
+//* [GET] 내가 팔로우 하는 친구 리스트 가져오기
 const getFollowingIdList = async (auth: number) => {
     const friendIdList = await prisma.friend.findMany({
         where: {
@@ -183,7 +183,7 @@ const getFollowingIdList = async (auth: number) => {
     return friendIdList;
 }
 
-//* 나를 팔로우 하는 친구 리스트 가져오기
+//* [GET] 나를 팔로우 하는 친구 리스트 가져오기
 const getFollowerIdList = async (auth: number) => {
     const friendIdList = await prisma.friend.findMany({
         where: {
@@ -197,7 +197,7 @@ const getFollowerIdList = async (auth: number) => {
     return friendIdList;
 }
 
-//* 친구 리스트 정보 가져오기
+//* [GET] 친구 리스트 정보 가져오기
 const getFriendInfoList = async (auth: number) => {
     let friendList: UserDTO[] = [];
     const friendIdList = await getFollowingIdList(auth);
@@ -212,7 +212,7 @@ const getFriendInfoList = async (auth: number) => {
     return friendList;
 }
 
-//* 팔로우 조회
+//* [GET] 팔로우 조회
 const isFriend = async (userId: number, friendId: number) => {
     const result = await prisma.friend.findFirst({
         where: {
