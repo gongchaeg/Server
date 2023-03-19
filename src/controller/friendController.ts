@@ -5,6 +5,7 @@ import { rm, sc } from "../constants";
 import { friendService } from '../service';
 import { slackErrorMessage } from '../modules/slackErrorMessage';
 import { sendWebhookMessage } from "../modules/slackWebhook";
+import { FriendReportRequestDTO } from '../interfaces/friend/FriendReportRequestDTO';
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (req: Request, res: Response) => {
@@ -129,13 +130,37 @@ const deleteFollowFriend = async (req: Request, res: Response) => {
 //* 친구 신고하기
 const postReport = async (req: Request, res: Response) => {
     const { friendId } = req.params;
+    const friendReportRequestDto: FriendReportRequestDTO = req.body;
     const auth = req.header("auth");
+
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+    }
+
+    if (!friendReportRequestDto) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
+    }
+
+    try {
+        const data = await friendService.postReport(+auth, +friendId, friendReportRequestDto);
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST, data));
+
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
 }

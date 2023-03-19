@@ -1,4 +1,5 @@
 export interface FriendReportRequestDTO {
     reasonIndex: number,
-    specificReason: string
+    specificReason: string,
+    etc?: string
 }

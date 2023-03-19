@@ -114,10 +114,11 @@ model Block {
 }
 
 model Report {
-  id                         Int  @id @default(autoincrement())
+  id                         Int     @id @default(autoincrement())
   userId                     Int
   friendId                   Int
-  reasonIndex                Int  @default(0)
-  User_Report_userIdToUser   User @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
-  User_Report_friendIdToUser User @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
+  reasonIndex                Int     @default(0)
+  etc                        String? @db.VarChar(300)
+  User_Report_userIdToUser   User    @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
+  User_Report_friendIdToUser User    @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
 }
