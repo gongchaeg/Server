@@ -11,5 +11,7 @@ router.get("/", friendController.searchUser);
 router.post("/:friendId", friendController.followFriend);
 //* 친구 팔로우 취소하기 - DELETE /friend/:friendId
 router.delete("/:friendId", friendController.deleteFollowFriend);
+//* 친구 신고하기 - POST /friend/:friendId/report
+router.post("/:friendId/report", friendController.postReport);
 
 export default router;

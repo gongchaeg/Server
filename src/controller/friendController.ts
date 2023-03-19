@@ -126,11 +126,26 @@ const deleteFollowFriend = async (req: Request, res: Response) => {
 
 }
 
+//* 친구 신고하기
+const postReport = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+    const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
+    if (!friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+    }
+
+}
+
 const friendController = {
     recommendBookToFriend,
     searchUser,
     followFriend,
-    deleteFollowFriend
+    deleteFollowFriend,
+    postReport,
 }
 
 export default friendController;
