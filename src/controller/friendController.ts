@@ -151,7 +151,7 @@ const postReport = async (req: Request, res: Response) => {
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
         }
-        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST, data));
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST));
 
 
     } catch (error) {
