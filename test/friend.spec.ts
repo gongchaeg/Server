@@ -104,6 +104,40 @@ describe('***** Friend Test *****', () => {
         });
     });
 
+    context('[POST] /friend/:friendId/report', () => {
+        //? after 작업
+        after(async () => {
+            await prisma.report.deleteMany({
+                where: {
+                    userId: 1,
+                    friendId: 300,
+                    reasonIndex: 5,
+                    etc: "test"
+                }
+            });
+
+        })
+        it('친구 신고하기 성공', done => {
+            req(app)
+                .post('/friend/300/report')
+                .set('Content-Type', 'application/json')
+                .set('auth', '300')
+                .send({
+                    "reasonIndex": 5,
+                    "etc": "test"
+                })
+                .expect(200)
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then((res) => {
+                    done();
+                })
+                .catch((err) => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        })
+    })
+
 
 
 });

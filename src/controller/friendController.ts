@@ -5,6 +5,12 @@ import { rm, sc } from "../constants";
 import { friendService } from '../service';
 import { slackErrorMessage } from '../modules/slackErrorMessage';
 import { sendWebhookMessage } from "../modules/slackWebhook";
+import { FriendReportRequestDTO } from '../interfaces/friend/FriendReportRequestDTO';
+import { mailSender } from "../modules/mail";
+import { ReportMailRequestDTO } from '../interfaces/friend/ReportMailRequestDTO';
+import { reportMessage } from '../modules/reportMessage';
+import { userService } from '../service';
+import { reportMailDTO } from '../interfaces/friend/reportMailDTO';
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (req: Request, res: Response) => {
@@ -126,11 +132,97 @@ const deleteFollowFriend = async (req: Request, res: Response) => {
 
 }
 
+//* 친구 신고하기
+const postReport = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+    const friendReportRequestDto: FriendReportRequestDTO = req.body;
+    const auth = req.header("auth");
+
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
+    if (!friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
+    }
+
+    if (!friendReportRequestDto) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
+    }
+
+    try {
+        const data = await friendService.postReport(+auth, +friendId, friendReportRequestDto);
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
+        }
+
+        postMail(friendReportRequestDto, +friendId, +auth);
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST));
+
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+
+}
+
+const postMail = async (friendReportRequestDto: FriendReportRequestDTO, friendId: number, userId: number) => {
+    const userName = await userService.getUserIntro(userId);
+    const friendName = await userService.getUserIntro(friendId);
+    let reasonString = "reason";
+    switch (friendReportRequestDto.reasonIndex) {
+        case 1:
+            reasonString = rm.REASON_ONE;
+            break;
+        case 2:
+            reasonString = rm.REASON_TWO;
+            break;
+        case 3:
+            reasonString = rm.REASON_THREE;
+            break;
+        case 4:
+            reasonString = rm.REASON_FOUR;
+            break;
+        default:
+            reasonString = rm.REASON_FIVE;
+            break;
+    }
+
+    if (friendReportRequestDto.etc == null) {
+        friendReportRequestDto.etc = "구체적 사유 없습니다."
+    }
+    const reportMailDTO: reportMailDTO = {
+        userNickname: userName.nickname,
+        userId: userId,
+        friendNickname: friendName.nickname,
+        friendId: friendId,
+        reasonString: reasonString,
+        etc: friendReportRequestDto.etc
+    }
+
+    const message = reportMessage(reportMailDTO);
+
+    const reportMailRequest: ReportMailRequestDTO = {
+        mailTitle: rm.MAIL_TITLE,
+        text: message,
+    }
+
+    mailSender.sendGmail(reportMailRequest);
+}
+
 const friendController = {
     recommendBookToFriend,
     searchUser,
     followFriend,
-    deleteFollowFriend
+    deleteFollowFriend,
+    postReport,
 }
 
 export default friendController;
