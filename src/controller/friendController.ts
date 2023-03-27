@@ -6,6 +6,11 @@ import { friendService } from '../service';
 import { slackErrorMessage } from '../modules/slackErrorMessage';
 import { sendWebhookMessage } from "../modules/slackWebhook";
 import { FriendReportRequestDTO } from '../interfaces/friend/FriendReportRequestDTO';
+import { mailSender } from "../modules/mail";
+import { ReportMailRequestDTO } from '../interfaces/friend/ReportMailRequestDTO';
+import { reportMessage } from '../modules/reportMessage';
+import { userService } from '../service';
+import { reportMailDTO } from '../interfaces/friend/reportMailDTO';
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (req: Request, res: Response) => {
@@ -151,6 +156,9 @@ const postReport = async (req: Request, res: Response) => {
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
         }
+
+        postMail(friendReportRequestDto, +friendId, +auth);
+
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST));
 
 
@@ -163,6 +171,50 @@ const postReport = async (req: Request, res: Response) => {
             .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
 
+}
+
+const postMail = async (friendReportRequestDto: FriendReportRequestDTO, friendId: number, userId: number) => {
+    const userName = await userService.getUserIntro(userId);
+    const friendName = await userService.getUserIntro(friendId);
+    let reasonString = "reason";
+    switch (friendReportRequestDto.reasonIndex) {
+        case 1:
+            reasonString = rm.REASON_ONE;
+            break;
+        case 2:
+            reasonString = rm.REASON_TWO;
+            break;
+        case 3:
+            reasonString = rm.REASON_THREE;
+            break;
+        case 4:
+            reasonString = rm.REASON_FOUR;
+            break;
+        default:
+            reasonString = rm.REASON_FIVE;
+            break;
+    }
+
+    if (friendReportRequestDto.etc == null) {
+        friendReportRequestDto.etc = "구체적 사유 없습니다."
+    }
+    const reportMailDTO: reportMailDTO = {
+        userNickname: userName.nickname,
+        userId: userId,
+        friendNickname: friendName.nickname,
+        friendId: friendId,
+        reasonString: reasonString,
+        etc: friendReportRequestDto.etc
+    }
+
+    const message = reportMessage(reportMailDTO);
+
+    const reportMailRequest: ReportMailRequestDTO = {
+        mailTitle: rm.MAIL_TITLE,
+        text: message,
+    }
+
+    mailSender.sendGmail(reportMailRequest);
 }
 
 const friendController = {

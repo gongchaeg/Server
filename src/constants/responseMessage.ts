@@ -86,4 +86,12 @@ export default {
   FAIL_GET_ALARM: "알림 조회 실패",
   SUCCESS_GET_ALARM: "알림 조회 성공",
 
+  // report
+  MAIL_TITLE: "[Report] 사용자 신고",
+  REASON_ONE: "부적절한 게시글",
+  REASON_TWO: "욕설 및 비하 발언",
+  REASON_THREE: "홍보성 컨텐츠",
+  REASON_FOUR: "닉네임 신고",
+  REASON_FIVE: "기타",
+
 };
