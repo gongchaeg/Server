@@ -109,7 +109,7 @@ describe('***** Friend Test *****', () => {
         after(async () => {
             await prisma.report.deleteMany({
                 where: {
-                    userId: 1,
+                    userId: 300,
                     friendId: 300,
                     reasonIndex: 5,
                     etc: "test"
