@@ -65,7 +65,7 @@ const signUp = async (req: Request, res:Response) => {
         if (data == rm.INVALID_TOKEN)
             return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
 
-        return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, data));
+        return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS));
 
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
