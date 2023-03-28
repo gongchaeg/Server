@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 import { tokenType } from "../constants";
 
-const fs = require('fs');
-
 const privateKey = process.env.JWT_SECRET_KEY as string;
 
 //* 받아온 userId를 담는 access token 생성
