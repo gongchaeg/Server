@@ -9,11 +9,14 @@ datasource db {
 
 model User {
   id                             Int         @id @unique @default(autoincrement())
-  nickname                       String      @unique @db.VarChar(50)
+  nickname                       String?     @unique @db.VarChar(50)
   profileImage                   String?     @db.VarChar(500)
   intro                          String?     @db.VarChar(100)
   createdAt                      DateTime    @default(now())
   updatedAt                      DateTime?   @updatedAt
+  social_platform                String      @db.VarChar(10)
+  social_id                      String      @db.VarChar(50)
+  refresh_token                  String?      @db.VarChar(500)
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
   Block_Block_userIdToUser       Block[]     @relation("Block_userIdToUser")
@@ -114,9 +117,11 @@ model Block {
 }
 
 model Report {
-  id                         Int  @id @default(autoincrement())
+  id                         Int     @id @default(autoincrement())
   userId                     Int
   friendId                   Int
-  User_Report_userIdToUser   User @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
-  User_Report_friendIdToUser User @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
+  reasonIndex                Int     @default(0)
+  etc                        String? @db.VarChar(300)
+  User_Report_userIdToUser   User    @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
+  User_Report_friendIdToUser User    @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
 }

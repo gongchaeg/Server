@@ -1,6 +1,6 @@
 export interface UserDTO {
     id : number,
-    nickname : string,
+    nickname : string|null,
     profileImage : string|null,
     intro? : string;
 }
