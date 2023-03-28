@@ -30,6 +30,7 @@ jobs:
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >>.env 
           echo WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env
+          echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
           cat .env
       
       - name: build server files
