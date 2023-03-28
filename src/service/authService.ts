@@ -1,6 +1,10 @@
 import jwtHandler from "../modules/jwtHandler";
 import { PrismaClient } from "@prisma/client";
 import social from "../modules/social";
+import { SignUpReqDTO } from "../interfaces/auth/SignUpReqDTO";
+import tokenType from "../constants/tokenType";
+import { rm, sc } from "../constants";
+import { JwtPayload } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -23,10 +27,11 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
       }
     })
 
-    const refreshToken = jwtHandler.getRefreshToken();
 
     //* 최초 로그인 시, 일단 유저 등록 -> 이후 회원가입 로직
     if (!userInkakao) {
+      const refreshToken = jwtHandler.getRefreshToken();
+      
       const user = await prisma.user.create({
         data: {
           social_platform: socialPlatform,
@@ -57,8 +62,36 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
   }
 };
 
+//* 회원 가입
+const signUp = async (accessToken: string, signUpDto : SignUpReqDTO) => {
+    //* 토큰에서 유저 아이디 가져오기
+    const decoded = jwtHandler.verify(accessToken); 
+
+    if (decoded === tokenType.TOKEN_EXPIRED)
+      return rm.EXPIRED_TOKEN;
+    if (decoded === tokenType.TOKEN_INVALID)
+      return rm.INVALID_TOKEN;
+
+    //? decode한 후 담겨있는 userId를 꺼내옴
+    const userId: number = (decoded as JwtPayload).userId;
+
+    const data = await prisma.user.update({
+      where : {
+        id: userId
+      },
+      data : {
+        profileImage : signUpDto.profileImage,
+        nickname : signUpDto.nickname,
+        intro : signUpDto.intro
+      }
+    });
+
+    return data;
+};
+
 const authService = {
-  signIn
+  signIn,
+  signUp
 }
 
 export default authService;
