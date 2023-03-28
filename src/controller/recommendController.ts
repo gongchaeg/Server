@@ -20,7 +20,7 @@ const getRecommend = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_RECOMMEND, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 

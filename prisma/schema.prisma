@@ -9,11 +9,14 @@ datasource db {
 
 model User {
   id                             Int         @id @unique @default(autoincrement())
-  nickname                       String      @unique @db.VarChar(50)
+  nickname                       String?     @unique @db.VarChar(50)
   profileImage                   String?     @db.VarChar(500)
   intro                          String?     @db.VarChar(100)
   createdAt                      DateTime    @default(now())
   updatedAt                      DateTime?   @updatedAt
+  social_platform                String      @db.VarChar(10)
+  social_id                      String      @db.VarChar(50)
+  refresh_token                  String      @db.VarChar(500)
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
   Block_Block_userIdToUser       Block[]     @relation("Block_userIdToUser")

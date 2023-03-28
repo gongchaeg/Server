@@ -30,7 +30,7 @@ const patchPick = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_PATCH_PICK));
 
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -57,7 +57,7 @@ const getBook = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BOOK, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 

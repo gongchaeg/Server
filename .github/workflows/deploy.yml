@@ -30,6 +30,7 @@ jobs:
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >>.env 
           echo WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env
+          echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
           echo MANAGER_EMAIL=${{ secrets.MANAGER_EMAIL }} >>.env 
           echo MANAGER_PASSWORD=${{ secrets.MANAGER_PASSWORD }} >> .env
           cat .env

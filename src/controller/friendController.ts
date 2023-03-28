@@ -37,7 +37,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_RECOMMEND_BOOK, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -68,7 +68,7 @@ const searchUser = async (req: Request, res: Response) => {
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_USER, data));
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -98,7 +98,7 @@ const followFriend = async (req: Request, res: Response) => {
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_POST_FOLLOW, data));
 
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 
@@ -163,7 +163,7 @@ const postReport = async (req: Request, res: Response) => {
 
 
     } catch (error) {
-        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, +auth, req.statusCode);
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 
         sendWebhookMessage(errorMessage);
 

@@ -1,7 +1,7 @@
 export interface AlarmResponseDTO {
     alarmId: number,
     senderId: number,
-    senderName: string,
+    senderName: string | null,
     profileImage: string | null,
     bookTitle?: string,
     typeId: number,
