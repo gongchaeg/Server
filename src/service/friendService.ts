@@ -1,3 +1,4 @@
+import { FriendReportRequestDTO } from './../interfaces/friend/FriendReportRequestDTO';
 import { FriendRecommendRequestDTO } from './../interfaces/friend/FriendRecommendRequestDTO';
 import { PrismaClient } from "@prisma/client";
 import { sc } from "../constants";
@@ -6,14 +7,14 @@ import { UserDTO } from '../interfaces/user/UserDTO';
 
 const prisma = new PrismaClient();
 
-//* 친구에게 책 추천하기 
+//* [POST] 친구에게 책 추천하기 
 const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendRequestDTO, friendId: number, auth: number) => {
     //* 존재하는 책인지 확인하기
     const books = await prisma.book.findFirst({
         where: {
             bookTitle: friendRecommendRequestDTO.bookTitle,
-            author : friendRecommendRequestDTO.author,
-            publisher : friendRecommendRequestDTO.publisher
+            author: friendRecommendRequestDTO.author,
+            publisher: friendRecommendRequestDTO.publisher
         },
     });
 
@@ -26,7 +27,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
                 bookTitle: friendRecommendRequestDTO.bookTitle,
                 author: friendRecommendRequestDTO.author,
                 bookImage: friendRecommendRequestDTO.bookImage,
-                publisher : friendRecommendRequestDTO.publisher
+                publisher: friendRecommendRequestDTO.publisher
             }
         })
         bookId = data.id
@@ -76,7 +77,7 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
     return result;
 }
 
-//* 사용자 검색하기
+//* [GET] 사용자 검색하기
 const searchUser = async (nickname: string, auth: number) => {
     const user = await prisma.user.findFirst({
         where: {
@@ -117,7 +118,7 @@ const searchUser = async (nickname: string, auth: number) => {
     return data;
 }
 
-//* 팔로우 하기
+//* [POST] 팔로우 하기
 const followFriend = async (friendId: number, auth: number) => {
     const followData = await prisma.friend.findFirst({
         where: {
@@ -154,7 +155,7 @@ const followFriend = async (friendId: number, auth: number) => {
 
 }
 
-//* 팔로우 취소하기
+//* [DELETE] 팔로우 취소하기
 const deleteFollowFriend = async (friendId: number, auth: number) => {
     const data = await prisma.friend.deleteMany({
         where: {
@@ -165,38 +166,38 @@ const deleteFollowFriend = async (friendId: number, auth: number) => {
     return data;
 }
 
-//* 내가 팔로우 하는 친구 리스트 가져오기
+//* [GET] 내가 팔로우 하는 친구 리스트 가져오기
 const getFollowingIdList = async (auth: number) => {
     const friendIdList = await prisma.friend.findMany({
-        where : {
-          senderId : auth
+        where: {
+            senderId: auth
         },
-        select : {
-          receiverId : true
+        select: {
+            receiverId: true
         },
-        orderBy : {
-          receiverId : "asc"
+        orderBy: {
+            receiverId: "asc"
         }
     });
-    
+
     return friendIdList;
 }
 
-//* 나를 팔로우 하는 친구 리스트 가져오기
+//* [GET] 나를 팔로우 하는 친구 리스트 가져오기
 const getFollowerIdList = async (auth: number) => {
     const friendIdList = await prisma.friend.findMany({
-        where : {
-          receiverId : auth
+        where: {
+            receiverId: auth
         },
-        select : {
-          senderId : true
+        select: {
+            senderId: true
         }
     });
-    
+
     return friendIdList;
 }
 
-//* 친구 리스트 정보 가져오기
+//* [GET] 친구 리스트 정보 가져오기
 const getFriendInfoList = async (auth: number) => {
     let friendList: UserDTO[] = [];
     const friendIdList = await getFollowingIdList(auth);
@@ -204,23 +205,52 @@ const getFriendInfoList = async (auth: number) => {
     for (const user of friendIdList) {
         const userId = user.receiverId;
         const friend = await userService.getUser(userId);
-    
+
         friendList?.push(friend);
     }
 
     return friendList;
 }
 
-//* 팔로우 조회
-const isFriend = async (userId : number, friendId : number) => {
+//* [GET] 팔로우 조회
+const isFriend = async (userId: number, friendId: number) => {
     const result = await prisma.friend.findFirst({
-        where : {
-          receiverId : friendId,
-          senderId : userId
+        where: {
+            receiverId: friendId,
+            senderId: userId
         }
     });
 
     return result;
+}
+
+//* [POST] 친구 신고하기
+const postReport = async (userId: number, friendId: number, friendReportRequestDto: FriendReportRequestDTO) => {
+
+    // 특정 이유 적은 경우
+    if (!friendReportRequestDto.etc) {
+        const reportResult = await prisma.report.create({
+            data: {
+                userId: userId,
+                friendId: friendId,
+                reasonIndex: friendReportRequestDto.reasonIndex
+            }
+        });
+
+        return reportResult;
+    }
+
+    // 특정 이유 안적은 경우
+    const reportResult = await prisma.report.create({
+        data: {
+            userId: userId,
+            friendId: friendId,
+            reasonIndex: friendReportRequestDto.reasonIndex,
+            etc: friendReportRequestDto.etc
+        }
+    });
+
+    return reportResult;
 }
 
 const friendService = {
@@ -231,7 +261,8 @@ const friendService = {
     getFriendInfoList,
     getFollowingIdList,
     getFollowerIdList,
-    isFriend
+    isFriend,
+    postReport,
 }
 
 export default friendService;

@@ -68,6 +68,9 @@ export default {
   DELETE_FRIEND_FAIL: "친구 팔로우 취소 실패",
   FAIL_NO_FRIEND: "팔로우 하지 않는 친구입니다",
   FAIL_NO_FRIEND_EXIST: "존재하지 않는 유저입니다.",
+  FAIL_REPORT_INFO: "친구 신고하기 정보 조회 실패",
+  FAIL_REPORT_POST: "친구 신고하기 실패",
+  SUCCESS_REPORT_POST: "친구 신고하기 성공",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
@@ -82,5 +85,13 @@ export default {
   // alarm
   FAIL_GET_ALARM: "알림 조회 실패",
   SUCCESS_GET_ALARM: "알림 조회 성공",
+
+  // report
+  MAIL_TITLE: "[Report] 사용자 신고",
+  REASON_ONE: "부적절한 게시글",
+  REASON_TWO: "욕설 및 비하 발언",
+  REASON_THREE: "홍보성 컨텐츠",
+  REASON_FOUR: "닉네임 신고",
+  REASON_FIVE: "기타",
 
 };
