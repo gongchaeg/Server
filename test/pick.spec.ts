@@ -48,7 +48,7 @@ describe('***** Pick Test *****', () => {
 
             await prisma.bookshelf.updateMany({
                 where: {
-                    id: 5,
+                    id: 2,
                 },
                 data: {
                     pickIndex: 0
@@ -64,7 +64,7 @@ describe('***** Pick Test *****', () => {
                 .send({
                     "firstPick": 1,
                     "secondPick": 3,
-                    "thirdPick": 5
+                    "thirdPick": 2
                 })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
