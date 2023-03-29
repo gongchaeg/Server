@@ -57,10 +57,16 @@ const signUp = async (req: Request, res:Response) => {
     const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
     const signUpdDto : SignUpReqDTO  = req.body;
 
+    if (!signUpdDto.intro || !signUpdDto.nickname) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+
+    const intro = signUpdDto.intro;
+    const refinedIntro = intro.replace(/\n/g, " ");
+
+    signUpdDto.intro = refinedIntro;
+
     try {
-        if (!signUpdDto.intro || !signUpdDto.nickname) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-        }
         
         const data = await authService.signUp(token, signUpdDto);
 
