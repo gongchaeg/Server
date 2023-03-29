@@ -25,7 +25,7 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
         social_platform : socialPlatform,
         social_id : socialId
       }
-    })
+    });
 
 
     //* 최초 로그인 시, 일단 유저 등록 -> 이후 회원가입 로직
@@ -48,6 +48,32 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
       return {
         accessToken,
         refreshToken,
+        isSignedUp,
+      };
+    }
+
+    if ( !userInkakao.refresh_token || !userInkakao.nickname) {
+      const userId = userInkakao.id;
+      
+      if( !userInkakao.refresh_token ) {
+        const refreshToken = jwtHandler.getRefreshToken();
+
+        await prisma.user.update({
+          data : {
+            refresh_token : refreshToken
+          },
+          where : {
+            id : userId
+          }
+        });
+      }
+  
+      const accessToken = jwtHandler.sign(userId);
+      const isSignedUp = false;
+  
+      return {
+        accessToken,
+        refreshToken : userInkakao.refresh_token,
         isSignedUp,
       };
     }

@@ -27,6 +27,10 @@ const signIn = async (req: Request, res: Response) => {
     const socialToken = req.header('accessToken')?.split(" ").reverse()[0] as string;
     const { socialPlatform } = req.body;
 
+    if ( !socialPlatform) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+
     try {
         const data = await authService.signIn(socialToken, socialPlatform);
 
@@ -55,7 +59,7 @@ const signUp = async (req: Request, res:Response) => {
 
     try {
         if (!signUpdDto.intro || !signUpdDto.nickname) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
         }
         
         const data = await authService.signUp(token, signUpdDto);
