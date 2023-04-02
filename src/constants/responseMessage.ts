@@ -11,6 +11,7 @@ export default {
   SIGNIN_FAIL: "로그인 실패",
   ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
 
+
   // 유저
   READ_USER_SUCCESS: "유저 조회 성공",
   READ_ALL_USERS_SUCCESS: "모든 유저 조회 성공",
@@ -20,6 +21,9 @@ export default {
   NO_USER: "탈퇴했거나 가입하지 않은 유저입니다.",
   SEARCH_USER_SUCCESS: "유저 검색 성공",
   SEARCH_USER_FAIL: "유저 검색 실패",
+  NULL_NICKNAME: "닉네임 값이 없습니다.",
+  FAIL_CHECK_NICKNAME: "닉네임 중복 검사 실패",
+  SUCCESS_CHECK_NICKNAME: "닉네임 중복 검사 성공",
 
   // 이미지
   NO_IMAGE: "이미지가 없습니다.",
@@ -93,5 +97,6 @@ export default {
   REASON_THREE: "홍보성 컨텐츠",
   REASON_FOUR: "닉네임 신고",
   REASON_FIVE: "기타",
+
 
 };
