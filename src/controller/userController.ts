@@ -22,7 +22,7 @@ const postDuplicateNickname = async (req: Request, res: Response) => {
             return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
         }
 
-        const data = await userService.postDuplicateNickname(+tokenCheck);
+        const data = await userService.postDuplicateNickname(+tokenCheck, nickname);
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_CHECK_NICKNAME))
         }

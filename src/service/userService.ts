@@ -40,17 +40,20 @@ const getUserIntro = async (userId: number) => {
 }
 
 //* 유저닉네임 중복 검사
-const postDuplicateNickname = async (userId: number) => {
+const postDuplicateNickname = async (userId: number, nickname: string) => {
+    let isExisted = 1;
     const userCheck = await prisma.user.findUnique({
         where: {
-            id: userId
+            nickname: nickname
         },
 
     });
-    if (!userCheck) return null;
+    if (!userCheck) {
+        isExisted = 0;
+    };
 
     const data = {
-        userId: userCheck.id
+        check: isExisted
     }
     return data;
 }
@@ -59,7 +62,7 @@ const postDuplicateNickname = async (userId: number) => {
 const userService = {
     getUser,
     getUserIntro,
-    postDuplicateNickname
+    postDuplicateNickname,
 };
 
 export default userService;
