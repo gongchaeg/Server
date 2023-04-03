@@ -6,6 +6,7 @@ import pickRouter from "./pickRouter";
 import alarmRouter from "./alarmRouter";
 import authRouter from "./authRouter";
 import userRouter from "./userRouter";
+import mypageRouter from "./mypageRouter";
 
 const router: Router = Router();
 
@@ -17,5 +18,6 @@ router.use("/pick", pickRouter);
 router.use("/alarm", alarmRouter);
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
+router.use("/mypage", mypageRouter);
 
 export default router;
