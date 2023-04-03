@@ -6,6 +6,7 @@ import { slackErrorMessage } from '../modules/slackErrorMessage';
 import { sendWebhookMessage } from "../modules/slackWebhook";
 import { mypageService } from "../service";
 import { userTokenCheck } from "../constants/userTokenCheck";
+import { patchUserRequestDTO } from '../interfaces/mypage/patchUserRequestDTO';
 
 //* 유저 탈퇴하기
 const deleteUser = async (req: Request, res: Response) => {
@@ -37,8 +38,50 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 }
 
+const patchUser = async (req: Request, res: Response) => {
+    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const patchUserRequestDTO: patchUserRequestDTO = req.body
+    const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
+    const { location } = image;
+
+    if (!location) {
+        patchUserRequestDTO.profileImage = null;
+    }
+
+    if (!patchUserRequestDTO.nickname) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_NICKNAME));
+    }
+
+    try {
+        patchUserRequestDTO.profileImage = location;
+        const tokenCheck = userTokenCheck(token);
+        if (tokenCheck == rm.EXPIRED_TOKEN) {
+            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
+        } else if (tokenCheck == rm.INVALID_TOKEN) {
+            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+        }
+
+        const data = await mypageService.patchUser(+tokenCheck, patchUserRequestDTO);
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_IMAGE_FAIL))
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.CREATE_IMAGE_SUCCESS));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+}
+
 const mypageController = {
     deleteUser,
+    patchUser,
 }
 
 export default mypageController;
