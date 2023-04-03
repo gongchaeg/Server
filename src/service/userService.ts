@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { IntroDTO } from "../interfaces/user/IntroDTO";
 import { UserDTO } from "../interfaces/user/UserDTO";
+import { UserDuplicateDTO } from "../interfaces/user/UserDuplicateDTO";
 
 const prisma = new PrismaClient();
 
@@ -42,10 +43,14 @@ const getUserIntro = async (userId: number) => {
 //* 유저닉네임 중복 검사
 const postDuplicateNickname = async (userId: number, nickname: string) => {
     let isExisted = 1;
-    const userCheck = await prisma.user.findUnique({
+
+    const userCheck: UserDuplicateDTO | null = await prisma.user.findUnique({
         where: {
-            nickname: nickname
+            nickname: nickname,
         },
+        select: {
+            nickname: true
+        }
 
     });
     if (!userCheck) {

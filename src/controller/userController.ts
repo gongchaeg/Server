@@ -9,7 +9,7 @@ import { userTokenCheck } from "../constants/userTokenCheck";
 //* 유저닉네임 중복 검사
 const postDuplicateNickname = async (req: Request, res: Response) => {
     const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
-    const nickname: string = req.body;
+    const { nickname } = req.body;
 
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_NICKNAME));
