@@ -115,9 +115,16 @@ const signUp = async (accessToken: string, signUpDto : SignUpReqDTO) => {
     return data;
 };
 
+//* 테스트로 accesstoken 발급 => 추후 삭제 !!!!
+const testSignin = async ( userId : number) => {
+  const accessToken = jwtHandler.sign(userId);
+  return accessToken;
+}
+
 const authService = {
   signIn,
-  signUp
+  signUp,
+  testSignin
 }
 
 export default authService;

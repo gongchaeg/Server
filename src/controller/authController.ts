@@ -86,9 +86,33 @@ const signUp = async (req: Request, res:Response) => {
     }
 };
 
+//* 나중에 삭제할 로직 !!!
+const testSignin = async (req: Request, res:Response) => {
+
+    const auth = req.header("auth");
+    if (!auth) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
+    try {
+        
+        const data = await authService.testSignin(+auth);
+
+        return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, data));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+};
+
 const AuthController = {
     signIn,
-    signUp
+    signUp,
+    testSignin
 };
 
 export default AuthController;
