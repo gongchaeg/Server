@@ -1,5 +1,5 @@
 export interface IntroDTO {
-    nickname : string|null,
-    profileImage : string|null,
-    intro? : string|null;
+    nickname: string | null,
+    profileImage: string | null,
+    intro?: string | null;
 }

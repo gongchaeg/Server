@@ -66,8 +66,8 @@ const postDuplicateNickname = async (userId: number, nickname: string) => {
 //* refreshToken으로 유저 검색
 const getUserByRfToken = async (refreshToken: string) => {
     const user = prisma.user.findFirst({
-        where : {
-            refresh_token : refreshToken
+        where: {
+            refresh_token: refreshToken
         }
     });
 
