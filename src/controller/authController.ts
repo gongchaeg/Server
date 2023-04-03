@@ -1,13 +1,14 @@
 
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { rm, sc } from "../constants";
+import { rm, sc, tokenType } from "../constants";
 import { fail, success } from "../constants/response";
 import { SignUpReqDTO } from "../interfaces/auth/SignUpReqDTO";
 import { slackErrorMessage } from "../modules/slackErrorMessage";
 import { sendWebhookMessage } from "../modules/slackWebhook";
-import { bookshelfService } from "../service";
+import { bookshelfService, userService } from "../service";
 import authService from "../service/authService";
+import jwtHandler from "../modules/jwtHandler";
 
 
 /**
@@ -86,6 +87,55 @@ const signUp = async (req: Request, res:Response) => {
     }
 };
 
+
+/**
+ * @route GET /auth/token
+ * @desc 만료된 토큰을 재발급
+ */
+const getToken = async (req: Request, res: Response) => {
+    const accessToken = req.header("accessToken")?.split(" ").reverse()[0] as string;
+    const refreshToken = req.header("refreshToken")?.split(" ").reverse()[0] as string;
+
+    if (!refreshToken || !accessToken) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+
+    try {
+        const decodedToken = jwtHandler.verify(accessToken);
+
+        if (decodedToken == tokenType.TOKEN_INVALID) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+
+        if (decodedToken == tokenType.TOKEN_EXPIRED) {
+            const refresh = jwtHandler.verify(refreshToken);
+      
+            if (refresh == tokenType.TOKEN_INVALID) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_REFRESH_TOKEN));
+            if (refresh == tokenType.TOKEN_EXPIRED) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
+      
+            const user = await userService.getUserByRfToken(refreshToken);
+
+            if (!user) {
+                return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+            }
+            const accessToken = jwtHandler.sign(user.id);
+
+            const result = {
+                newAccessToken : accessToken,
+                refreshToken
+            }
+      
+            return res.status(sc.OK).send(success(sc.OK, rm.CREATE_TOKEN_SUCCESS, result));
+        }
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.VALID_TOKEN));
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+}
+
+
 //* 나중에 삭제할 로직 !!!
 const testSignin = async (req: Request, res:Response) => {
 
@@ -112,6 +162,7 @@ const testSignin = async (req: Request, res:Response) => {
 const AuthController = {
     signIn,
     signUp,
+    getToken,
     testSignin
 };
 
