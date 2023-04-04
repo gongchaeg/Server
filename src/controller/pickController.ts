@@ -9,8 +9,8 @@ import { sendWebhookMessage } from "../modules/slackWebhook";
 //* Pick한 책 수정
 const patchPick = async (req: Request, res: Response) => {
     const pickPatchRequestDTO: PickPatchRequestDTO = req.body;
-    const auth = req.header("auth");
-    if (!auth) {
+    const userId = req.body.userId;
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
@@ -21,7 +21,7 @@ const patchPick = async (req: Request, res: Response) => {
     try {
         // 슬랙 메시지 에러 확인을 하기 위함
         // let pickData = JSON.parse(req.body);
-        const data = await pickService.patchPick(pickPatchRequestDTO, +auth);
+        const data = await pickService.patchPick(pickPatchRequestDTO, +userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_PATCH_PICK));
@@ -43,12 +43,12 @@ const patchPick = async (req: Request, res: Response) => {
 
 //* 책 전체 조회
 const getBook = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
+    const userId = req.body.userId;
 
-    if (!auth) {
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
-    const data = await pickService.getBook(+auth);
+    const data = await pickService.getBook(+userId);
 
     try {
         if (!data) {

@@ -8,21 +8,15 @@ import { userTokenCheck } from "../constants/userTokenCheck";
 
 //* 유저닉네임 중복 검사
 const postDuplicateNickname = async (req: Request, res: Response) => {
-    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const userId = req.body.userId;
     const { nickname } = req.body;
 
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_NICKNAME));
     }
     try {
-        const tokenCheck = userTokenCheck(token);
-        if (tokenCheck == rm.EXPIRED_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-        } else if (tokenCheck == rm.INVALID_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
-        }
 
-        const data = await userService.postDuplicateNickname(+tokenCheck, nickname);
+        const data = await userService.postDuplicateNickname(+userId, nickname);
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_CHECK_NICKNAME))
         }

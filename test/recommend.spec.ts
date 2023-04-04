@@ -1,6 +1,5 @@
 import app from "../src/index";
 import req from "supertest";
-import { expect } from "chai";
 import dotenv from "dotenv";
 import { env } from "process";
 

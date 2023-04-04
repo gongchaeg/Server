@@ -7,13 +7,13 @@ import { slackErrorMessage } from "../modules/slackErrorMessage";
 
 //* 추천 책 조회하기
 const getRecommend = async (req: Request, res: Response) => {
-    const auth = req.body.userId;
-    if (!auth) {
+    const userId = req.body.userId;
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
     try {
-        const data = await recommendService.getRecommend(+auth);
+        const data = await recommendService.getRecommend(+userId);
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_RECOMMEND));
         }

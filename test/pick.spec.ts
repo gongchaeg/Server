@@ -3,6 +3,7 @@ import req, { Response } from "supertest";
 import { expect } from 'chai';
 import { PrismaClient } from "@prisma/client";
 import { response } from "express";
+import { env } from "process";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ describe('***** Pick Test *****', () => {
             req(app)
                 .get('/pick/all')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })  // header 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -60,7 +61,7 @@ describe('***** Pick Test *****', () => {
             req(app)
                 .patch('/pick')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })  // header 설정
                 .send({
                     "firstPick": 1,
                     "secondPick": 3,

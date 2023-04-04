@@ -1,6 +1,6 @@
 import app from "../src/index";
 import req, { Response } from "supertest";
-import { expect } from 'chai';
+import { env } from "process";
 
 describe('***** Alarm Test *****', () => {
     context('[GET] /alarm', () => {
@@ -8,7 +8,7 @@ describe('***** Alarm Test *****', () => {
             req(app)
                 .get('/alarm')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })  // header 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
