@@ -35,6 +35,10 @@ const signIn = async (req: Request, res: Response) => {
     try {
         const data = await authService.signIn(socialToken, socialPlatform);
 
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNIN_FAIL))
+        }
+
         return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, data));
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);

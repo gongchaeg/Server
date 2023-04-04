@@ -6,21 +6,28 @@ import tokenType from "../constants/tokenType";
 import { rm, sc } from "../constants";
 import { JwtPayload } from "jsonwebtoken";
 
+
 const prisma = new PrismaClient();
 
 //* 소셜 로그인 
 const signIn = async (socialToken : string, socialPlatform: string) => {
 
-  //* 카카오 로그인
-  if (socialPlatform == "kakao") {
-    const userData = await social.signInKakao(socialToken);
+  let socialId;
 
-    if (!userData) throw new Error('no user data!');
+  switch (socialPlatform) {
+    case 'kakao':
+      const userData = await social.signInKakao(socialToken);
+      socialId = String(userData.id);
+      break;
+    case 'apple':
+      socialId = await social.signInApple(socialToken);
+      break;
+  }
+
+  if (!socialId) throw new Error('no user data!');
   
-    const socialId = String(userData.id);
-  
-    //* 기존 카카오 auth 서버에 등록 되어있는 회원인지 확인
-    const userInkakao = await prisma.user.findFirst({
+    //* 기존 소셜 auth 서버에 등록 되어있는 회원인지 확인
+    const userInSocial = await prisma.user.findFirst({
       where : {
         social_platform : socialPlatform,
         social_id : socialId
@@ -28,8 +35,8 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
     });
 
 
-    //* 최초 로그인 시, 일단 유저 등록 -> 이후 회원가입 로직
-    if (!userInkakao) {
+    //* 최초 로그인 시, 일단 유저 등록
+    if (!userInSocial) {
       const refreshToken = jwtHandler.getRefreshToken();
       
       const user = await prisma.user.create({
@@ -52,10 +59,11 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
       };
     }
 
-    if ( !userInkakao.refresh_token || !userInkakao.nickname) {
-      const userId = userInkakao.id;
+    //* 로그인만 하고, 회원가입은 하지 않음
+    if ( !userInSocial.refresh_token || !userInSocial.nickname) {
+      const userId = userInSocial.id;
       
-      if( !userInkakao.refresh_token ) {
+      if( !userInSocial.refresh_token ) {
         const refreshToken = jwtHandler.getRefreshToken();
 
         await prisma.user.update({
@@ -73,20 +81,19 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
   
       return {
         accessToken,
-        refreshToken : userInkakao.refresh_token,
+        refreshToken : userInSocial.refresh_token,
         isSignedUp,
       };
     }
 
     //* 기존에 회원이 등록되어있으면, 자동 로그인
-    const accessToken = jwtHandler.sign(userInkakao.id);
+    const accessToken = jwtHandler.sign(userInSocial.id);
     return {
       accessToken,
-      refreshToken : userInkakao.refresh_token,
+      refreshToken : userInSocial.refresh_token,
       isSignedUp : true
     }
-  }
-};
+  };
 
 //* 회원 가입
 const signUp = async (accessToken: string, signUpDto : SignUpReqDTO) => {
