@@ -92,7 +92,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .delete('/friend/302')
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(200)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {

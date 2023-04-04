@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { Response } from 'supertest';
 import { PrismaClient } from '@prisma/client';
 import { afterEach } from 'node:test';
+import { env } from 'process';
 
 dotenv.config();
 const prisma = new PrismaClient();
@@ -54,7 +55,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .post('/bookshelf')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .send({
                     "bookImage": "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954620147.jpg",
                     "bookTitle": "데미안",
@@ -78,7 +79,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf')
                 .set('Content-Type', 'application/json')
-                .expect(400)
+                .expect(401)
                 .then(res => {
                     done();
                 })
@@ -95,7 +96,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/detail/1')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
@@ -112,7 +113,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/detail/1')
                 .set('Content-Type', 'application/json')
-                .expect(400)
+                .expect(401)
                 .then(res => {
                     done();
                 })
@@ -125,8 +126,9 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/detail/-1')
                 .set('Content-Type', 'application/json')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .then(res => {
-                    expect(res.body.status).to.equals(400); // 추후 상태 코드 변경
+                    expect(res.body.status).to.equals(404); // 추후 상태 코드 변경
                     done();
                 })
                 .catch(err => {
@@ -155,7 +157,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .patch('/bookshelf/1')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .send({
                     "description": "테스트를 위해 한 마디 수정합니다",
                     "memo": "테스트를 위해 한 마디 수정합니다"
@@ -174,7 +176,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .patch('/bookshelf/1')
                 .set('Content-Type', 'application/json')
-                .expect(400)
+                .expect(401)
                 .then(res => {
                     done();
                 })
@@ -187,7 +189,8 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .patch('/bookshelf/-1')
                 .set('Content-Type', 'application/json')
-                .expect(400) // 추후 상태 코드 변경
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
+                .expect(404) // 추후 상태 코드 변경
                 .then(res => {
                     done();
                 })
@@ -204,7 +207,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
@@ -219,7 +222,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf')
                 .set('Content-Type', 'application/json')
-                .expect(400)
+                .expect(401)
                 .then(res => {
                     done();
                 })
@@ -236,7 +239,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/friend/302')  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header - userId 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then(res => {
@@ -251,7 +254,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/friend/302')
                 .set('Content-Type', 'application/json')
-                .expect(400)
+                .expect(401)
                 .then(res => {
                     done();
                 })

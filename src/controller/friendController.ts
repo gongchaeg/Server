@@ -115,7 +115,8 @@ const followFriend = async (req: Request, res: Response) => {
  **/
 const deleteFollowFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
-    const auth = req.header("auth");
+    const auth = req.body.userId;
+    
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
