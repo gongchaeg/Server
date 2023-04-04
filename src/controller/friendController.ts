@@ -223,10 +223,8 @@ const postMail = async (friendReportRequestDto: FriendReportRequestDTO, friendId
  **/
 const blockFriend = async (req:Request, res:Response) => {
     const { friendId } = req.params;
-    console.log("=============freindID", friendId); 
     //* middleware로 auth 받기
     const userId = req.body.userId;
-    console.log("=============userID", userId);
 
     if (!userId || !friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
