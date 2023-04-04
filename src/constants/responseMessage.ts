@@ -79,6 +79,8 @@ export default {
   SUCCESS_REPORT_POST: "친구 신고하기 성공",
   SUCCESS_BLOCK_FRIEND: "친구 차단하기 성공",
   FAIL_BLOCK_FRIEND: "친구 차단하기 실패",
+  SUCCESS_CANCLE_BLOCK_FIREND: "친구 차단 해제 성공",
+  FAIL_CANCLE_BLOCK_FRIEND: "친구 차단 해제 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",

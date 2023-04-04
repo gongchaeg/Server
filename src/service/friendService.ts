@@ -309,6 +309,18 @@ const blockFriend = async (userId: number, friendId: number) => {
     return data;
 }
 
+//* [DELETE] 친구 차단 해제하기
+const cancleBlockedFriend = async (userId: number, friendId: number) => {
+    const data = prisma.block.deleteMany({
+        where : {
+            userId : userId,
+            friendId : friendId
+        }
+    });
+
+    return data;
+}
+
 const friendService = {
     recommendBookToFriend,
     searchUser,
@@ -319,7 +331,8 @@ const friendService = {
     getFollowerIdList,
     isFriend,
     postReport,
-    blockFriend
+    blockFriend,
+    cancleBlockedFriend
 }
 
 export default friendService;
