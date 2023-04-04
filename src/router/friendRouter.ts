@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { friendController } from "../controller";
+import auth from "../middlewares/auth";
 
 const router: Router = Router();
 
@@ -13,5 +14,7 @@ router.post("/:friendId", friendController.followFriend);
 router.delete("/:friendId", friendController.deleteFollowFriend);
 //* 친구 신고하기 - POST /friend/:friendId/report
 router.post("/:friendId/report", friendController.postReport);
+//* 친구 차단하기 - POST /friend/block/:friendId
+router.post("/block/:friendId", auth, friendController.blockFriend);
 
 export default router;

@@ -79,7 +79,10 @@ const recommendBookToFriend = async (friendRecommendRequestDTO: FriendRecommendR
 
 //* [GET] 사용자 검색하기
 const searchUser = async (nickname: string, auth: number) => {
-    const user = await prisma.user.findFirst({
+
+    let isFollowed: boolean = false;
+    let isBlocked: boolean = false;
+    const findUser = await prisma.user.findFirst({
         where: {
             nickname: {
                 equals: nickname,
@@ -88,16 +91,38 @@ const searchUser = async (nickname: string, auth: number) => {
         }
     });
 
-    if (user == null) {
+    if (findUser == null) {
         return null;
     }
 
-    let isFollowed: boolean = false;
+    //* A가 B를 차단하면 B는 A를 검색하지 못함.
+    const blocked = await prisma.block.findFirst({
+        where : {
+            friendId : auth, //B
+            userId : findUser.id //A
+        }
+    })
+
+    if (blocked != null) {
+        return null;
+    }
+
+    //* A가 B를 차단했는지 확인
+    const block = await prisma.block.findFirst({
+        where : {
+            userId : auth,
+            friendId : findUser.id
+        }
+    });
+
+    if (block != null) {
+        isBlocked = true;
+    }
 
     const followed = await prisma.friend.findFirst({
         where: {
             senderId: auth,
-            receiverId: user?.id
+            receiverId: findUser?.id
         },
         select: {
             followId: true
@@ -109,10 +134,11 @@ const searchUser = async (nickname: string, auth: number) => {
     }
 
     const data = {
-        friendId: user.id,
-        nickname: user.nickname,
-        profileImage: user.profileImage,
-        isFollowed: isFollowed
+        friendId: findUser.id,
+        nickname: findUser.nickname,
+        profileImage: findUser.profileImage,
+        isFollowed: isFollowed,
+        isBlocked
     }
 
     return data;
@@ -253,6 +279,36 @@ const postReport = async (userId: number, friendId: number, friendReportRequestD
     return reportResult;
 }
 
+//* [POST] 친구 차단하기
+const blockFriend = async (userId: number, friendId: number) => {
+    const data = await prisma.block.create({
+        data : {
+            userId : userId,
+            friendId : friendId
+        }
+    });
+
+    // 서로 팔로우 테이블에서 삭제
+    deleteFollowFriend(userId,friendId);
+    deleteFollowFriend(friendId,userId);
+
+    // 서로 추천한 책 삭제
+    await prisma.recommend.deleteMany({
+        where :{
+            recommendedBy : userId,
+            recommendTo: friendId
+        }
+    });
+    await prisma.recommend.deleteMany({
+        where :{
+            recommendedBy : friendId,
+            recommendTo: userId
+        }
+    });
+
+    return data;
+}
+
 const friendService = {
     recommendBookToFriend,
     searchUser,
@@ -263,6 +319,7 @@ const friendService = {
     getFollowerIdList,
     isFriend,
     postReport,
+    blockFriend
 }
 
 export default friendService;
