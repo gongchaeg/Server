@@ -12,8 +12,8 @@ import { bookshelfService } from "../service";
  * @desc 내 책장에 책 등록하기
  **/
 const createMyBook = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -50,8 +50,8 @@ const createMyBook = async (req: Request, res: Response) => {
  * @desc 등록한 책의 상세 정보 불러오기
  */
 const getBookById = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
     const { bookshelfId } = req.params;
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -85,8 +85,8 @@ const getBookById = async (req: Request, res: Response) => {
  * @desc 등록한 책 삭제하기
  */
 const deleteMyBook = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
     const { bookshelfId } = req.params;
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -122,7 +122,7 @@ const deleteMyBook = async (req: Request, res: Response) => {
 const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
     const { bookshelfId } = req.params;
-    const auth = req.header("auth");
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -157,7 +157,7 @@ const updateMyBook = async (req: Request, res: Response) => {
  * @desc 내 책장 (메인 뷰) 조회하기
  */
 const getMyBookshelf = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
@@ -187,7 +187,7 @@ const getMyBookshelf = async (req: Request, res: Response) => {
  */
 const getFriendBookshelf = async (req: Request, res: Response) => {
     const { friendId } = req.params;
-    const auth = req.header("auth");
+    const auth = req.body.userId;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {

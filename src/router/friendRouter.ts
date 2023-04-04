@@ -11,7 +11,7 @@ router.get("/", friendController.searchUser);
 //* 친구 팔로우하기 - POST /friend/:friendId
 router.post("/:friendId", friendController.followFriend);
 //* 친구 팔로우 취소하기 - DELETE /friend/:friendId
-router.delete("/:friendId", friendController.deleteFollowFriend);
+router.delete("/:friendId", auth, friendController.deleteFollowFriend);
 //* 친구 신고하기 - POST /friend/:friendId/report
 router.post("/:friendId/report", friendController.postReport);
 //* 친구 차단하기 - POST /friend/block/:friendId

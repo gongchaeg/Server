@@ -7,7 +7,7 @@ import { slackErrorMessage } from "../modules/slackErrorMessage";
 
 //* 추천 책 조회하기
 const getRecommend = async (req: Request, res: Response) => {
-    const auth = req.header("auth");
+    const auth = req.body.userId;
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
