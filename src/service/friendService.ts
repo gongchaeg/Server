@@ -279,48 +279,6 @@ const postReport = async (userId: number, friendId: number, friendReportRequestD
     return reportResult;
 }
 
-//* [POST] 친구 차단하기
-const blockFriend = async (userId: number, friendId: number) => {
-    const data = await prisma.block.create({
-        data : {
-            userId : userId,
-            friendId : friendId
-        }
-    });
-
-    // 서로 팔로우 테이블에서 삭제
-    deleteFollowFriend(userId,friendId);
-    deleteFollowFriend(friendId,userId);
-
-    // 서로 추천한 책 삭제
-    await prisma.recommend.deleteMany({
-        where :{
-            recommendedBy : userId,
-            recommendTo: friendId
-        }
-    });
-    await prisma.recommend.deleteMany({
-        where :{
-            recommendedBy : friendId,
-            recommendTo: userId
-        }
-    });
-
-    return data;
-}
-
-//* [DELETE] 친구 차단 해제하기
-const cancleBlockedFriend = async (userId: number, friendId: number) => {
-    const data = prisma.block.deleteMany({
-        where : {
-            userId : userId,
-            friendId : friendId
-        }
-    });
-
-    return data;
-}
-
 const friendService = {
     recommendBookToFriend,
     searchUser,
@@ -330,9 +288,7 @@ const friendService = {
     getFollowingIdList,
     getFollowerIdList,
     isFriend,
-    postReport,
-    blockFriend,
-    cancleBlockedFriend
+    postReport
 }
 
 export default friendService;

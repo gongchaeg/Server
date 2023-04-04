@@ -11,6 +11,7 @@ import { ReportMailRequestDTO } from '../interfaces/friend/ReportMailRequestDTO'
 import { reportMessage } from '../modules/reportMessage';
 import { userService } from '../service';
 import { reportMailDTO } from '../interfaces/friend/reportMailDTO';
+import blockService from '../service/blockService';
 
 //* 친구에게 책 추천하기 
 const recommendBookToFriend = async (req: Request, res: Response) => {
@@ -231,7 +232,7 @@ const blockFriend = async (req:Request, res:Response) => {
     }
 
     try {
-        const data = await friendService.blockFriend(+userId, +friendId);
+        const data = await blockService.blockFriend(+userId, +friendId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_BLOCK_FRIEND));
