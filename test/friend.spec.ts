@@ -2,6 +2,7 @@ import app from "../src/index";
 import req, { Response } from "supertest";
 import { expect } from "chai";
 import { PrismaClient } from '@prisma/client';
+import { env } from "process";
 
 const prisma = new PrismaClient();
 
@@ -137,7 +138,32 @@ describe('***** Friend Test *****', () => {
                 })
         })
     })
+    
+    context('[POST] /friend/block/:friendId', () => {
+        //? after 작업
+        after(async () => {
+            await prisma.block.deleteMany({
+                where: {
+                    userId: 300,
+                    friendId: 301,
+                }
+            });
 
-
-
+        })
+        it('친구 차단하기 성공', done => {
+            req(app)
+                .post('/friend/block/301')
+                .set('Content-Type', 'application/json')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
+                .expect(200)
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then((res) => {
+                    done();
+                })
+                .catch((err) => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        })
+    })
 });

@@ -217,12 +217,44 @@ const postMail = async (friendReportRequestDto: FriendReportRequestDTO, friendId
     mailSender.sendGmail(reportMailRequest);
 }
 
+/**
+ * @route POST /friend/block/:friendId
+ * @desc 친구 차단하기
+ **/
+const blockFriend = async (req:Request, res:Response) => {
+    const { friendId } = req.params;
+    console.log("=============freindID", friendId); 
+    //* middleware로 auth 받기
+    const userId = req.body.userId;
+    console.log("=============userID", userId);
+
+    if (!userId || !friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+
+    try {
+        const data = await friendService.blockFriend(+userId, +friendId);
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_BLOCK_FRIEND));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_BLOCK_FRIEND));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+        sendWebhookMessage(errorMessage);
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+}
+
 const friendController = {
     recommendBookToFriend,
     searchUser,
     followFriend,
     deleteFollowFriend,
     postReport,
+    blockFriend
 }
 
 export default friendController;
