@@ -10,17 +10,14 @@ import { patchUserRequestDTO } from '../interfaces/mypage/patchUserRequestDTO';
 
 //* 유저 탈퇴하기
 const deleteUser = async (req: Request, res: Response) => {
-    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const userId = req.body.userId;
+
+    if (!userId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
 
     try {
-        const tokenCheck = userTokenCheck(token);
-        if (tokenCheck == rm.EXPIRED_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-        } else if (tokenCheck == rm.INVALID_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
-        }
-
-        const data = await mypageService.deleteUser(+tokenCheck);
+        const data = await mypageService.deleteUser(+userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_USER_FAIL))
@@ -40,10 +37,14 @@ const deleteUser = async (req: Request, res: Response) => {
 
 //* 사용자 정보 수정하기
 const patchUser = async (req: Request, res: Response) => {
-    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const userId = req.body.userId;
     const patchUserRequestDTO: patchUserRequestDTO = req.body
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
+
+    if (!userId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
 
     if (!location) {
         patchUserRequestDTO.profileImage = null;
@@ -55,14 +56,8 @@ const patchUser = async (req: Request, res: Response) => {
 
     try {
         patchUserRequestDTO.profileImage = location;
-        const tokenCheck = userTokenCheck(token);
-        if (tokenCheck == rm.EXPIRED_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-        } else if (tokenCheck == rm.INVALID_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
-        }
 
-        const data = await mypageService.patchUser(+tokenCheck, patchUserRequestDTO);
+        const data = await mypageService.patchUser(+userId, patchUserRequestDTO);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_IMAGE_FAIL))
@@ -82,17 +77,13 @@ const patchUser = async (req: Request, res: Response) => {
 
 //* 사용자 정보 조회하기
 const getUserData = async (req: Request, res: Response) => {
-    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const userId = req.body.userId;
+    if (!userId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
 
     try {
-        const tokenCheck = userTokenCheck(token);
-        if (tokenCheck == rm.EXPIRED_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-        } else if (tokenCheck == rm.INVALID_TOKEN) {
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
-        }
-
-        const data = await userService.getUserIntro(+tokenCheck);
+        const data = await userService.getUserIntro(+userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL))

@@ -16,8 +16,8 @@ import { reportMailDTO } from '../interfaces/friend/reportMailDTO';
 const recommendBookToFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendRecommendRequestDTO: FriendRecommendRequestDTO = req.body;
-    const auth = req.header("auth");
-    if (!auth) {
+    const userId = req.body.userId;
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
@@ -25,7 +25,7 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId, +auth);
+        const data = await friendService.recommendBookToFriend(friendRecommendRequestDTO, +friendId, +userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_RECOMMEND_BOOK));
@@ -50,8 +50,8 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
 //* 사용자 검색하기
 const searchUser = async (req: Request, res: Response) => {
     const { nickname } = req.query;
-    const auth = req.header("auth");
-    if (!auth) {
+    const userId = req.body.userId;
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
@@ -60,7 +60,7 @@ const searchUser = async (req: Request, res: Response) => {
     }
 
     try {
-        const data = await friendService.searchUser(nickname as string, +auth);
+        const data = await friendService.searchUser(nickname as string, +userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_NO_FRIEND_EXIST));
@@ -81,8 +81,8 @@ const searchUser = async (req: Request, res: Response) => {
 //* 사용자 팔로우 하기
 const followFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
-    const auth = req.header("auth");
-    if (!auth) {
+    const userId = req.body.userId;
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
@@ -90,7 +90,7 @@ const followFriend = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_FOUND_FRIEND_ID));
     }
     try {
-        const data = await friendService.followFriend(+friendId, +auth);
+        const data = await friendService.followFriend(+friendId, +userId);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_POST_FOLLOW));
@@ -136,9 +136,9 @@ const deleteFollowFriend = async (req: Request, res: Response) => {
 const postReport = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendReportRequestDto: FriendReportRequestDTO = req.body;
-    const auth = req.header("auth");
+    const userId = req.body.userId;
 
-    if (!auth) {
+    if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
 
@@ -151,13 +151,13 @@ const postReport = async (req: Request, res: Response) => {
     }
 
     try {
-        const data = await friendService.postReport(+auth, +friendId, friendReportRequestDto);
+        const data = await friendService.postReport(+userId, +friendId, friendReportRequestDto);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
         }
 
-        postMail(friendReportRequestDto, +friendId, +auth);
+        postMail(friendReportRequestDto, +friendId, +userId);
 
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_REPORT_POST));
 
@@ -221,7 +221,7 @@ const postMail = async (friendReportRequestDto: FriendReportRequestDTO, friendId
  * @route POST /friend/block/:friendId
  * @desc 친구 차단하기
  **/
-const blockFriend = async (req:Request, res:Response) => {
+const blockFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     //* middleware로 auth 받기
     const userId = req.body.userId;

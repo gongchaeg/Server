@@ -12,7 +12,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .get(encodeURI('/friend?nickname=test2'))  // api 요청
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')  // header 설정
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })  // header 설정
                 .expect(200) // 예측 상태 코드
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -47,7 +47,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/301')
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(200)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -63,7 +63,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/302')
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .expect(400)
                 .expect('Content-Type', /json/) // 예측 content-type
                 .then((res) => {
@@ -122,7 +122,7 @@ describe('***** Friend Test *****', () => {
             req(app)
                 .post('/friend/300/report')
                 .set('Content-Type', 'application/json')
-                .set('auth', '300')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .send({
                     "reasonIndex": 5,
                     "etc": "test"
@@ -138,7 +138,7 @@ describe('***** Friend Test *****', () => {
                 })
         })
     })
-    
+
     context('[POST] /friend/block/:friendId', () => {
         //? after 작업
         after(async () => {
@@ -192,6 +192,6 @@ describe('***** Friend Test *****', () => {
                     done(err);
                 })
         })
-        
+
     })
 });
