@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { mypageController } from "../controller";
-import { upload } from "../middlewares";
+import { auth, upload } from "../middlewares";
 
 const router: Router = Router();
 
@@ -10,4 +10,7 @@ router.delete("/withdraw", mypageController.deleteUser);
 router.patch("/profile", upload.single("file"), mypageController.patchUser);
 //* 사용자 정보 조회하기 GET /mypage/profile
 router.get("/profile", upload.single("file"), mypageController.getUserData);
+//* 차단 리스트에서 차단 해제하기 DELETE /mypage/blocklist/:friendId
+router.delete("/blocklist/:friendId", auth, mypageController.cancleBlock);
+
 export default router;

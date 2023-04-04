@@ -4,7 +4,7 @@ import { fail, success } from "../constants/response";
 import { rm, sc } from "../constants";
 import { slackErrorMessage } from '../modules/slackErrorMessage';
 import { sendWebhookMessage } from "../modules/slackWebhook";
-import { mypageService, userService } from "../service";
+import { friendService, mypageService, userService } from "../service";
 import { userTokenCheck } from "../constants/userTokenCheck";
 import { patchUserRequestDTO } from '../interfaces/mypage/patchUserRequestDTO';
 
@@ -110,10 +110,39 @@ const getUserData = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ * @route DELETE /mypage/blocklist/:friendId
+ * @desc 친구 차단 해제하기
+ **/
+const cancleBlock = async (req: Request, res: Response) => {
+    const { friendId } = req.params;
+    const userId = req.body.userId;
+
+    if (!userId || !friendId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+
+    try {
+        const data = await friendService.cancleBlockedFriend(+userId, +friendId);
+
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_CANCLE_BLOCK_FRIEND));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_CANCLE_BLOCK_FIREND));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+        sendWebhookMessage(errorMessage);
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+}
+
 const mypageController = {
     deleteUser,
     patchUser,
     getUserData,
+    cancleBlock
 }
 
 export default mypageController;

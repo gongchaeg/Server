@@ -145,7 +145,7 @@ describe('***** Friend Test *****', () => {
             await prisma.block.deleteMany({
                 where: {
                     userId: 300,
-                    friendId: 301,
+                    friendId: 301
                 }
             });
 
@@ -165,5 +165,33 @@ describe('***** Friend Test *****', () => {
                     done(err);
                 })
         })
+    })
+
+    context('[DELETE] /mypage/blocklist/:friendId', () => {
+        //? after 작업
+        before(async () => {
+            await prisma.block.create({
+                data: {
+                    userId: 300,
+                    friendId: 302,
+                }
+            });
+        })
+        it('친구 차단 해제하기 성공', done => {
+            req(app)
+                .delete('/mypage/blocklist/302')
+                .set('Content-Type', 'application/json')
+                .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
+                .expect(200)
+                .expect('Content-Type', /json/) // 예측 content-type
+                .then((res) => {
+                    done();
+                })
+                .catch((err) => {
+                    console.error("###### Error >>", err);
+                    done(err);
+                })
+        })
+        
     })
 });
