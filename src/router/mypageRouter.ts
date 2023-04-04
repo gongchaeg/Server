@@ -12,5 +12,7 @@ router.patch("/profile", upload.single("file"), mypageController.patchUser);
 router.get("/profile", upload.single("file"), mypageController.getUserData);
 //* 차단 리스트에서 차단 해제하기 DELETE /mypage/blocklist/:friendId
 router.delete("/blocklist/:friendId", auth, mypageController.cancleBlock);
+//* 차단 리스트 조회하기 GET /mypage/blocklist
+router.get("/blocklist", auth, mypageController.getBlockList);
 
 export default router;

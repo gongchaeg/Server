@@ -81,6 +81,8 @@ export default {
   FAIL_BLOCK_FRIEND: "친구 차단하기 실패",
   SUCCESS_CANCLE_BLOCK_FIREND: "친구 차단 해제 성공",
   FAIL_CANCLE_BLOCK_FRIEND: "친구 차단 해제 실패",
+  SUCCESS_GET_BLOCK_LIST: "친구 차단 리스트 조회 성공",
+  FAIL_GET_BLOCK_LIST: "친구 차단 리스트 조회 실패",
 
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
