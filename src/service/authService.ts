@@ -96,30 +96,22 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
   };
 
 //* 회원 가입
-const signUp = async (accessToken: string, signUpDto : SignUpReqDTO) => {
-    //* 토큰에서 유저 아이디 가져오기
-    const decoded = jwtHandler.verify(accessToken); 
+const signUp = async (userId: number, signUpDto : SignUpReqDTO) => {
 
-    if (decoded === tokenType.TOKEN_EXPIRED)
-      return rm.EXPIRED_TOKEN;
-    if (decoded === tokenType.TOKEN_INVALID)
-      return rm.INVALID_TOKEN;
+  if (!signUpDto.profileImage) throw new Error('no profileImage url!');
 
-    //? decode한 후 담겨있는 userId를 꺼내옴
-    const userId: number = (decoded as JwtPayload).userId;
+  const data = await prisma.user.update({
+    where : {
+      id: userId
+    },
+    data : {
+      profileImage : signUpDto.profileImage,
+      nickname : signUpDto.nickname,
+      intro : signUpDto.intro
+    }
+  });
 
-    const data = await prisma.user.update({
-      where : {
-        id: userId
-      },
-      data : {
-        profileImage : signUpDto.profileImage,
-        nickname : signUpDto.nickname,
-        intro : signUpDto.intro
-      }
-    });
-
-    return data;
+  return data;
 };
 
 //* 테스트로 accesstoken 발급 => 추후 삭제 !!!!

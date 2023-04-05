@@ -56,11 +56,15 @@ const signIn = async (req: Request, res: Response) => {
  * @route PATCH /auth/signup
  * @desc 회원 가입
  */
-
 const signUp = async (req: Request, res:Response) => {
-
-    const token = req.header('accessToken')?.split(" ").reverse()[0] as string;
+    const userId = req.body.userId;
     const signUpdDto : SignUpReqDTO  = req.body;
+    const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
+    const { location } = image;
+
+    if (!location) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
+    }
 
     if (!signUpdDto.intro || !signUpdDto.nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
@@ -70,15 +74,14 @@ const signUp = async (req: Request, res:Response) => {
     const refinedIntro = intro.replace(/\n/g, " ");
 
     signUpdDto.intro = refinedIntro;
+    signUpdDto.profileImage = location;
 
     try {
-        
-        const data = await authService.signUp(token, signUpdDto);
+        const data = await authService.signUp(+userId, signUpdDto);
 
-        if (data == rm.EXPIRED_TOKEN)
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-        if (data == rm.INVALID_TOKEN)
-            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+        if (!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST))
+        }
 
         return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS));
 
