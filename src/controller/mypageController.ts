@@ -43,6 +43,11 @@ const patchUser = async (req: Request, res: Response) => {
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
 
+    const intro = patchUserRequestDTO.intro;
+    const refinedIntro = intro?.replace(/\n/g, " ");
+
+    patchUserRequestDTO.intro = refinedIntro;
+
     if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
