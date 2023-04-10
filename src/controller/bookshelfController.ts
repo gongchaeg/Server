@@ -15,6 +15,11 @@ const createMyBook = async (req: Request, res: Response) => {
     const bookshelfCreateDto: BookshelfCreateDTO = req.body;
     const auth = req.body.userId;
 
+    const refinedDescription = bookshelfCreateDto.description.replace(/\n/g, " ");
+    const refinedMemo = bookshelfCreateDto.memo.replace(/\n/g, " ");
+    bookshelfCreateDto.description = refinedDescription;
+    bookshelfCreateDto.memo = refinedMemo;
+
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
@@ -123,6 +128,11 @@ const updateMyBook = async (req: Request, res: Response) => {
     const bookshelfUpdateDto: BookshelfUpdateDTO = req.body;
     const { bookshelfId } = req.params;
     const auth = req.body.userId;
+
+    const refinedDescription = bookshelfUpdateDto.description?.replace(/\n/g, " ");
+    const refinedMemo = bookshelfUpdateDto.memo?.replace(/\n/g, " ");
+    bookshelfUpdateDto.description = refinedDescription;
+    bookshelfUpdateDto.memo = refinedMemo;
 
     //* 헤더로 유저 아이디 안넘겨줬을 때
     if (!auth) {

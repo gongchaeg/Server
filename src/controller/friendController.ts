@@ -18,6 +18,10 @@ const recommendBookToFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const friendRecommendRequestDTO: FriendRecommendRequestDTO = req.body;
     const userId = req.body.userId;
+
+    const refinedRecommendDesc = friendRecommendRequestDTO.recommendDesc.replace(/\n/g, " ");
+    friendRecommendRequestDTO.recommendDesc = refinedRecommendDesc;
+
     if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
