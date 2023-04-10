@@ -91,7 +91,7 @@ const searchUser = async (nickname: string, auth: number) => {
         }
     });
 
-    if (findUser == null) {
+    if (findUser == null || findUser.id == auth) {
         return null;
     }
 
