@@ -50,7 +50,7 @@ model Bookshelf {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Book         Book           @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "bookshelf_book_id_fk")
-  User         User           @relation(fields: [userId], references: [id], onDelete: NoAction, map: "bookshelf_user_id_fk")
+  User         User           @relation(fields: [userId], references: [id], onDelete: Cascade, map: "bookshelf_user_id_fk")
   NewBookAlarm NewBookAlarm[]
 }
 
@@ -58,7 +58,7 @@ model Friend {
   followId         Int  @id @unique @default(autoincrement())
   receiverId       Int
   senderId         Int
-  receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_id_fk")
+  receiverIdToUser User @relation("Friend_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade, map: "friend_user_id_fk")
   senderIdToUser   User @relation("Friend_senderIdToUser", fields: [senderId], references: [id], onDelete: Cascade, map: "friend_user_id_fk_2")
 }
 
@@ -82,8 +82,8 @@ model Recommend {
   bookId              Int
   createdAt           DateTime         @default(now())
   Book                Book             @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "recommend_book_id_fk")
-  recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: NoAction, map: "recommend_user_id_fk")
-  recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: NoAction, map: "recommend_user_id_fk_2")
+  recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: Cascade, map: "recommend_user_id_fk")
+  recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: Cascade, map: "recommend_user_id_fk_2")
   RecommendAlarm      RecommendAlarm[]
 }
 
