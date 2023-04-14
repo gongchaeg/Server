@@ -14,9 +14,12 @@ const postDuplicateNickname = async (req: Request, res: Response) => {
     if (!nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_NICKNAME));
     }
+
+    const refinedNickname = nickname.replace(/ /g,"");
+
     try {
 
-        const data = await userService.postDuplicateNickname(+userId, nickname);
+        const data = await userService.postDuplicateNickname(+userId, refinedNickname);
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_CHECK_NICKNAME))
         }
