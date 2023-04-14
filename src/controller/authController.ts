@@ -72,8 +72,11 @@ const signUp = async (req: Request, res:Response) => {
 
     const intro = signUpdDto.intro;
     const refinedIntro = intro.replace(/\n/g, " ");
+    const nickname = signUpdDto.nickname;
+    const refinedNickname = nickname.replace(/ /g, "");
 
     signUpdDto.intro = refinedIntro;
+    signUpdDto.nickname = refinedNickname;
     signUpdDto.profileImage = location;
 
     try {
