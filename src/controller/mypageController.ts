@@ -45,8 +45,11 @@ const patchUser = async (req: Request, res: Response) => {
 
     const intro = patchUserRequestDTO.intro;
     const refinedIntro = intro?.replace(/\n/g, " ");
+    const nickname = patchUserRequestDTO.nickname;
+    const refinedNickname = nickname.replace(/ /g, "");
 
     patchUserRequestDTO.intro = refinedIntro;
+    patchUserRequestDTO.nickname = refinedNickname;
 
     if (!userId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
