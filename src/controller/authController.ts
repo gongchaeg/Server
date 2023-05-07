@@ -107,7 +107,7 @@ const getToken = async (req: Request, res: Response) => {
     const refreshToken = req.header("refreshToken")?.split(" ").reverse()[0] as string;
 
     if (!refreshToken || !accessToken) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.EMPTY_TOKEN));
     }
 
     try {
