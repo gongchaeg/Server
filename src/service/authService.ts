@@ -39,7 +39,7 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
     if (!userInSocial) {
       const refreshToken = jwtHandler.getRefreshToken();
       
-      const user = await prisma.user.create({
+      const createUser = await prisma.user.create({
         data: {
           social_platform: socialPlatform,
           social_id: socialId,
@@ -47,9 +47,7 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
         },
       });
   
-      const userId = user.id;
-  
-      const accessToken = jwtHandler.sign(userId);
+      const accessToken = jwtHandler.sign(createUser.id);
       const isSignedUp = false;
   
       return {
@@ -88,9 +86,20 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
 
     //* 기존에 회원이 등록되어있으면, 자동 로그인
     const accessToken = jwtHandler.sign(userInSocial.id);
+    const refreshToken = jwtHandler.getRefreshToken();
+
+    await prisma.user.update({
+      data : {
+        refresh_token : refreshToken
+      },
+      where : {
+        id : userInSocial.id
+      }
+    });
+
     return {
       accessToken,
-      refreshToken : userInSocial.refresh_token,
+      refreshToken,
       isSignedUp : true
     }
   };
