@@ -37,7 +37,7 @@ const getRefreshToken = () => {
   const payload = {};
 
   const refreshToken = jwt.sign(payload, privateKey, {
-    expiresIn: "30d",
+    expiresIn: "90d",
   });
 
   return refreshToken;
