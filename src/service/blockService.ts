@@ -2,35 +2,39 @@ import { PrismaClient } from "@prisma/client";
 import friendService from "./friendService";
 import { UserDTO } from "../interfaces/user/UserDTO";
 import userService from "./userService";
+import alarmService from "./alarmService";
 
 const prisma = new PrismaClient();
 
 //* [POST] 친구 차단하기
 const blockFriend = async (userId: number, friendId: number) => {
     const data = await prisma.block.create({
-        data : {
-            userId : userId,
-            friendId : friendId
+        data: {
+            userId: userId,
+            friendId: friendId
         }
     });
 
     // 서로 팔로우 테이블에서 삭제
-    friendService.deleteFollowFriend(userId,friendId);
-    friendService.deleteFollowFriend(friendId,userId);
+    friendService.deleteFollowFriend(userId, friendId);
+    friendService.deleteFollowFriend(friendId, userId);
 
     // 서로 추천한 책 삭제
     await prisma.recommend.deleteMany({
-        where :{
-            recommendedBy : userId,
+        where: {
+            recommendedBy: userId,
             recommendTo: friendId
         }
     });
     await prisma.recommend.deleteMany({
-        where :{
-            recommendedBy : friendId,
+        where: {
+            recommendedBy: friendId,
             recommendTo: userId
         }
     });
+
+    // 알림테이블에서 삭제
+    alarmService.deleteAlarm(userId, friendId);
 
     return data;
 }
@@ -38,9 +42,9 @@ const blockFriend = async (userId: number, friendId: number) => {
 //* [DELETE] 친구 차단 해제하기
 const cancleBlockedFriend = async (userId: number, friendId: number) => {
     const data = prisma.block.deleteMany({
-        where : {
-            userId : userId,
-            friendId : friendId
+        where: {
+            userId: userId,
+            friendId: friendId
         }
     });
 
@@ -50,10 +54,10 @@ const cancleBlockedFriend = async (userId: number, friendId: number) => {
 //* [GET] 친구 차단 목록 조회하기
 const getBlockList = async (userId: number) => {
     const list = await prisma.block.findMany({
-        where : {
-            userId : userId
+        where: {
+            userId: userId
         },
-        select : {
+        select: {
             friendId: true
         }
     });

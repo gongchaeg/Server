@@ -158,28 +158,38 @@ const getAlarm = async (auth: number) => {
 }
 
 //* 책 등록 시 알림 생성
-const createNewBookAlarm = async (userId: number, bookshelf: Bookshelf, follows:{senderId: number}[]) => {
-    for ( const follow of follows ) {
+const createNewBookAlarm = async (userId: number, bookshelf: Bookshelf, follows: { senderId: number }[]) => {
+    for (const follow of follows) {
         const alarm = await prisma.alarm.create({
-          data : {
-            senderId : userId,
-            receiverId : follow.senderId,
-            typeId : 3
-          }
+            data: {
+                senderId: userId,
+                receiverId: follow.senderId,
+                typeId: 3
+            }
         });
-    
+
         await prisma.newBookAlarm.create({
-          data : {
-            alarmId : alarm.id,
-            bookshelfId : bookshelf.id
-          }
+            data: {
+                alarmId: alarm.id,
+                bookshelfId: bookshelf.id
+            }
         });
-      }
+    }
+}
+
+const deleteAlarm = async (userId: number, friendId: number) => {
+    await prisma.alarm.deleteMany({
+        where: {
+            receiverId: userId,
+            senderId: friendId
+        }
+    })
 }
 
 const alarmService = {
     getAlarm,
-    createNewBookAlarm
+    createNewBookAlarm,
+    deleteAlarm
 }
 
 export default alarmService;                                                                                                                                                                                                                                                    
