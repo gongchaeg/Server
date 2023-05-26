@@ -25,6 +25,7 @@ export default {
   NULL_NICKNAME: "닉네임 값이 없습니다.",
   FAIL_CHECK_NICKNAME: "닉네임 중복 검사 실패",
   SUCCESS_CHECK_NICKNAME: "닉네임 중복 검사 성공",
+  UPDATE_USER_PRIFILE_SUCCESS: "프로필 수정 성공",
 
   // 이미지
   NO_IMAGE: "이미지가 없습니다.",

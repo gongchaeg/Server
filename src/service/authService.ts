@@ -107,8 +107,6 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
 //* 회원 가입
 const signUp = async (userId: number, signUpDto : SignUpReqDTO) => {
 
-  if (!signUpDto.profileImage) throw new Error('no profileImage url!');
-
   const data = await prisma.user.update({
     where : {
       id: userId

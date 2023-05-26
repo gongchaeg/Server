@@ -20,19 +20,6 @@ const patchUser = async (userId: number, patchUserRequestDTO: patchUserRequestDT
         patchUserRequestDTO.intro = "";
     }
 
-    if (!patchUserRequestDTO.profileImage) {
-        const data = await prisma.user.update({
-            where: {
-                id: userId
-            },
-            data: {
-                nickname: patchUserRequestDTO.nickname,
-                intro: patchUserRequestDTO.intro
-            }
-        })
-        return data;
-    }
-
     const data = await prisma.user.update({
         where: {
             id: userId
