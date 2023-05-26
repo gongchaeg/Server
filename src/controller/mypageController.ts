@@ -40,8 +40,10 @@ const deleteUser = async (req: Request, res: Response) => {
 const patchUser = async (req: Request, res: Response) => {
     const userId = req.body.userId;
     const patchUserRequestDTO: patchUserRequestDTO = req.body
-    const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
-    const { location } = image;
+    const image: Express.MulterS3.File|undefined = req.file as Express.MulterS3.File;
+
+    patchUserRequestDTO.profileImage = image ? image.location : null;
+
 
     const intro = patchUserRequestDTO.intro;
     const refinedIntro = intro?.replace(/\n/g, " ");
@@ -55,16 +57,11 @@ const patchUser = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
 
-    if (!location) {
-        patchUserRequestDTO.profileImage = null;
-    }
-
     if (!patchUserRequestDTO.nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_NICKNAME));
     }
 
     try {
-        patchUserRequestDTO.profileImage = location;
 
         const data = await mypageService.patchUser(+userId, patchUserRequestDTO);
 
@@ -72,7 +69,7 @@ const patchUser = async (req: Request, res: Response) => {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_IMAGE_FAIL))
         }
 
-        return res.status(sc.OK).send(success(sc.OK, rm.CREATE_IMAGE_SUCCESS));
+        return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_USER_PRIFILE_SUCCESS));
 
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);

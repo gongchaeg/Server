@@ -59,12 +59,9 @@ const signIn = async (req: Request, res: Response) => {
 const signUp = async (req: Request, res:Response) => {
     const userId = req.body.userId;
     const signUpdDto : SignUpReqDTO  = req.body;
-    const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
-    const { location } = image;
+    const image: Express.MulterS3.File|undefined = req.file as Express.MulterS3.File;
 
-    if (!location) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
-    }
+    signUpdDto.profileImage = image ? image.location : null;
 
     if (!signUpdDto.intro || !signUpdDto.nickname) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
@@ -77,7 +74,6 @@ const signUp = async (req: Request, res:Response) => {
 
     signUpdDto.intro = refinedIntro;
     signUpdDto.nickname = refinedNickname;
-    signUpdDto.profileImage = location;
 
     try {
         const data = await authService.signUp(+userId, signUpdDto);

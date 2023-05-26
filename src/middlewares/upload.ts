@@ -14,6 +14,7 @@ const upload = multer({
 
         //? key는 파일 이름을 지정. 버킷 내 같은 이름의 파일은 같은 파일로 인식하기 때문에 Unique하도록!
         key: function (req: Express.Request, file: Express.MulterS3.File, cb) {
+            if(req.file==undefined||null) cb(null, undefined);
             cb(null, `${Date.now()}_${file.originalname}`);
         },
     }),
