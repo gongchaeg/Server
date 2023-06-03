@@ -120,7 +120,7 @@ const followFriend = async (req: Request, res: Response) => {
 const deleteFollowFriend = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const auth = req.body.userId;
-    
+
     if (!auth) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
@@ -152,7 +152,7 @@ const postReport = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_FOUND_FRIEND_ID));
     }
 
-    if (!friendReportRequestDto) {
+    if (!friendReportRequestDto.reasonIndex) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
     }
 
@@ -161,6 +161,10 @@ const postReport = async (req: Request, res: Response) => {
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_REPORT_POST));
+        }
+
+        if (data == sc.NOT_FOUND) {
+            return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.REPORT_NO_USER));
         }
 
         postMail(friendReportRequestDto, +friendId, +userId);
