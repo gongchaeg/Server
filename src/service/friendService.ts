@@ -97,9 +97,9 @@ const searchUser = async (nickname: string, auth: number) => {
 
     //* A가 B를 차단하면 B는 A를 검색하지 못함.
     const blocked = await prisma.block.findFirst({
-        where : {
-            friendId : auth, //B
-            userId : findUser.id //A
+        where: {
+            friendId: auth, //B
+            userId: findUser.id //A
         }
     })
 
@@ -109,9 +109,9 @@ const searchUser = async (nickname: string, auth: number) => {
 
     //* A가 B를 차단했는지 확인
     const block = await prisma.block.findFirst({
-        where : {
-            userId : auth,
-            friendId : findUser.id
+        where: {
+            userId: auth,
+            friendId: findUser.id
         }
     });
 
@@ -260,6 +260,16 @@ const isFriend = async (userId: number, friendId: number) => {
 //* [POST] 친구 신고하기
 const postReport = async (userId: number, friendId: number, friendReportRequestDto: FriendReportRequestDTO) => {
 
+    const friendData = await prisma.friend.findFirst({
+        where: {
+            senderId: userId,
+            receiverId: friendId
+        }
+    });
+
+    if (!friendData) {
+        return sc.NOT_FOUND;
+    }
     // 특정 이유 적은 경우
     if (!friendReportRequestDto.etc) {
         const reportResult = await prisma.report.create({

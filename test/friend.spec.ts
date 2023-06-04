@@ -111,7 +111,7 @@ describe('***** Friend Test *****', () => {
             await prisma.report.deleteMany({
                 where: {
                     userId: 300,
-                    friendId: 300,
+                    friendId: 302,
                     reasonIndex: 5,
                     etc: "test"
                 }
@@ -120,7 +120,7 @@ describe('***** Friend Test *****', () => {
         })
         it('친구 신고하기 성공', done => {
             req(app)
-                .post('/friend/300/report')
+                .post('/friend/302/report')
                 .set('Content-Type', 'application/json')
                 .set({ accessToken: `Bearer ${env.TEST_ACCESS_TOKEN}` })
                 .send({

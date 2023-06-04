@@ -107,6 +107,7 @@ export default {
   REASON_THREE: "홍보성 컨텐츠",
   REASON_FOUR: "닉네임 신고",
   REASON_FIVE: "기타",
+  REPORT_NO_USER: "존재하지 않은 사용자입니다.",
 
 
 };
