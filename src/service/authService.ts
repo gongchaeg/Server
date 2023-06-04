@@ -24,7 +24,7 @@ const signIn = async (socialToken : string, socialPlatform: string) => {
       break;
   }
 
-  if (!socialId) throw new Error('no user data!');
+  if (socialId === undefined || socialId === null) return rm.INVALID_SOCIAL_TOKEN;
   
     //* 기존 소셜 auth 서버에 등록 되어있는 회원인지 확인
     const userInSocial = await prisma.user.findFirst({

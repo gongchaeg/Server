@@ -183,6 +183,13 @@ const followFriend = async (friendId: number, auth: number) => {
 
 //* [DELETE] 팔로우 취소하기
 const deleteFollowFriend = async (friendId: number, auth: number) => {
+
+    //? 친구 테이블에 데이터가 없다면 에러
+    const isFriend = friendService.isFriend(auth, friendId);
+    if (isFriend == null) {
+        return sc.NOT_FOUND;
+    }
+
     const data = await prisma.friend.deleteMany({
         where: {
             receiverId: friendId,

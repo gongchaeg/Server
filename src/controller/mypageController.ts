@@ -115,7 +115,7 @@ const cancleBlock = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const userId = req.body.userId;
 
-    if (!userId || !friendId) {
+    if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
 
@@ -123,7 +123,7 @@ const cancleBlock = async (req: Request, res: Response) => {
         const data = await blockService.cancleBlockedFriend(+userId, +friendId);
 
         if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_CANCLE_BLOCK_FRIEND));
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
         }
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_CANCLE_BLOCK_FIREND));
 
@@ -142,15 +142,11 @@ const cancleBlock = async (req: Request, res: Response) => {
 const getBlockList = async (req: Request, res: Response) => {
     const userId = req.body.userId;
 
-    if (!userId) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-    }
-
     try {
         const data = await blockService.getBlockList(+userId);
 
         if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_GET_BLOCK_LIST));
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
         }
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_GET_BLOCK_LIST, data));
 
