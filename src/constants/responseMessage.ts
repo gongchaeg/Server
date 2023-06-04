@@ -39,8 +39,9 @@ export default {
   EXPIRED_ALL_TOKEN: "모든 토큰이 만료되었습니다. 재로그인 해주세요.",
   INVALID_REFRESH_TOKEN: "유효하지 않은 리프레시 토큰입니다",
   INVALID_TOKEN: "유효하지 않은 토큰입니다.",
-  VALID_TOKEN: "유효한 토큰입니다.",
+  NOT_EXPIRED_TOKEN: "아직 만료되지 않은 토큰입니다.",
   EMPTY_TOKEN: "토큰 값이 없습니다.",
+  INVALID_SOCIAL_TOKEN: "잘못된 소셜 토큰입니다.",
 
   // 책장
   CREATE_MYBOOK_SUCCESS: "책 등록 성공",

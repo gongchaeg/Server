@@ -7,7 +7,7 @@ import jwtHandler from "../modules/jwtHandler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("accessToken")?.split(" ").reverse()[0] as string; //? Bearer ~~ 에서 토큰만 파싱
-  if (!token) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));
+  if (!token) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.EMPTY_TOKEN));
 
   try {
     const decoded = jwtHandler.verify(token); //? jwtHandler에서 만들어둔 verify로 토큰 검사

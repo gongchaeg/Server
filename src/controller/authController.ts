@@ -21,22 +21,22 @@ const signIn = async (req: Request, res: Response) => {
     if (!error.isEmpty()) {
         return res
         .status(sc.UNAUTHORIZED)
-        .send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+        .send(fail(sc.UNAUTHORIZED, rm.INVALID_SOCIAL_TOKEN));
     }
 
     // 소셜 로그인 access token
     const socialToken = req.header('accessToken')?.split(" ").reverse()[0] as string;
     const { socialPlatform } = req.body;
 
-    if ( !socialPlatform) {
+    if (socialPlatform === null || socialPlatform === undefined) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
 
     try {
         const data = await authService.signIn(socialToken, socialPlatform);
 
-        if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNIN_FAIL))
+        if (data === rm.INVALID_SOCIAL_TOKEN) {
+            return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_SOCIAL_TOKEN))
         }
 
         return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, data));
@@ -77,10 +77,6 @@ const signUp = async (req: Request, res:Response) => {
 
     try {
         const data = await authService.signUp(+userId, signUpdDto);
-
-        if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST))
-        }
 
         return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS));
 
@@ -131,7 +127,7 @@ const getToken = async (req: Request, res: Response) => {
       
             return res.status(sc.OK).send(success(sc.OK, rm.CREATE_TOKEN_SUCCESS, result));
         }
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.VALID_TOKEN));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NOT_EXPIRED_TOKEN));
     } catch (error) {
         const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
 

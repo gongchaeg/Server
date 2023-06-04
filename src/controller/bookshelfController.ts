@@ -20,11 +20,6 @@ const createMyBook = async (req: Request, res: Response) => {
     bookshelfCreateDto.description = refinedDescription;
     bookshelfCreateDto.memo = refinedMemo;
 
-    //* 헤더로 유저 아이디 안넘겨줬을 때
-    if (!auth) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-
     if (!bookshelfCreateDto.author || !bookshelfCreateDto.bookTitle) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
     }
@@ -37,7 +32,7 @@ const createMyBook = async (req: Request, res: Response) => {
         }
 
         if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_MYBOOK_FAIL));
+            return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
         }
         return res.status(sc.CREATED).send(success(sc.CREATED, rm.CREATE_MYBOOK_SUCCESS, createMybookDTO));
     } catch (error) {
@@ -169,11 +164,6 @@ const updateMyBook = async (req: Request, res: Response) => {
 const getMyBookshelf = async (req: Request, res: Response) => {
     const auth = req.body.userId;
 
-    //* 헤더로 유저 아이디 안넘겨줬을 때
-    if (!auth) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-
     const data = await bookshelfService.getMyBookshelf(+auth);
 
     try {
@@ -199,11 +189,6 @@ const getFriendBookshelf = async (req: Request, res: Response) => {
     const { friendId } = req.params;
     const auth = req.body.userId;
 
-    //* 헤더로 유저 아이디 안넘겨줬을 때
-    if (!auth) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-
     if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
@@ -215,9 +200,6 @@ const getFriendBookshelf = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND_FRIEND_ID));
         }
 
-        if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-        }
         return res.status(sc.OK).send(success(sc.OK, rm.READ_FRIEND_BOOKSHELF_SUCCESS, data));
 
     } catch (error) {
