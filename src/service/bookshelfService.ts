@@ -24,6 +24,10 @@ const createMyBook = async (userId : number, bookshelfCreateDto : BookshelfCreat
     bookId = -1;
   }
 
+  if(bookshelfCreateDto.author === null) {
+    bookshelfCreateDto.author = "";
+  }
+
   const bookshelf = await prisma.bookshelf.create({
       data: {
         pickIndex : 0,
