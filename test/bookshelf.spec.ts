@@ -79,7 +79,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf')
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(400)
                 .then(res => {
                     done();
                 })
@@ -113,7 +113,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/detail/1')
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(400)
                 .then(res => {
                     done();
                 })
@@ -176,7 +176,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .patch('/bookshelf/1')
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(400)
                 .then(res => {
                     done();
                 })
@@ -222,7 +222,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf')
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(400)
                 .then(res => {
                     done();
                 })
@@ -254,7 +254,7 @@ describe('***** Bookshelf Test *****', () => {
             req(app)
                 .get('/bookshelf/friend/302')
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(400)
                 .then(res => {
                     done();
                 })

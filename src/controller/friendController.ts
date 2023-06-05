@@ -242,7 +242,7 @@ const blockFriend = async (req: Request, res: Response) => {
     //* middleware로 auth 받기
     const userId = req.body.userId;
 
-    if (!userId || !friendId) {
+    if (!friendId) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
 
@@ -250,7 +250,7 @@ const blockFriend = async (req: Request, res: Response) => {
         const data = await blockService.blockFriend(+userId, +friendId);
 
         if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.FAIL_BLOCK_FRIEND));
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
         }
         return res.status(sc.OK).send(success(sc.OK, rm.SUCCESS_BLOCK_FRIEND));
 
