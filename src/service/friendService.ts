@@ -115,8 +115,9 @@ const searchUser = async (nickname: string, auth: number) => {
         }
     });
 
+    //* 차단하면 사용자 검색이 아예 안되도록
     if (block != null) {
-        isBlocked = true;
+        return null;
     }
 
     const followed = await prisma.friend.findFirst({
