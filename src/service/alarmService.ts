@@ -151,7 +151,7 @@ const getAlarm = async (auth: number) => {
     await Promise.all(promises);
 
     alarmAll.sort(function (a, b) {
-        return a.createdAt > b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0;
+        return a.alarmId > b.alarmId ? -1 : a.alarmId > b.alarmId ? 1 : 0;
     });
 
     return alarmAll;
