@@ -183,7 +183,14 @@ const deleteAlarm = async (userId: number, friendId: number) => {
             receiverId: userId,
             senderId: friendId
         }
-    })
+    });
+
+    await prisma.alarm.deleteMany({
+        where: {
+            receiverId : friendId,
+            senderId : userId
+        }
+    });
 }
 
 const alarmService = {
