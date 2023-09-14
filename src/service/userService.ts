@@ -44,15 +44,20 @@ const getUserIntro = async (userId: number) => {
 const postDuplicateNickname = async (userId: number, nickname: string) => {
     let isExisted = 1;
 
-    const userCheck: UserDuplicateDTO | null = await prisma.user.findUnique({
+    const lowercaseNickname: string = nickname.toLowerCase();
+
+    const userCheck = await prisma.user.findFirst({
         where: {
-            nickname: nickname,
+            nickname: {
+                equals: lowercaseNickname,
+                mode: "insensitive"
+            }
         },
         select: {
             nickname: true
         }
-
     });
+
     if (!userCheck) {
         isExisted = 0;
     };
