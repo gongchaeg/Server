@@ -79,12 +79,28 @@ const getUserByRfToken = async (refreshToken: string) => {
     return user;
 }
 
+const getUserVersion = async (userId: number) => {
+    const versionData = await prisma.version.findUnique({
+        where: {
+            id: 1
+        },
+        select: {
+            imageUrl: true,
+            iosForceVersion: true,
+            androidForceVersion: true,
+            text: true
+        }
+    });
+
+    return versionData;
+}
 
 const userService = {
     getUser,
     getUserIntro,
     postDuplicateNickname,
-    getUserByRfToken
+    getUserByRfToken,
+    getUserVersion
 };
 
 export default userService;

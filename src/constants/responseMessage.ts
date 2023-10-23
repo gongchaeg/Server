@@ -26,6 +26,7 @@ export default {
   FAIL_CHECK_NICKNAME: "닉네임 중복 검사 실패",
   SUCCESS_CHECK_NICKNAME: "닉네임 중복 검사 성공",
   UPDATE_USER_PRIFILE_SUCCESS: "프로필 수정 성공",
+  GET_USER_VERSION_SUCCESS: "유저 강제 버전 조회 성공",
 
   // 이미지
   NO_IMAGE: "이미지가 없습니다.",
