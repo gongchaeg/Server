@@ -81,7 +81,7 @@ model Recommend {
   recommendTo         Int
   bookId              Int
   createdAt           DateTime         @default(now())
-  Book                Book             @relation(fields: [bookId], references: [id], onDelete: NoAction, map: "recommend_book_id_fk")
+  Book                Book             @relation(fields: [bookId], references: [id], onDelete: Cascade, map: "recommend_book_id_fk")
   recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: Cascade, map: "recommend_user_id_fk")
   recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: Cascade, map: "recommend_user_id_fk_2")
   RecommendAlarm      RecommendAlarm[]
@@ -124,4 +124,12 @@ model Report {
   etc                        String? @db.VarChar(300)
   User_Report_userIdToUser   User    @relation("Report_userIdToUser", fields: [userId], references: [id], onDelete: Cascade, map: "report_user_id_fk")
   User_Report_friendIdToUser User    @relation("Report_friendIdToUser", fields: [friendId], references: [id], onDelete: Cascade, map: "report_user_id_fk_2")
+}
+
+model Version {
+  id                  Int     @id @default(autoincrement())
+  androidForceVersion String? @db.VarChar(255)
+  imageUrl            String? @db.VarChar(500)
+  text                String? @db.VarChar(255)
+  iosForceVersion     String? @db.VarChar(255)
 }

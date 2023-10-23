@@ -37,8 +37,35 @@ const postDuplicateNickname = async (req: Request, res: Response) => {
 
 }
 
+const getUserVersion = async (req: Request, res:Response) => {
+    const userId = req.body.userId;
+    if (!userId) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+
+    try {
+        const data = await userService.getUserVersion(+userId);
+
+        if(!data) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST))
+        }
+
+        return res.status(sc.OK).send(success(sc.OK, rm.GET_USER_VERSION_SUCCESS, data));
+
+    } catch (error) {
+        const errorMessage = slackErrorMessage(req.method.toUpperCase(), req.originalUrl, error, req.statusCode);
+
+        sendWebhookMessage(errorMessage);
+
+        res.status(sc.INTERNAL_SERVER_ERROR)
+            .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+
+}
+
 const userController = {
     postDuplicateNickname,
+    getUserVersion
 }
 
 export default userController;
