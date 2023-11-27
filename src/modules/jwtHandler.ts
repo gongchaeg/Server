@@ -10,6 +10,7 @@ const sign = (userId: number) => {
   };
 
   const accessToken = jwt.sign(payload, privateKey, {expiresIn: "3d"});
+  
   return accessToken;
 };
 
@@ -46,5 +47,5 @@ const getRefreshToken = () => {
 export default {
   sign,
   verify,
-  getRefreshToken
+  getRefreshToken,
 };
