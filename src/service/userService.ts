@@ -80,9 +80,7 @@ const getUserByRfToken = async (refreshToken: string) => {
   return user;
 };
 
-const getUserVersion = async (
-  userId: number
-): Promise<UserVersionDTO | null> => {
+const getUserVersion = async (): Promise<UserVersionDTO | null> => {
   const versionData = await prisma.version.findUnique({
     where: {
       id: 1,
