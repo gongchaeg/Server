@@ -9,8 +9,8 @@ const sign = (userId: number) => {
     userId, //피카북 서버 userId
   };
 
-  const accessToken = jwt.sign(payload, privateKey, {expiresIn: "3d"});
-  
+  const accessToken = jwt.sign(payload, privateKey, { expiresIn: "30s" });
+
   return accessToken;
 };
 
