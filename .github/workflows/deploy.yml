@@ -2,9 +2,9 @@ name: deploy
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
   pull_request:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -29,7 +29,6 @@ jobs:
           pwd
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >>.env 
-          echo WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env
           echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
           echo MANAGER_EMAIL=${{ secrets.MANAGER_EMAIL }} >>.env 
           echo MANAGER_PASSWORD=${{ secrets.MANAGER_PASSWORD }} >> .env
@@ -37,6 +36,8 @@ jobs:
           echo S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }} >>.env 
           echo S3_BUCKET=${{ secrets.S3_BUCKET }} >>.env
           echo TEST_ACCESS_TOKEN=${{ secrets.TEST_ACCESS_TOKEN}} >>.env
+          echo WEBHOOK_URL_ERROR=${{ secrets.WEBHOOK_URL_ERROR}} >>.env
+          ecoh WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP}} >> .env
           cat .env
 
       - name: build server files
