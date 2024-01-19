@@ -37,7 +37,7 @@ jobs:
           echo S3_BUCKET=${{ secrets.S3_BUCKET }} >>.env
           echo TEST_ACCESS_TOKEN=${{ secrets.TEST_ACCESS_TOKEN}} >>.env
           echo WEBHOOK_URL_ERROR=${{ secrets.WEBHOOK_URL_ERROR}} >>.env
-          ecoh WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP}} >> .env
+          echo WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP}} >> .env
           cat .env
 
       - name: build server files
