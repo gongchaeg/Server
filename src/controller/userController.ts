@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { fail, success } from "../constants/response";
 import { rm, sc } from "../constants";
-import { slackErrorMessage } from "../modules/slackErrorMessage";
-import { sendWebhookMessage } from "../modules/slackWebhook";
+import { slackErrorMessage } from "../modules/slack/slackErrorMessage";
 import { userService } from "../service";
 import { userTokenCheck } from "../constants/userTokenCheck";
+import { sendWebhookErrorMessage } from "../modules/slack/slackWebhook";
 
 //* 유저닉네임 중복 검사
 const postDuplicateNickname = async (req: Request, res: Response) => {
@@ -41,7 +41,7 @@ const postDuplicateNickname = async (req: Request, res: Response) => {
       req.statusCode
     );
 
-    sendWebhookMessage(errorMessage);
+    sendWebhookErrorMessage(errorMessage);
 
     res
       .status(sc.INTERNAL_SERVER_ERROR)
@@ -70,7 +70,7 @@ const getUserVersion = async (req: Request, res: Response) => {
       req.statusCode
     );
 
-    sendWebhookMessage(errorMessage);
+    sendWebhookErrorMessage(errorMessage);
 
     res
       .status(sc.INTERNAL_SERVER_ERROR)
