@@ -38,7 +38,6 @@ model Book {
   bookImage String?     @db.VarChar(500)
   publisher String      @db.VarChar(50)
   Bookshelf Bookshelf[]
-  Recommend Recommend[]
 }
 
 model Bookshelf {
