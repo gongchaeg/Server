@@ -34,11 +34,10 @@ model User {
 model Book {
   id        Int         @id @unique @default(autoincrement())
   bookTitle String      @db.VarChar(500)
-  author    String      @db.VarChar(50)
+  author    String      @db.VarChar(100)
   bookImage String?     @db.VarChar(500)
   publisher String      @db.VarChar(50)
   Bookshelf Bookshelf[]
-  Recommend Recommend[]
 }
 
 model Bookshelf {
@@ -82,7 +81,6 @@ model Recommend {
   recommendTo         Int
   bookId              Int
   createdAt           DateTime         @default(now())
-  Book                Book             @relation(fields: [bookId], references: [id], onDelete: Cascade, map: "recommend_book_id_fk")
   recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: Cascade, map: "recommend_user_id_fk_2")
   recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: Cascade, map: "recommend_user_id_fk")
   RecommendAlarm      RecommendAlarm[]
