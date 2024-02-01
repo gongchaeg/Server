@@ -38,6 +38,7 @@ model Book {
   bookImage String?     @db.VarChar(500)
   publisher String      @db.VarChar(50)
   Bookshelf Bookshelf[]
+  Recommend Recommend[]
 }
 
 model Bookshelf {
@@ -80,6 +81,7 @@ model Recommend {
   recommendedBy       Int
   recommendTo         Int
   bookId              Int
+  Book                Book             @relation(fields: [bookId], references: [id], onDelete: Cascade, map: "recommend_book_id_fk")
   createdAt           DateTime         @default(now())
   recommendToToUser   User             @relation("Recommend_recommendToToUser", fields: [recommendTo], references: [id], onDelete: Cascade, map: "recommend_user_id_fk_2")
   recommendedByToUser User             @relation("Recommend_recommendedByToUser", fields: [recommendedBy], references: [id], onDelete: Cascade, map: "recommend_user_id_fk")
