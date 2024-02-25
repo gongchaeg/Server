@@ -18,6 +18,7 @@ model User {
   social_id                      String?     @db.VarChar(50)
   refresh_token                  String?     @db.VarChar(500)
   email                          String?     @db.VarChar(100)
+  fcm_token                      String?     @db.VarChar(500)
   Alarm_Alarm_receiverIdToUser   Alarm[]     @relation("Alarm_receiverIdToUser")
   Alarm_Alarm_senderIdToUser     Alarm[]     @relation("Alarm_senderIdToUser")
   Block_Block_userIdToUser       Block[]     @relation("Block_userIdToUser")

@@ -3,6 +3,7 @@ import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
 import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
+import { BookshelfDuplicateReqDTO } from "../interfaces/bookshelf/BookshelfDuplicateReqDTO";
 import { slackErrorMessage } from "../modules/slack/slackErrorMessage";
 import { sendWebhookErrorMessage } from "../modules/slack/slackWebhook";
 import { bookshelfService } from "../service";
@@ -266,6 +267,39 @@ const getFriendBookshelf = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @route POST /bookshelf/duplicate
+ * @desc 책 등록 시, 중복된 책인지 확인하기
+ */
+const checkDuplicateBook = async (req: Request, res: Response) => {
+  const bookshelfDuplicateReqDTO: BookshelfDuplicateReqDTO = req.body;
+  const userId = req.body.userId;
+
+  try {
+    const data = await bookshelfService.checkDuplicateBook(
+      bookshelfDuplicateReqDTO,
+      +userId
+    );
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.SUCCESS_CHECK_BOOKSHELF_DUPLICATE, data));
+  } catch (error) {
+    const errorMessage = slackErrorMessage(
+      req.method.toUpperCase(),
+      req.originalUrl,
+      error,
+      req.statusCode
+    );
+
+    sendWebhookErrorMessage(errorMessage);
+
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const bookshelfController = {
   createMyBook,
   getBookById,
@@ -273,6 +307,7 @@ const bookshelfController = {
   updateMyBook,
   getMyBookshelf,
   getFriendBookshelf,
+  checkDuplicateBook,
 };
 
 export default bookshelfController;

@@ -23,4 +23,7 @@ router.get("/", auth, bookshelfController.getMyBookshelf);
 //* 친구 책장 조회하기 GET /bookshelf/friend/:friendId
 router.get("/friend/:friendId", auth, bookshelfController.getFriendBookshelf);
 
+//* 책 등록 시, 중복 체크 POST /bookshelf/duplicate
+router.post("/duplicate", auth, bookshelfController.checkDuplicateBook);
+
 export default router;
