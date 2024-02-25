@@ -55,6 +55,7 @@ export default {
   READ_BOOKSHELF_FAIL: "책장 불러오기 실패",
   READ_FRIEND_BOOKSHELF_SUCCESS: "친구 책장 불러오기 성공",
   READ_FRIEND_BOOKSHELF_FAIL: "친구 책장 불러오기 실패",
+  SUCCESS_CHECK_BOOKSHELF_DUPLICATE: "책 등록 시, 중복 체크 성공",
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
