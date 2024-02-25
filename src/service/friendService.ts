@@ -196,7 +196,7 @@ const followFriend = async (friendId: number, auth: number) => {
   });
 
   if (receiverUser && senderUser && receiverUser.fcm_token) {
-    const pushTitle = `${senderUser.nickname}님이 당신을 팔로우했어요!`;
+    const pushTitle = `💌 '${senderUser.nickname}'님이 당신을 팔로우했어요!`;
     const pushBody = "지금 확인하러 가기";
 
     const pushMessage = createPushMessage(
