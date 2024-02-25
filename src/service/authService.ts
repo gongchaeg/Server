@@ -10,7 +10,11 @@ import { AppleLoginVO } from "../interfaces/social/AppleLoginVO";
 const prisma = new PrismaClient();
 
 //* 소셜 로그인
-const signIn = async (socialToken: string, socialPlatform: string) => {
+const signIn = async (
+  socialToken: string,
+  socialPlatform: string,
+  fcmToken: string
+) => {
   let socialId;
   let email;
 
@@ -48,6 +52,7 @@ const signIn = async (socialToken: string, socialPlatform: string) => {
         social_id: socialId,
         email: email,
         refresh_token: refreshToken,
+        fcm_token: fcmToken,
       },
     });
 
@@ -86,6 +91,18 @@ const signIn = async (socialToken: string, socialPlatform: string) => {
       refreshToken: userInSocial.refresh_token,
       isSignedUp,
     };
+  }
+
+  //* fcm 토큰 비어있으면 저장
+  if (!userInSocial.fcm_token) {
+    await prisma.user.update({
+      data: {
+        fcm_token: fcmToken,
+      },
+      where: {
+        id: userInSocial.id,
+      },
+    });
   }
 
   //* 기존에 회원이 등록되어있으면, 자동 로그인

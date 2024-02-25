@@ -30,14 +30,18 @@ const signIn = async (req: Request, res: Response) => {
     .header("accessToken")
     ?.split(" ")
     .reverse()[0] as string;
-  const { socialPlatform } = req.body;
+  const { socialPlatform, fcmToken } = req.body;
 
   if (socialPlatform === null || socialPlatform === undefined) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
 
   try {
-    const data = await authService.signIn(socialToken, socialPlatform);
+    const data = await authService.signIn(
+      socialToken,
+      socialPlatform,
+      fcmToken
+    );
 
     if (data === rm.INVALID_SOCIAL_TOKEN) {
       return res
