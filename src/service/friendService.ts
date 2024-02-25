@@ -60,7 +60,7 @@ const recommendBookToFriend = async (
     },
   });
 
-  //알림 테이블에도 추가
+  // 알림 테이블에도 추가
   const alarm = await prisma.alarm.create({
     data: {
       senderId: auth,
@@ -75,6 +75,39 @@ const recommendBookToFriend = async (
       recommendId: recommendData.id,
     },
   });
+
+  // 푸시 알림 보내기
+  const receiverUser = await prisma.user.findFirst({
+    where: {
+      id: friendId,
+    },
+  });
+  const senderUser = await prisma.user.findFirst({
+    where: {
+      id: auth,
+    },
+  });
+
+  if (receiverUser && senderUser && receiverUser.fcm_token) {
+    const pushTitle = `⭐️ '${senderUser.nickname}'님이 당신에게 책을 추천했어요!`;
+    const pushBody = `${senderUser.nickname} : "얼른 와서 확인해 봐!!"`;
+
+    const pushMessage = createPushMessage(
+      receiverUser.fcm_token,
+      pushTitle,
+      pushBody
+    );
+
+    admin
+      .messaging()
+      .send(pushMessage)
+      .then((res: any) => {
+        console.log("Success sent message : ", res);
+      })
+      .catch((err: any) => {
+        console.log("Error Sending message !! : ", err);
+      });
+  }
 
   const result = {
     recommendId: recommendData.id,
