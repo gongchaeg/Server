@@ -11,7 +11,6 @@ export default {
   SIGNIN_FAIL: "로그인 실패",
   ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
 
-
   // 유저
   READ_USER_SUCCESS: "유저 조회 성공",
   READ_USER_FAIL: "유저 조회 실패",
@@ -32,7 +31,6 @@ export default {
   NO_IMAGE: "이미지가 없습니다.",
   CREATE_IMAGE_SUCCESS: "이미지 저장 성공",
   CREATE_IMAGE_FAIL: "이미지 저장 실패",
-
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -90,6 +88,8 @@ export default {
   // 추천
   FAIL_GET_RECOMMEND: "추천 책 조회 실패",
   SUCCESS_GET_RECOMMEND: "추천 책 조회 성공",
+  FAIL_DELETE_RECOMMEND: "추천 책 삭제 실패",
+  SUCCESS_DELETE_RECOMMEND: "추천 책 삭제 성공",
 
   //pick
   FAIL_PATCH_PICK: "책 pick 수정 실패",
@@ -109,6 +109,4 @@ export default {
   REASON_FOUR: "닉네임 신고",
   REASON_FIVE: "기타",
   REPORT_NO_USER: "존재하지 않은 사용자입니다.",
-
-
 };
