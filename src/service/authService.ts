@@ -76,6 +76,7 @@ const signIn = async (
       await prisma.user.update({
         data: {
           refresh_token: refreshToken,
+          fcm_token: fcmToken,
         },
         where: {
           id: userId,
@@ -93,18 +94,6 @@ const signIn = async (
     };
   }
 
-  //* fcm 토큰 비어있으면 저장
-  if (!userInSocial.fcm_token) {
-    await prisma.user.update({
-      data: {
-        fcm_token: fcmToken,
-      },
-      where: {
-        id: userInSocial.id,
-      },
-    });
-  }
-
   //* 기존에 회원이 등록되어있으면, 자동 로그인
   const accessToken = jwtHandler.sign(userInSocial.id);
   const refreshToken = jwtHandler.getRefreshToken();
@@ -112,6 +101,7 @@ const signIn = async (
   await prisma.user.update({
     data: {
       refresh_token: refreshToken,
+      fcm_token: fcmToken,
     },
     where: {
       id: userInSocial.id,
