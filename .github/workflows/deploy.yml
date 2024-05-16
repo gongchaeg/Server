@@ -63,7 +63,7 @@ jobs:
           yarn run build
 
       - name: Zip files
-        run: zip -r peekabook.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
+        run: zip -r peekabook.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./service-account-file.json
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
