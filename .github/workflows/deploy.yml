@@ -37,12 +37,23 @@ jobs:
           echo WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP }} >> .env
           cat .env
 
-      - name: Create Firebase key file
+      - name: Create JSON file
         run: |
-          pwd
-          touch new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
-          echo "${{ secrets.FIREBASE_KEY }}" >> new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
-          cat new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
+          cat <<EOF > service-account-file.json
+          {
+            "type": "service_account",
+            "project_id": "new-peekabook",
+            "private_key_id": ${{ secrets.FIREBASE_PRIVATE_KEY_ID }},
+            "private_key": ${{ secrets.FIREBASE_PRIVATE_KEY }},
+            "client_email": ${{ secrets.FIREBASE_CLIENT_EMAIL }},
+            "client_id": ${{ secrets.FIREBASE_CLIENT_ID }},
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ke3ck%40new-peekabook.iam.gserviceaccount.com",
+            "universe_domain": "googleapis.com"
+          }
+          EOF
 
       - name: Build server files
         run: |
