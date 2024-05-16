@@ -37,7 +37,7 @@ jobs:
 
       - name: Create Firebase key file
         run: |
-          echo ${{ secrets.FIREBASE_KEY }} > new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
+          echo ${{ secrets.FIREBASE_KEY }} >> new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
           cat new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
 
       - name: Build server files
