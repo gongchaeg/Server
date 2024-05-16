@@ -105,3 +105,6 @@ dist
 
 #mac os DS_Store
 .DS_Store
+
+# firebase key 
+new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json

@@ -1,4 +1,5 @@
-import { FriendBookshelfResDTO } from './../interfaces/bookshelf/FriendBookshelfResDTO';
+import { BookshelfDuplicateReqDTO } from "./../interfaces/bookshelf/BookshelfDuplicateReqDTO";
+import { FriendBookshelfResDTO } from "./../interfaces/bookshelf/FriendBookshelfResDTO";
 import { PrismaClient } from "@prisma/client";
 import { BookDTO } from "../interfaces/book/BookDTO";
 import { BookshelfCreateDTO } from "../interfaces/bookshelf/BookshelfCreateDTO";
@@ -7,17 +8,19 @@ import { BookshelfUpdateDTO } from "../interfaces/bookshelf/BookshelfUpdateDTO";
 import { UserDTO } from "../interfaces/user/UserDTO";
 import userService from "./userService";
 import { IntroDTO } from "../interfaces/user/IntroDTO";
-import { sc } from '../constants';
-import { rm } from 'fs';
-import friendService from './friendService';
-import bookService from './bookService';
-import alarmService from './alarmService';
+import { sc } from "../constants";
+import { rm } from "fs";
+import friendService from "./friendService";
+import bookService from "./bookService";
+import alarmService from "./alarmService";
 
 const prisma = new PrismaClient();
 
 //* 내 책장에 책 등록
-const createMyBook = async (userId: number, bookshelfCreateDto: BookshelfCreateDTO) => {
-
+const createMyBook = async (
+  userId: number,
+  bookshelfCreateDto: BookshelfCreateDTO
+) => {
   const bookData = await bookService.getBookId(bookshelfCreateDto);
   let bookId = bookData?.id;
   if (!bookId) {
@@ -35,23 +38,23 @@ const createMyBook = async (userId: number, bookshelfCreateDto: BookshelfCreateD
       memo: bookshelfCreateDto.memo,
       User: {
         connect: {
-          id: userId
-        }
+          id: userId,
+        },
       },
       Book: {
         connectOrCreate: {
           where: {
-            id: bookId
+            id: bookId,
           },
           create: {
             bookTitle: bookshelfCreateDto.bookTitle,
             author: bookshelfCreateDto.author,
             bookImage: bookshelfCreateDto.bookImage,
-            publisher: bookshelfCreateDto.publisher
-          }
-        }
-      }
-    }
+            publisher: bookshelfCreateDto.publisher,
+          },
+        },
+      },
+    },
   });
 
   // 나를 팔로우하는 친구들에게 알림 보내기
@@ -65,7 +68,7 @@ const createMyBook = async (userId: number, bookshelfCreateDto: BookshelfCreateD
 const getBookById = async (bookshelfId: number) => {
   const bookData = await prisma.bookshelf.findUnique({
     where: {
-      id: bookshelfId
+      id: bookshelfId,
     },
     select: {
       description: true,
@@ -74,10 +77,10 @@ const getBookById = async (bookshelfId: number) => {
         select: {
           bookImage: true,
           bookTitle: true,
-          author: true
-        }
-      }
-    }
+          author: true,
+        },
+      },
+    },
   });
 
   return bookData;
@@ -85,12 +88,11 @@ const getBookById = async (bookshelfId: number) => {
 
 //* 등록한 책 삭제
 const deleteMyBook = async (bookshelfId: number) => {
-
   //* 책장에 없는 책을 삭제하려고 하면 에러
   const bookdata = await prisma.bookshelf.findUnique({
     where: {
-      id: bookshelfId
-    }
+      id: bookshelfId,
+    },
   });
 
   if (!bookdata) {
@@ -103,11 +105,11 @@ const deleteMyBook = async (bookshelfId: number) => {
       await prisma.bookshelf.updateMany({
         where: {
           userId: bookdata.userId,
-          pickIndex: idx
+          pickIndex: idx,
         },
         data: {
-          pickIndex: (idx - 1)
-        }
+          pickIndex: idx - 1,
+        },
       });
     }
   }
@@ -116,50 +118,50 @@ const deleteMyBook = async (bookshelfId: number) => {
     await prisma.bookshelf.updateMany({
       where: {
         userId: bookdata.userId,
-        pickIndex: 3
+        pickIndex: 3,
       },
       data: {
-        pickIndex: 2
-      }
+        pickIndex: 2,
+      },
     });
   }
 
   //* 책삭제 했을때 알림들 다 삭제됨
   const deleteData = await prisma.newBookAlarm.findMany({
     where: {
-      bookshelfId: bookshelfId
-    }
+      bookshelfId: bookshelfId,
+    },
   });
-
 
   // alarm DB에서 삭제
   const deletePromise = deleteData.map(async (data) => {
     await prisma.alarm.deleteMany({
       where: {
-        id: data.alarmId
-      }
-    })
+        id: data.alarmId,
+      },
+    });
   });
   await Promise.all(deletePromise);
 
   const data = await prisma.bookshelf.delete({
     where: {
-      id: bookshelfId
-    }
+      id: bookshelfId,
+    },
   });
-
 
   return data;
 };
 
 //* 등록한 책 수정
-const updateMyBook = async (bookshelfId: number, bookshelfUpdateDto: BookshelfUpdateDTO) => {
-
+const updateMyBook = async (
+  bookshelfId: number,
+  bookshelfUpdateDto: BookshelfUpdateDTO
+) => {
   //unique한 bookshelfId 값
   const bookshelfData = await prisma.bookshelf.findFirst({
     where: {
-      id: bookshelfId
-    }
+      id: bookshelfId,
+    },
   });
 
   if (!bookshelfData) {
@@ -168,20 +170,19 @@ const updateMyBook = async (bookshelfId: number, bookshelfUpdateDto: BookshelfUp
 
   const data = await prisma.bookshelf.update({
     where: {
-      id: bookshelfId
+      id: bookshelfId,
     },
     data: {
       description: bookshelfUpdateDto.description,
-      memo: bookshelfUpdateDto.memo
+      memo: bookshelfUpdateDto.memo,
     },
   });
 
   return data;
-}
+};
 
 //* 내 책장 (메인 뷰) 조회
 const getMyBookshelf = async (userId: number) => {
-
   // section1 : friendList
   let friendList: UserDTO[] = [];
   const friends = friendService.getFriendInfoList(userId);
@@ -196,10 +197,10 @@ const getMyBookshelf = async (userId: number) => {
   const picks = await prisma.bookshelf.findMany({
     where: {
       userId: userId,
-      pickIndex: { in: [1, 2, 3] }
+      pickIndex: { in: [1, 2, 3] },
     },
     orderBy: {
-      pickIndex: 'asc'
+      pickIndex: "asc",
     },
     select: {
       id: true,
@@ -208,18 +209,17 @@ const getMyBookshelf = async (userId: number) => {
         select: {
           id: true,
           bookImage: true,
-          bookTitle: true
-        }
+          bookTitle: true,
+        },
       },
-      description: true
-
-    }
+      description: true,
+    },
   });
 
   // section4 : books
   const books = await prisma.bookshelf.findMany({
     where: {
-      userId: userId
+      userId: userId,
     },
     select: {
       id: true,
@@ -228,28 +228,27 @@ const getMyBookshelf = async (userId: number) => {
       Book: {
         select: {
           bookImage: true,
-        }
-      }
+        },
+      },
     },
     orderBy: {
-      createdAt: "desc"
-    }
-  })
+      createdAt: "desc",
+    },
+  });
 
   const data: MyBookshelfResDTO = {
     friendList: friendList,
     myIntro: myIntro,
     picks: picks,
     bookTotalNum: books.length,
-    books: books
+    books: books,
   };
 
   return data;
-}
+};
 
 //* 친구 책장 조회
 const getFriendBookshelf = async (userId: number, friendId: number) => {
-
   //? 친구 테이블에 데이터가 없다면 에러
   const isFriend = friendService.isFriend(userId, friendId);
   if (isFriend == null) {
@@ -260,8 +259,8 @@ const getFriendBookshelf = async (userId: number, friendId: number) => {
   const userIntro = await userService.getUserIntro(userId);
   const myIntro = {
     nickname: userIntro?.nickname,
-    profileImage: userIntro.profileImage
-  }
+    profileImage: userIntro.profileImage,
+  };
 
   // section2 : friendList
   let friendList: UserDTO[] = [];
@@ -277,10 +276,10 @@ const getFriendBookshelf = async (userId: number, friendId: number) => {
   const picks = await prisma.bookshelf.findMany({
     where: {
       userId: friendId,
-      pickIndex: { in: [1, 2, 3] }
+      pickIndex: { in: [1, 2, 3] },
     },
     orderBy: {
-      pickIndex: 'asc'
+      pickIndex: "asc",
     },
     select: {
       id: true,
@@ -289,17 +288,17 @@ const getFriendBookshelf = async (userId: number, friendId: number) => {
         select: {
           id: true,
           bookImage: true,
-          bookTitle: true
-        }
+          bookTitle: true,
+        },
       },
-      description: true
-    }
+      description: true,
+    },
   });
 
   // section5 : books
   const books = await prisma.bookshelf.findMany({
     where: {
-      userId: friendId
+      userId: friendId,
     },
     select: {
       id: true,
@@ -308,13 +307,13 @@ const getFriendBookshelf = async (userId: number, friendId: number) => {
       Book: {
         select: {
           bookImage: true,
-        }
-      }
+        },
+      },
     },
     orderBy: {
-      createdAt: "desc"
-    }
-  })
+      createdAt: "desc",
+    },
+  });
 
   const data: FriendBookshelfResDTO = {
     myIntro: myIntro,
@@ -322,11 +321,38 @@ const getFriendBookshelf = async (userId: number, friendId: number) => {
     friendIntro: friendIntro,
     picks: picks,
     bookTotalNum: books.length,
-    books: books
+    books: books,
   };
 
   return data;
-}
+};
+
+//* 책 등록 시, 중복 확인
+const checkDuplicateBook = async (
+  bookshelfDuplicateReqDTO: BookshelfDuplicateReqDTO,
+  userId: number
+) => {
+  const bookData = await prisma.book.findFirst({
+    where: {
+      bookTitle: bookshelfDuplicateReqDTO.bookTitle,
+      author: bookshelfDuplicateReqDTO.author,
+      publisher: bookshelfDuplicateReqDTO.publisher,
+    },
+  });
+
+  if (!bookData) {
+    return { isDuplicate: false };
+  }
+
+  const bookshelfData = await prisma.bookshelf.findFirst({
+    where: {
+      bookId: bookData.id,
+      userId,
+    },
+  });
+
+  return { isDuplicate: !!bookshelfData };
+};
 
 const bookshelfService = {
   createMyBook,
@@ -334,7 +360,8 @@ const bookshelfService = {
   deleteMyBook,
   updateMyBook,
   getMyBookshelf,
-  getFriendBookshelf
+  getFriendBookshelf,
+  checkDuplicateBook,
 };
 
-export default bookshelfService;                                                                                                                            
+export default bookshelfService;

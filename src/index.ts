@@ -11,11 +11,11 @@ app.use("/", router); // use -> 모든 요청
 
 //* HTTP method - GET
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send("Peekabook Server!");
+  res.send("Peekabook Server!");
 });
 
 app.listen(PORT, () => {
-    console.log(`
+  console.log(`
         #############################################
             🛡️ Server listening on port: ${PORT} 🛡️
         #############################################
