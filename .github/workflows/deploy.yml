@@ -21,45 +21,47 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: create env file
-        working-directory: ./
+      - name: Create .env file
         run: |
-          pwd
-          touch .env
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >>.env 
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
-          echo MANAGER_EMAIL=${{ secrets.MANAGER_EMAIL }} >>.env 
+          echo MANAGER_EMAIL=${{ secrets.MANAGER_EMAIL }} >> .env
           echo MANAGER_PASSWORD=${{ secrets.MANAGER_PASSWORD }} >> .env
-          echo S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }} >>.env 
-          echo S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }} >>.env 
-          echo S3_BUCKET=${{ secrets.S3_BUCKET }} >>.env
-          echo TEST_ACCESS_TOKEN=${{ secrets.TEST_ACCESS_TOKEN}} >>.env
-          echo WEBHOOK_URL_ERROR=${{ secrets.WEBHOOK_URL_ERROR}} >>.env
-          echo WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP}} >> .env
+          echo S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }} >> .env
+          echo S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }} >> .env
+          echo S3_BUCKET=${{ secrets.S3_BUCKET }} >> .env
+          echo TEST_ACCESS_TOKEN=${{ secrets.TEST_ACCESS_TOKEN }} >> .env
+          echo WEBHOOK_URL_ERROR=${{ secrets.WEBHOOK_URL_ERROR }} >> .env
+          echo WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP }} >> .env
           cat .env
 
-      - name: build server files
-        working-directory: ./
+      - name: Create Firebase key file
+        run: |
+          echo "${{ secrets.FIREBASE_KEY }}" > new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
+          cat new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
+
+      - name: Build server files
         run: |
           yarn
           yarn run build
 
-      - name: zip file
+      - name: Zip files
         run: zip -r peekabook.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./new-peekabook-firebase-adminsdk-ke3ck-2c155d0a19.json
 
-      - name: AWS configure credientials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: upload to S3
+      - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./peekabook.zip s3://peekabook-build/deploy/
 
-      - name: deploy with AWS codeDeploy
-        run: aws deploy create-deployment
-          --application-name peekabook-codedeploy
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name GROUP
-          --s3-location bucket=peekabook-build,bundleType=zip,key=deploy/peekabook.zip
+      - name: Deploy with AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name peekabook-codedeploy \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name GROUP \
+            --s3-location bucket=peekabook-build,bundleType=zip,key=deploy/peekabook.zip
