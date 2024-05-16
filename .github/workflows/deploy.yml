@@ -25,16 +25,16 @@ jobs:
         run: |
           pwd
           touch .env
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
-          echo MANAGER_EMAIL=${{ secrets.MANAGER_EMAIL }} >> .env
-          echo MANAGER_PASSWORD=${{ secrets.MANAGER_PASSWORD }} >> .env
-          echo S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }} >> .env
-          echo S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }} >> .env
-          echo S3_BUCKET=${{ secrets.S3_BUCKET }} >> .env
-          echo TEST_ACCESS_TOKEN=${{ secrets.TEST_ACCESS_TOKEN }} >> .env
-          echo WEBHOOK_URL_ERROR=${{ secrets.WEBHOOK_URL_ERROR }} >> .env
-          echo WEBHOOK_URL_SIGNUP=${{ secrets.WEBHOOK_URL_SIGNUP }} >> .env
+          echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
+          echo JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}" >> .env
+          echo MANAGER_EMAIL="${{ secrets.MANAGER_EMAIL }}" >> .env
+          echo MANAGER_PASSWORD="${{ secrets.MANAGER_PASSWORD }}" >> .env
+          echo S3_ACCESS_KEY="${{ secrets.S3_ACCESS_KEY }}" >> .env
+          echo S3_SECRET_KEY="${{ secrets.S3_SECRET_KEY }}" >> .env
+          echo S3_BUCKET="${{ secrets.S3_BUCKET }}" >> .env
+          echo TEST_ACCESS_TOKEN="${{ secrets.TEST_ACCESS_TOKEN }}" >> .env
+          echo WEBHOOK_URL_ERROR="${{ secrets.WEBHOOK_URL_ERROR }}" >> .env
+          echo WEBHOOK_URL_SIGNUP="${{ secrets.WEBHOOK_URL_SIGNUP }}" >> .env
           cat .env
 
       - name: Create JSON file
