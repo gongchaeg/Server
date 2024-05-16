@@ -39,6 +39,8 @@ jobs:
 
       - name: Create JSON file
         run: |
+          pwd
+          touch service-account-file.json
           cat <<EOF > service-account-file.json
           {
             "type": "service_account",
