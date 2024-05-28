@@ -155,8 +155,8 @@ const getAlarm = async (auth: number) => {
 // 푸시 알림 보내는 함수
 async function sendPushNotification(receiverUser: any, senderUser: any) {
   if (receiverUser?.fcm_token) {
-    const pushTitle = `📚 '${senderUser.nickname}'님이 새로운 책을 추가했어요!`;
-    const pushBody = `${receiverUser.nickname} : "앗! 무슨 책인지 너무 궁금해!!"`;
+    const pushTitle = `📚 '${senderUser.nickname}'님이 새로운 책을 책장에 추가했어요!`;
+    const pushBody = `${receiverUser.nickname}님이 어떤 책을 읽었는지 지금 바로 알아보세요`;
 
     const pushMessage = createPushMessage(
       receiverUser.fcm_token,
