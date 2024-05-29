@@ -96,7 +96,7 @@ const recommendBookToFriend = async (
 
   if (receiverUser && senderUser && receiverUser.fcm_token) {
     const pushTitle = `⭐️ '${senderUser.nickname}'님이 당신에게 책을 추천했어요!`;
-    const pushBody = `${savedBook?.bookTitle}`;
+    const pushBody = `'${savedBook?.bookTitle}'`;
 
     const pushMessage = createPushMessage(
       receiverUser.fcm_token,
