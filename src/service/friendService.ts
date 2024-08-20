@@ -46,7 +46,7 @@ const recommendBookToFriend = async (
     },
   });
 
-  //? 친구 없는 경우
+  //* 친구 없는 경우
   if (friendData == null) {
     return sc.NOT_FOUND;
   }
